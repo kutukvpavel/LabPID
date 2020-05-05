@@ -1,4 +1,4 @@
-﻿namespace pid
+﻿namespace LabPID
 {
     partial class Info
     {
@@ -520,7 +520,7 @@
             // pctCJC
             // 
             this.pctCJC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pctCJC.Image = global::pid.Properties.Resources.warning_icon;
+            this.pctCJC.Image = global::LabPID.Properties.Resources.warning_icon;
             this.pctCJC.Location = new System.Drawing.Point(258, 633);
             this.pctCJC.Margin = new System.Windows.Forms.Padding(1);
             this.pctCJC.Name = "pctCJC";
@@ -1612,7 +1612,7 @@
             // pctWarning
             // 
             this.pctWarning.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pctWarning.Image = global::pid.Properties.Resources.Warning_icon__1_;
+            this.pctWarning.Image = global::LabPID.Properties.Resources.Warning_icon__1_;
             this.pctWarning.InitialImage = null;
             this.pctWarning.Location = new System.Drawing.Point(257, 29);
             this.pctWarning.Margin = new System.Windows.Forms.Padding(0);
@@ -1647,7 +1647,7 @@
             // pctOver
             // 
             this.pctOver.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pctOver.Image = global::pid.Properties.Resources.warning_icon;
+            this.pctOver.Image = global::LabPID.Properties.Resources.warning_icon;
             this.pctOver.Location = new System.Drawing.Point(258, 592);
             this.pctOver.Margin = new System.Windows.Forms.Padding(1);
             this.pctOver.Name = "pctOver";
@@ -1671,7 +1671,7 @@
             // pctGpioState
             // 
             this.pctGpioState.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pctGpioState.Image = global::pid.Properties.Resources.warning_icon;
+            this.pctGpioState.Image = global::LabPID.Properties.Resources.warning_icon;
             this.pctGpioState.InitialImage = null;
             this.pctGpioState.Location = new System.Drawing.Point(258, 3);
             this.pctGpioState.Margin = new System.Windows.Forms.Padding(1);

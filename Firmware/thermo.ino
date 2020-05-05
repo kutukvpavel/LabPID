@@ -1,34 +1,31 @@
-﻿/*  Note. The code below has been edited many times since first introducing comments to it, so the latter may be not super-informative and beautiful now, I didn't bother much to correct them
-*   before device development is completed.
-*  It still requires some refactoring and formatting. I wish arduino IDE supported #region directives, because sometimes code gets completely unreadable
-*  because of huge pieces being placed between various linked routines.
-*
+﻿/*  *
 *  NB! Some of the libraries used (e.g. PID) have been modified! The code is valid only if modified libs are used.
 *
 *  Current major TODO:
-*  Consider various error-handling techniques (e.g. for broken thermocouple etc).
+*  None
 *  _____________________________________
 *  Developed by Kutukov Pavel, 2016-2020.
-*  This software is provided as-is and the author is not responsible for any damage caused by this software. I.e. use it at your own risk.
-*  Everyone is free to make changes to this software and adjust it according to one's needs as long as this copyright note is kept intact.
-*  Commercial use of this software is forbidden unless you have a written permission of the original developer.
+*  This software was developed to fulfill the author's personal needs only and is provided strictly as-is.
 */
 
-#include <max6675.h>  //Thermocouple
+//Non-modified libraries (have to be present in the arduino libraries folder)
 #include <SPI.h>
-#include <OneWire.h>  //DS18B20
-#include <DallasTemperature.h>
-#include <LiquidCrystal.h>  //LCD
-#include <MsTimer2.h> //Timers
-#include <TimerOne.h>
-#include <ClickEncoder.h> //Encoder
-#include <PID_v1.h> //PID
-#include <EEPROM.h> //Misc
-#include <Average.h>
+#include <LiquidCrystal.h>
+#include <EEPROM.h> 
+//Modified, but not imported into the cppproj (one-time changes)
+#include "libraries\MAX6675-master\src\max6675.h" //SPI thermocouple amplifier
+#include "libraries\OneWire\OneWire.h"
+#include "libraries\DallasTemperature\DallasTemperature.h"
+#include "libraries\MsTimer2\MsTimer2.h"
+#include "libraries\TimerOne-master\TimerOne.h"
+#include "libraries\encoder-arduino\ClickEncoder.h"
+#include "libraries\PID\PID_v1.h" //Heavily modified
+#include "libraries\Average-master\Average.h"
+//Libraries imported into the project (continuous changes)
 #include "MyFunctions.h"
 
 //Definitions of constants
-#define DEBUG                           //Debug info enable
+//#define DEBUG  //Debug info enable. Warning: consumes flash memory space and may impair communication with software!!
 
 #pragma region Definitions
 //#define NO_DS  -- Deprecated! [No Cold Junction Compensation (i.e. no ds18b20)]

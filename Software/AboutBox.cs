@@ -7,9 +7,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace pid
+namespace LabPID
 {
-    partial class AboutBox : Form
+    public partial class AboutBox : Form
     {
         public AboutBox()
         {

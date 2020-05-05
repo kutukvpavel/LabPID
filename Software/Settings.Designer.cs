@@ -1,4 +1,4 @@
-﻿namespace pid
+﻿namespace LabPID
 {
     partial class Settings
     {
@@ -335,7 +335,7 @@
             // pctAmbient
             // 
             this.pctAmbient.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pctAmbient.Image = global::pid.Properties.Resources.question_faq_icon;
+            this.pctAmbient.Image = global::LabPID.Properties.Resources.question_faq_icon;
             this.pctAmbient.InitialImage = null;
             this.pctAmbient.Location = new System.Drawing.Point(471, 210);
             this.pctAmbient.Name = "pctAmbient";

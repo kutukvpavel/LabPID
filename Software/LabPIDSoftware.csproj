@@ -7,8 +7,8 @@
     <ProjectGuid>{54D943D3-815C-4590-A0D7-AAC3660121D4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>pid</RootNamespace>
-    <AssemblyName>pid</AssemblyName>
+    <RootNamespace>LabPID</RootNamespace>
+    <AssemblyName>LabPIDSoftware</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -54,6 +54,7 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="CommPort.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="Info.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +75,7 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="TemperatureProfile.cs" />
     <Compile Include="Terminal.cs">
       <SubType>Form</SubType>
     </Compile>

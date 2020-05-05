@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace pid
+namespace LabPID
 {
     public partial class Info : Form
     {

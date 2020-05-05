@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace pid
+namespace LabPID
 {
     public partial class Terminal : Form
     {

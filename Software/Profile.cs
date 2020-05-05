@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
 
-namespace pid
+namespace LabPID
 {
     public partial class Profile : Form
     {

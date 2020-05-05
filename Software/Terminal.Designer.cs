@@ -1,4 +1,4 @@
-﻿namespace pid
+﻿namespace LabPID
 {
     partial class Terminal
     {
@@ -78,7 +78,7 @@
             this.btnSend.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.btnSend.AutoSize = false;
             this.btnSend.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnSend.Image = global::pid.Properties.Resources.forward;
+            this.btnSend.Image = global::LabPID.Properties.Resources.forward;
             this.btnSend.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(23, 22);

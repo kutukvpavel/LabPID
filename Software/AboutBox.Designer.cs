@@ -1,4 +1,4 @@
-﻿namespace pid
+﻿namespace LabPID
 {
     partial class AboutBox
     {

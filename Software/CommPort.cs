@@ -4,7 +4,7 @@ using System.IO.Ports;
 using System.Collections;
 using System.Threading;
 
-namespace pid
+namespace LabPID
 {
 	// Copied from project "Termie" almost "as-is".
 
