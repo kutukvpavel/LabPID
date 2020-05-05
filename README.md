@@ -19,4 +19,7 @@ Software:
  - Real-time temperature plots (multiple channels, though this is a work in progress, and there are caveats)
  - Execute predefined temperature profiles
  
- P.S. The PCB layout was created way back in 2016 using SprintLayout, and was really just a prototyping board.
+Building:
+ - Out-of-th-box requires VisualMicro visual studio plugin, suitalbe board packages and all other arduino-envirinment stuff, except locally copied libraries (though I'm sure with some effort avr-gcc can be used directly from VS)
+ 
+P.S. The PCB layout was created way back in 2016 using SprintLayout, and was really just a prototyping board.
