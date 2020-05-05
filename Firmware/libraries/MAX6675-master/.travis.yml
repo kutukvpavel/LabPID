@@ -1,0 +1,24 @@
+language: python
+python:
+    - "2.7"
+
+# Cache PlatformIO packages using Travis CI container-based infrastructure
+sudo: false
+cache:
+    directories:
+        - "~/.platformio"
+
+env:
+    - PLATFORMIO_CI_SRC=examples/lcdthermocouple/lcdthermocouple.pde
+    - PLATFORMIO_CI_SRC=examples/serialthermocouple/serialthermocouple.pde
+
+install:
+    - pip install -U platformio
+    #
+    # Libraries from PlatformIO Library Registry:
+    #
+    # http://platformio.org/lib/show/136/LiquidCrystal
+    - platformio lib install 136
+
+script:
+    - platformio ci --board=esp12e --lib="."
