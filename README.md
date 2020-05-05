@@ -14,6 +14,7 @@ Hardware:
 
 Software:
  - .NET 4.0 (XP SP3 compatible)
+ - Uses standard arduino-like virtual COM port
  - Adjust all settings (PID coefficients, calibration values etc)
  - Real-time temperature plots (multiple channels, though this is a work in progress, and there are caveats)
  - Execute predefined temperature profiles
