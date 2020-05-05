@@ -1,0 +1,22 @@
+0 - Setpoint
+1 - N Kp
+2 - N Ki
+3 - N Kd
+4 - Amplifier (TK)
+5 - Integral (Threshold)
+6 - Current averaging (<>0)
+7 - Input channel (0..2: ADC, SPI, DS)
+8 - Control info out (7 lines, starting with ">D:")
+9 - Log (<>0)
+T - Default ambient (edsTemp)
+A - Mode (0..3: N,A,D,M)
+P - A Kp
+I - A Ki
+D - A Kd
+S - Sensor indexes (first two numbers after sign)
+C - Current calibration
+V - Device info out (3 lines, starting with ">I:")
+B - Distill bias
+L - Current DS indexes (2 lines, starting with ">S:")
+W - Manual mode power
+O - Tolerated overshoot for d-mode
