@@ -14,12 +14,12 @@ Hardware:
 
 Software:
  - .NET 4.0 (XP SP3 compatible)
- - Uses standard arduino-like virtual COM port
+ - Uses standard arduino-like virtual COM port (commands are intended to be human-readable to enable simple operation through UART in case the software is unavailable)
  - Adjust all settings (PID coefficients, calibration values etc)
  - Real-time temperature plots (multiple channels, though this is a work in progress, and there are caveats)
  - Execute predefined temperature profiles
  
 Building:
- - Out-of-th-box requires VisualMicro visual studio plugin, suitalbe board packages and all other arduino-envirinment stuff, except locally copied libraries (though I'm sure with some effort avr-gcc can be used directly from VS)
+ - To use the source out-of-the-box requires VisualMicro visual studio plugin, suitable board packages and all other arduino-environment stuff, except locally copied libraries (though I'm sure with some effort avr-gcc can be used directly from VS)
  
 P.S. The PCB layout was created way back in 2016 using SprintLayout, and was really just a prototyping board.
