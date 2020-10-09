@@ -151,12 +151,12 @@ namespace LabPID
         {
             lblTemp1.Text = Program.clsControl.Temp[0].ToString() + " °C";
             lblTemp2.Text = Program.clsControl.Temp[1].ToString() + " °C";
-            if (Program.clsControl.Mode != Program.Controller.ModeType.Manual)
+            if (Program.clsControl.Mode != Controller.ModeType.Manual)
             {
                 mtbPower.Text = Program.clsControl.Power.ToString("000");
             }
             mtbSetpoint.Text = Program.clsControl.Setpoint.ToString(Program.ShortFloatFormat); 
-            updMode.SelectedIndex = updMode.Items.IndexOf(Program.Controller.ModeDesignator[Program.clsControl.Mode].ToString());
+            updMode.SelectedIndex = updMode.Items.IndexOf(Controller.ModeDesignator[Program.clsControl.Mode].ToString());
             updChannel.SelectedIndex = Program.clsControl.Channel;
             chkGpioState.Checked = Program.clsControl.GpioState;
             if (!partially)
@@ -174,7 +174,7 @@ namespace LabPID
                 mtbIntegral.Text = (Program.clsControl.Integral * 100).ToString("000.00");
                 mtbDisitill.Text = (Program.clsControl.ExtraPower * 100).ToString("000.00");
                 mtbOver.Text = Program.clsControl.Overshoot.ToString(Program.ShortFloatFormat);
-                chkAuto.Checked = (Program.clsControl.Mode != Program.Controller.ModeType.Manual);
+                chkAuto.Checked = (Program.clsControl.Mode != Controller.ModeType.Manual);
                 chkAv1.Checked = Program.clsControl.Averages[0];
                 chkAv2.Checked = Program.clsControl.Averages[1];
                 chkAv3.Checked = Program.clsControl.Averages[2];
@@ -441,7 +441,7 @@ namespace LabPID
         {
             try
             {
-                Program.clsControl.Mode = (Program.Controller.ModeType)updMode.SelectedIndex;
+                Program.clsControl.Mode = (Controller.ModeType)updMode.SelectedIndex;
                 return false;
             }
             catch (InvalidCastException)
@@ -455,7 +455,7 @@ namespace LabPID
         {
             if (((Control)sender).Tag.ToString() != "0") return;
             ApplyMode();
-            if (Program.clsControl.Mode == Program.Controller.ModeType.Manual)
+            if (Program.clsControl.Mode == Controller.ModeType.Manual)
             {
                 Program.clsControl.Power = short.Parse(mtbPower.Text.Remove(3));
             }
@@ -480,8 +480,8 @@ namespace LabPID
         private void pctAI_Click(object sender, EventArgs e)
         {
             if (((Control)sender).Tag.ToString() != "0") return;
-            Program.clsControl[Program.Controller.ModeType.Aggressive,
-                Program.Controller.PidCoeff.Integral] = float.Parse(mtbKAI.Text);
+            Program.clsControl[Controller.ModeType.Aggressive,
+                Controller.PidCoeff.Integral] = float.Parse(mtbKAI.Text);
             RemoveSign(ref pctAI);
         }
 
@@ -502,40 +502,40 @@ namespace LabPID
         private void pctAP_Click(object sender, EventArgs e)
         {
             if (((Control)sender).Tag.ToString() != "0") return;
-            Program.clsControl[Program.Controller.ModeType.Aggressive, 
-                Program.Controller.PidCoeff.Proportional] = float.Parse(mtbKAP.Text);
+            Program.clsControl[Controller.ModeType.Aggressive, 
+                Controller.PidCoeff.Proportional] = float.Parse(mtbKAP.Text);
             RemoveSign(ref pctAP);
         }
 
         private void pctAD_Click(object sender, EventArgs e)
         {
             if (((Control)sender).Tag.ToString() != "0") return;
-            Program.clsControl[Program.Controller.ModeType.Aggressive,
-                Program.Controller.PidCoeff.Differential] = float.Parse(mtbKAD.Text);
+            Program.clsControl[Controller.ModeType.Aggressive,
+                Controller.PidCoeff.Differential] = float.Parse(mtbKAD.Text);
             RemoveSign(ref pctAD);
         }
 
         private void pctNP_Click(object sender, EventArgs e)
         {
             if (((Control)sender).Tag.ToString() != "0") return;
-            Program.clsControl[Program.Controller.ModeType.Normal,
-                Program.Controller.PidCoeff.Proportional] = float.Parse(mtbKPP.Text);
+            Program.clsControl[Controller.ModeType.Normal,
+                Controller.PidCoeff.Proportional] = float.Parse(mtbKPP.Text);
             RemoveSign(ref pctNP);
         }
 
         private void pctNI_Click(object sender, EventArgs e)
         {
             if (((Control)sender).Tag.ToString() != "0") return;
-            Program.clsControl[Program.Controller.ModeType.Normal,
-                Program.Controller.PidCoeff.Integral] = float.Parse(mtbKPI.Text);
+            Program.clsControl[Controller.ModeType.Normal,
+                Controller.PidCoeff.Integral] = float.Parse(mtbKPI.Text);
             RemoveSign(ref pctNI);
         }
 
         private void pctND_Click(object sender, EventArgs e)
         {
             if (((Control)sender).Tag.ToString() != "0") return;
-            Program.clsControl[Program.Controller.ModeType.Normal,
-                Program.Controller.PidCoeff.Differential] = float.Parse(mtbKPD.Text);
+            Program.clsControl[Controller.ModeType.Normal,
+                Controller.PidCoeff.Differential] = float.Parse(mtbKPD.Text);
             RemoveSign(ref pctND);
         }
 
@@ -707,6 +707,7 @@ namespace LabPID
             Program.clsProfile.TimeToChangeSetpoint += ClsProfile_TimeToChangeSetpoint;
             Program.clsProfile.ExecutionFinished += ClsProfile_ExecutionFinished;
             Program.clsProfile.TemperatureValidationCallback += GetTempAndSetpoint;
+            Program.clsProfile.TimeToIssueCustomCommand += ClsProfile_TimeToIssueCustomCommand;
             Program.clsProfile.Start();
             if (!включитьЗаписьToolStripMenuItem.Checked)
             {
@@ -715,6 +716,11 @@ namespace LabPID
             } 
             btnSession.Enabled = false;
             lblProfile.Text = (lblProfile.Tag as string) + Program.clsProfile.Name;
+        }
+
+        private void ClsProfile_TimeToIssueCustomCommand(object sender, CustomCommandEventArgs e)
+        {
+            Program.clsControl.SendCustom(e.Command);
         }
 
         private void ClsProfile_ExecutionFinished(object sender, EventArgs e)
@@ -805,7 +811,7 @@ namespace LabPID
             if (((Control)sender).Tag.ToString() != "0") return;
             try
             {
-                Program.clsControl.GpioDirection = (Program.Controller.GpioDirectionType)updGpioMode.SelectedIndex;
+                Program.clsControl.GpioDirection = (Controller.GpioDirectionType)updGpioMode.SelectedIndex;
                 Program.clsControl.GpioState = chkGpioState.Checked;
                 RemoveSign(ref pctGpioState);
             }
