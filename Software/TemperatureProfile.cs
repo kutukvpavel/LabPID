@@ -16,6 +16,16 @@ namespace LabPID
         public float Temperature { get; }
     }
 
+    public class CustomCommandEventArgs : EventArgs
+    {
+        public CustomCommandEventArgs(string cmd)
+        {
+            Command = cmd;
+        }
+
+        public string Command { get; }
+    }
+
     public class TemperatureProfile : SortedDictionary<int, float>   //ms, °C
     {
         public enum State
@@ -31,9 +41,11 @@ namespace LabPID
             _OneSecondTimer.Elapsed += OneSecondTimer_Elapsed;
         }
 
+        public event EventHandler<CustomCommandEventArgs> TimeToIssueCustomCommand;
         public event EventHandler<TemperatureEventArgs> TimeToChangeSetpoint;
         public event EventHandler ExecutionFinished;
 
+        public Dictionary<int, string> CustomCommands;
         public Func<Tuple<float, float>> TemperatureValidationCallback;
         public int ElapsedTime { get; private set; }
         public State CurrentState { get; private set; } = State.Stopped;
@@ -58,6 +70,10 @@ namespace LabPID
                 _Reached = (Math.Abs(t.Item1 - t.Item2) < DelayTolerance);
                 if (!_Reached) return;
             }
+            if (CustomCommands.ContainsKey(ElapsedTime))
+            {
+                TimeToIssueCustomCommand?.Invoke(this, new CustomCommandEventArgs(CustomCommands[ElapsedTime]));
+            }
             if (++ElapsedTime >= _Enumerator.Current.Key)
             {
                 _Reached = false;
@@ -71,6 +87,7 @@ namespace LabPID
             _Finish = 0;
             _Reached = false;
             ElapsedTime = 0;
+            CustomCommands = new Dictionary<int, string>();
         }
 
         public void Start()

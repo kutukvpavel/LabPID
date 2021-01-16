@@ -39,7 +39,15 @@ namespace LabPID
                 while (line != null)
                 {
                     string[] split = line.Split(' ');
-                    _profile.Add(int.Parse(split[0]), float.Parse(split[1], CultureInfo.InvariantCulture));
+                    int time = int.Parse(split[0]);
+                    if (split[1][0] == '"')
+                    {
+                        _profile.CustomCommands.Add(time, split[1]);
+                    }
+                    else
+                    {
+                        _profile.Add(time, float.Parse(split[1], CultureInfo.InvariantCulture));
+                    }
                     line = reader.ReadLine();
                 }
                 _profile.Name = txtName.Text;
