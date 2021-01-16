@@ -87,10 +87,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyFunctions.h" />
+    <ClInclude Include="thermo.h" />
     <ClInclude Include="__vm\.thermo.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="commands.cpp" />
+    <ClCompile Include="display.cpp" />
+    <ClCompile Include="mem.cpp" />
     <ClCompile Include="MyFunctions.cpp" />
+    <ClCompile Include="onewire.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
