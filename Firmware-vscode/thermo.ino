@@ -1,5 +1,5 @@
-﻿/*  *
-*  NB! Some of the libraries used (e.g. PID) have been modified! The code is valid only if modified libs are used.
+/*
+* NB! Some of the libraries used (e.g. PID) have been modified! The code is valid only if modified libs are used.
 *
 *  Current major TODO:
 *  Improve interface performance
@@ -8,16 +8,16 @@
 *  This software was developed to fulfill the author's personal needs only and is provided strictly as-is.
 */
 
-#include "thermo.h"
-
 //Non-modified libraries (have to be present in the arduino libraries folder)
-#include <libraries\SPI\src\SPI.h>
+#include <SPI.h>
 
 //Modified, but not imported into the cppproj (one-time changes)
-#include "libraries\MAX6675-master\src\max6675.h" //SPI thermocouple amplifier
-#include "libraries\Average-master\Average.h"
-#include "libraries\MsTimer2\MsTimer2.h"
-#include "libraries\TimerOne-master\TimerOne.h"
+#include "src\MAX6675-master\src\max6675.h" //SPI thermocouple amplifier
+#include "src\Average-master\Average.h"
+#include "src\MsTimer2\MsTimer2.h"
+#include "src\TimerOne-master\TimerOne.h"
+
+#include "thermo.h"
 
 #pragma region Variables
 

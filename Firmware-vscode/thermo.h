@@ -1,12 +1,12 @@
 #pragma once
 
-//Non-modified libraries (have to be present in the arduino libraries folder)
-#include <libraries\EEPROM\src\EEPROM.h> 
-//Modified, but not imported into the cppproj (one-time changes)
-#include "libraries\encoder-arduino\ClickEncoder.h"
-#include "libraries\PID\PID_v1.h" //Heavily modified
 //Libraries imported into the project (continuous changes)
 #include "MyFunctions.h"
+//Non-modified libraries (have to be present in the arduino libraries folder)
+#include <EEPROM.h> 
+//Modified, but not imported into the cppproj (one-time changes)
+#include "src\encoder-arduino\ClickEncoder.h"
+#include "src\PID\PID_v1.h" //Heavily modified
 
 //Definitions of constants
 //#define DEBUG  //Debug info enable. Warning: consumes flash memory space and may impair communication with software!!

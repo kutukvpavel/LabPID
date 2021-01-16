@@ -20,10 +20,11 @@
             "name": "AVR8",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:\\arduino-1.8.5\\hardware\\tools\\**",
-                "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\**",
-                "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
-                "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\**",
+                "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\variants\\standard\\**",
+                "C:\\arduino-1.8.5\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include\\**",
+                "C:\\arduino-1.8.5\\hardware\\tools\\avr\\avr\\include\\",
+                "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\**",
+                "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\libraries\\**",
                 "E:\\Doc\\Паша\\Программирование\\arduino\\libraries\\**",
                 "C:\\arduino-1.8.5\\libraries\\**"
             ],
@@ -42,17 +43,18 @@
             "browse": {
                 "path": [
                     "${workspaceFolder}/**",
-                    "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\**",
-                    "C:\\arduino-1.8.5\\hardware\\tools\\**",
-                    "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\**",
-                    "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
-                    "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\**",
+                    "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\variants\\standard\\**",
+                    "C:\\arduino-1.8.5\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include\\**",
+                    "C:\\arduino-1.8.5\\hardware\\tools\\avr\\avr\\include\\*",
+                    "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\**",
+                    "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\libraries\\**",
                     "E:\\Doc\\Паша\\Программирование\\arduino\\libraries\\**",
                     "C:\\arduino-1.8.5\\libraries\\**"
                 ],
                 "limitSymbolsToIncludedHeaders": true
             },
             "forcedInclude": [
+                "C:\\arduino-1.8.5\\hardware\\tools\\avr\\avr\\include\\stdlib.h",
                 "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\4.9.2-atmel3.5.4-arduino2\\avr\\include\\stdint.h",
                 "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.21\\cores\\arduino\\Arduino.h"
             ]

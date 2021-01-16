@@ -1,8 +1,8 @@
 #include "thermo.h"
 
 //Modified, but not imported into the cppproj (one-time changes)
-#include "libraries\OneWire\OneWire.h"
-#include "libraries\DallasTemperature\DallasTemperature.h"
+#include "src\OneWire\OneWire.h"
+#include "src\DallasTemperature\DallasTemperature.h"
 
 OneWire oneWire(PIN_ONEWIRE);                                        // OneWire bus object
 DallasTemperature dsSensors(&oneWire);                                  // DS18B20 Object
