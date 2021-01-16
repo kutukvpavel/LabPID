@@ -18,6 +18,7 @@
 #define INFO "Lab PID temperature controller with GPIO."
 
 #define AVERAGING_WINDOW 3_ui8
+#define PIN_COOLER A4
 #define PIN_GPIO 11                     //General purpose IO pin
 #define PIN_INPUT A7                    //ADC input
 #define TIMING 1000                     //Timing for PID in milliseconds
@@ -48,8 +49,8 @@
 #define PIN_SS 10
 #define EEPROM_START 1                  //EEPROM virtual start address
 #define ERROR_TIMEOUT 7_ui8                 //Number of seconds to wait (re-checking the conditions) before showing error status
-#define PWM_MAX 62499
-#define PWM_MIN 0
+#define PWM_MAX 62499u
+#define PWM_MIN -1
 #define ENCODER_STEPS 4_ui8
 
 #define GPIO_DIRECTION(var) (((BV8(1) | BV8(2)) & (var)) >> 1_ui8)
@@ -90,6 +91,7 @@
 #define RAMP_LIMIT_ADDR (DISTILL_WINDOW_ADDR + sizeof(distillTempWindow)) //67
 #define GPIO_ADDR (RAMP_LIMIT_ADDR + sizeof(rampStepLimit)) //71
 #define CJC_ADDR (GPIO_ADDR + sizeof(gpioMode)) //72
+#define COOLER_ADDR (CJC_ADDR + sizeof(cjc)) //73
 #pragma endregion
 
 #pragma region Globals
@@ -127,6 +129,7 @@ extern bool averaging[CHANNEL_COUNT];
 extern bool logging[2];        
 extern bool condition[4];      
 extern bool cjc;
+extern bool enableCooler[CHANNEL_COUNT];
 
 extern ClickEncoder* encoder;
 extern PID myPID;

@@ -36,7 +36,9 @@ ISR(TIMER1_OVF_vect)                               // 1 sec timer routine
 {
 	myPID.Compute();                            // For PID computations, safety check and output updating
 	check_safety();
-	timers_set_pwm_duty(static_cast<uint16_t>(Output));
+	uint16_t duty = (Output > 0) ? static_cast<uint16_t>(Output) : 0;
+	timers_set_pwm_duty(duty);
+	if (enableCooler[channelIndex]) digitalWrite(PIN_COOLER, Output < 0);
 	logging[1] = true;                            //Also enables logging flag for the log to be periodically created (with 1 sec period, of course)
 }
 
@@ -92,7 +94,7 @@ char convert_regulation_mode(char src)  //Routine for converting user-friendly i
 
 void check_power()
 {
-	if (power < 0)
+	if (power < 0 && !enableCooler[channelIndex])
 	{
 		power = 0;
 	}
@@ -197,7 +199,7 @@ void pid_process()
 	if (regulationMode == MODE_MANUAL)            //If manual mode is enabled then turn off the PID and count output value based on power value
 	{
 		if (myPID.GetMode() != MANUAL) myPID.SetMode(MANUAL);
-		Output = static_cast<float>(PWM_MAX * (power < 0 ? 0 : static_cast<long>(power))) / 100; //Negative power values are reserved yet
+		Output = static_cast<float>((PWM_MAX * (power < 0 ? 0 : static_cast<uint32_t>(power))) / 100);
 	}
 	else
 	{

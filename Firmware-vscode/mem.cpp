@@ -36,5 +36,6 @@ void mem_rw(bool wrt)
 	mem(&rampStepLimit, wrt);
 	mem(&gpioMode, wrt);
 	mem(&cjc, wrt);
+	mem(&enableCooler, wrt);
 	eepromCurrentAddr = eepromStart;
 }

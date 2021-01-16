@@ -6,15 +6,15 @@ void timers_init()
     // Clock source: System Clock
     // Clock value: 62,500 kHz
     // Mode: Fast PWM top=ICR1
-    // OC1A output: Discon.
-    // OC1B output: Non-Inv.
+    // OC1A output: Non-Inv.
+    // OC1B output: Discon.
     // Noise Canceler: Off
     // Input Capture on Falling Edge
     // Timer1 Overflow Interrupt: On
     // Input Capture Interrupt: Off
     // Compare A Match Interrupt: Off
     // Compare B Match Interrupt: Off
-    TCCR1A=0x22;
+    TCCR1A=0x82;
     TCCR1B=0x1C;
     TCNT1H=0x00;
     TCNT1L=0x00;

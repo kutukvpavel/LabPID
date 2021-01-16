@@ -29,6 +29,7 @@ bool averaging[CHANNEL_COUNT] = { 1, 1, 0 };                                    
 bool logging[] = { 0, 0 };                                                 // Logging enable flags
 bool condition[4] = { 0, 0, 0, 0 };                                          // Flags for error states behavior control {Safety error, DS chain: <= 1 sensor, DS chain: 0 sensors, DS chain changed}
 bool cjc = false;
+bool enableCooler[CHANNEL_COUNT] = { 0, 0, 0 };
 
 ClickEncoder* encoder;                                                // Encoder object 
 PID myPID(&Input, &Output, &Setpoint, K[0][0], K[1][0], K[2][0], DIRECT);    // PID Object

@@ -225,6 +225,14 @@ void cmd()                       // Handling PC commands, general packet structu
 		Serial.println(cjc);
 #endif
 		break;
+	case 'N':
+		enableCooler[channelIndex] = (convert(enableCooler[channelIndex]) != 0) ? true : false;
+#ifdef DEBUG
+		Serial.print(static_cast<uint8_t>(enableCooler[0])); Serial.print(" ");
+		Serial.print(static_cast<uint8_t>(enableCooler[1])); Serial.print(" ");
+		Serial.println(static_cast<uint8_t>(enableCooler[2]));
+#endif
+		break;
 	default: break;
 	}
 }
@@ -262,6 +270,11 @@ void cfOut()                              //Outputs all the current technical da
 	Serial.print(rampStepLimit); sendSpace();
 	Serial.print(static_cast<int>(gpioMode)); sendSpace();
 	Serial.println(cjc);
+	for (uint8_t i = 0; i < (CHANNEL_COUNT - 1_ui8); i++)
+	{
+		Serial.print(static_cast<uint8_t>(enableCooler[i])); sendSpace();
+	}
+	Serial.println(static_cast<uint8_t>(enableCooler[CHANNEL_COUNT - 1_ui8]));
 }
 
 void serial_send_log()
