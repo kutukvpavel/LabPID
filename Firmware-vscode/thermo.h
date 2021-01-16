@@ -17,6 +17,7 @@
 #define FIRMWARE_VERSION "2b"
 #define INFO "Lab PID temperature controller with GPIO."
 
+#define AVERAGING_WINDOW 3_ui8
 #define PIN_GPIO 11                     //General purpose IO pin
 #define PIN_INPUT A7                    //ADC input
 #define TIMING 1000                     //Timing for PID in milliseconds
@@ -46,8 +47,8 @@
 #define PIN_ONEWIRE A3                 //OneWire bus pin
 #define PIN_SS 10
 #define EEPROM_START 1                  //EEPROM virtual start address
-#define ERROR_TIMEOUT 3_ui8                 //Number of seconds to wait (re-checking the conditions) before showing error status
-#define PWM_MAX 1023
+#define ERROR_TIMEOUT 7_ui8                 //Number of seconds to wait (re-checking the conditions) before showing error status
+#define PWM_MAX 62499
 #define PWM_MIN 0
 #define ENCODER_STEPS 4_ui8
 
@@ -131,11 +132,21 @@ extern ClickEncoder* encoder;
 extern PID myPID;
 #pragma endregion
 
-void check_power();
+#pragma region Timers
+
+void timers_init();
+inline void timers_set_pwm_duty(uint16_t) __attribute__((always_inline));
+void timers_set_pwm_duty(uint16_t v)
+{
+    OCR1B = v;
+}
+
+#pragma endregion
 
 #pragma region Common functions
 
 char convert_regulation_mode(char src);
+void check_power();
 
 #pragma endregion
 

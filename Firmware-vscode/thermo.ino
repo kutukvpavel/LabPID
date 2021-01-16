@@ -4,7 +4,7 @@
 *  Current major TODO:
 *  Improve interface performance
 *  _____________________________________
-*  Developed by Kutukov Pavel, 2016-2020.
+*  Developed by Kutukov Pavel, 2016-2021.
 *  This software was developed to fulfill the author's personal needs only and is provided strictly as-is.
 */
 
@@ -14,8 +14,6 @@
 //Modified, but not imported into the cppproj (one-time changes)
 #include "src\MAX6675-master\src\max6675.h" //SPI thermocouple amplifier
 #include "src\Average-master\Average.h"
-#include "src\MsTimer2\MsTimer2.h"
-#include "src\TimerOne-master\TimerOne.h"
 
 #include "thermo.h"
 
@@ -26,9 +24,10 @@ bool updateDisplay = true;                                                      
 uint16_t counter750ms = 0;                                                             // Virtual timer counter (750ms)
 uint16_t counter500ms = 0;                                                            // Virtual timer counter (500ms)
 uint16_t counterForDisplay = 0;                                                           // Virtual timer counter (display)
+float averagingBuffer[AVERAGING_WINDOW];
 
 MAX6675 thermocouple;                                  // MAX6675 thermocouple amplifier object
-Average<float> averageContainer(3);                                                // Averaging container
+Average<float> averagingObject(AVERAGING_WINDOW, averagingBuffer);                                                // Averaging container
 
 #pragma endregion
 
@@ -37,11 +36,11 @@ ISR(TIMER1_OVF_vect)                               // 1 sec timer routine
 {
 	myPID.Compute();                            // For PID computations, safety check and output updating
 	check_safety();
-	Timer1.setPwmDuty(PIN_PWM, static_cast<uint16_t>(Output));
+	timers_set_pwm_duty(static_cast<uint16_t>(Output));
 	logging[1] = true;                            //Also enables logging flag for the log to be periodically created (with 1 sec period, of course)
 }
 
-void isr_fast(void)                               // 1 ms timer routine
+ISR(TIMER2_OVF_vect)                               // 1 ms timer routine
 {
 	encoder->service();                         // For encoder poll
 	if (counterForDisplay > 199)
@@ -58,7 +57,6 @@ void isr_fast(void)                               // 1 ms timer routine
 	counter750ms++;                                       //OneWire poll timer
 	counter500ms++;                                      //max6675 timer
 	counterForDisplay++;                                     //Display timer
-
 }
 #pragma endregion
 
@@ -162,9 +160,8 @@ void read_input()                           //Update input according to the mode
 	}
 	in += calibration[channelIndex];          // Apply calibration value
 	if (averaging[channelIndex])
-	{
-		averageContainer.push(in);                           // Apply averaging if enabled for current mode
-		Input = averageContainer.mean();
+	{                         
+		Input = averagingObject.rolling(in); // Apply averaging if enabled for current mode
 	}
 	else
 	{
@@ -254,11 +251,7 @@ void setup() {
 #endif
 	myPID.SetSampleTime(TIMING);                          //Time-related stuff init
 	myPID.SetOutputLimits(PWM_MIN, PWM_MAX);
-	Timer1.initialize(((unsigned long)TIMING) * 1000UL);
-	//Timer1.attachInterrupt(isr1);
-	Timer1.pwm(PIN_PWM, 0);
-	MsTimer2::set(1, isr_fast);
-	MsTimer2::start();
+	timers_init();
 	encoder = new ClickEncoder(PIN_ENCODER1, PIN_ENCODER2, PIN_BUTTON, ENCODER_STEPS, 0);   //Encoder init
 																							//turn the PID on
 	myPID.SetMode(AUTOMATIC);

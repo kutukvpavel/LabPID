@@ -57,8 +57,7 @@ template <class T> class Average {
     public:
         // Public functions and variables.  These can be accessed from
         // outside the class.
-        Average(uint32_t size);
-        ~Average();
+        Average(uint32_t size, T* buffer);
         float rolling(T entry);
         void push(T entry);
         float mean();
@@ -82,19 +81,15 @@ template <class T> int Average<T>::getCount() {
     return _count;
 }
 
-template <class T> Average<T>::Average(uint32_t size) {
+template <class T> Average<T>::Average(uint32_t size, T* buffer) {
     _size = size;
     _count = 0;
-    _store = (T *)malloc(sizeof(T) * size);
+    _store = buffer;
     _position = 0;                                            // track position for circular storage
     _sum = 0;                                                 // track sum for fast mean calculation
     for (uint32_t i = 0; i < size; i++) {
         _store[i] = 0;
     }
-}
-
-template <class T> Average<T>::~Average() {
-    free(_store);
 }
 
 template <class T> void Average<T>::push(T entry) {

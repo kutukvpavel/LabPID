@@ -33,7 +33,7 @@
                 "ARDUINO_AVR_NANO",
                 "ARDUINO_ARCH_AVR",
                 "__AVR_ATmega328__",
-                "ARDUINO 185"
+                "ARDUINO=185"
             ],
             "windowsSdkVersion": "10.0.18362.0",
             "compilerPath": "",
