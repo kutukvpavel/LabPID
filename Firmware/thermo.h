@@ -1,18 +1,10 @@
 #pragma once
 
 //Non-modified libraries (have to be present in the arduino libraries folder)
-#include <SPI.h>
-#include <LiquidCrystal.h>
 #include <EEPROM.h> 
 //Modified, but not imported into the cppproj (one-time changes)
-#include "libraries\MAX6675-master\src\max6675.h" //SPI thermocouple amplifier
-#include "libraries\OneWire\OneWire.h"
-#include "libraries\DallasTemperature\DallasTemperature.h"
-#include "libraries\MsTimer2\MsTimer2.h"
-#include "libraries\TimerOne-master\TimerOne.h"
 #include "libraries\encoder-arduino\ClickEncoder.h"
 #include "libraries\PID\PID_v1.h" //Heavily modified
-#include "libraries\Average-master\Average.h"
 //Libraries imported into the project (continuous changes)
 #include "MyFunctions.h"
 

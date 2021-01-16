@@ -93,6 +93,7 @@
   <ItemGroup>
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="display.cpp" />
+    <ClCompile Include="globals.cpp" />
     <ClCompile Include="mem.cpp" />
     <ClCompile Include="MyFunctions.cpp" />
     <ClCompile Include="onewire.cpp" />

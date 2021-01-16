@@ -7,41 +7,19 @@
 *  Developed by Kutukov Pavel, 2016-2020.
 *  This software was developed to fulfill the author's personal needs only and is provided strictly as-is.
 */
+
 #include "thermo.h"
 
-#pragma region Globals
-const uint8_t eepromStart = EEPROM_START;                                         // Starting EEPROM address  TODO: consider changing it to dynamic var                                                              
-const float mult[5] = { 100, 10 , 1, 0.1, 0.01 };                 // Multipliers for building up numbers
-uint8_t channelIndex = CHANNEL_ADC;           // Current input used: 0 - ADC, 1 - SPI, 2 - DS18B20
-uint8_t prevChannelIndex = 0xff;              // Backup used to check for changes, thus determining if display update is needed
-uint8_t regulationMode = MODE_NORMAL;         // Regulation mode flag: 0 - normal, 1 - aggressive, 2 - distillation, 3 - manual
-uint8_t dsAddresses[2][8];                                           // Address temporary storage, introduced to try to speed up OneWire-related actions. 0 - ambient, 1 - channel
-uint8_t gpioMode = 0;                        //0bXXY where X denotes direction (input = 0, out = 1, pullup = 2) and Y stands for the state 
-float prevSetpoint = -1;                                                     // Backup needed for display update necessity check...
-float prevInputValue = -1;                                                   //  Same, more to come...
-float Setpoint, Input, Output;                                       // PID main values
-float integralTermLimit = 0.35;                                                // Integral term bound (in percents)
-float K[CHANNEL_COUNT][2] = { { 18, 35 },{ 0.006, 0.19 },{ 15, 16 } };                       // Current regulation constants
-float amplifierCoeff = INIT_AMP_COEFF;                                                    // Coefficient used for working with external amplifier
-float calibration[CHANNEL_COUNT] = { 0, 0, 0 };                                        // Input calibration values
-float distillExtraPower = 0;                                                          // Bias for distillation
-float ambientTemp = 0;                                                       // Current DS18B20 (ambient) temperature
-float defaultAmbientTemp = 25.0f;                                                  // Default ambient temperature
-float distillTempWindow = 5;                                                          // Tolerated setpoint overshoot in D-mode
-float dsChannelTemp = 0;                                                      // Current DS18B20 (channel) temperature
-float rampStepLimit = 2;
-uint8_t dsIndexes[2] = { 0, 1 };                                                 // DS18B20 indexes. 0 - ambient, 1 - channel
-int8_t power = 0;                                                            // Current power value
-int8_t prevPower = -1;                                                        // Similar backup for power value
-uint8_t cursorType = CURSOR_NONE;                                                            // Current cursor type
-uint8_t errorStatusDelay = 0;                                                           // Delay before error status (for the device not to lock when lowering setpoint manually)
-bool averaging[CHANNEL_COUNT] = { 1, 1, 0 };                                             // Averaging state array: {mode 0, mode 1, mode 2}
-bool logging[] = { 0, 0 };                                                 // Logging enable flags
-bool condition[4] = { 0, 0, 0, 0 };                                          // Flags for error states behavior control {Safety error, DS chain: <= 1 sensor, DS chain: 0 sensors, DS chain changed}
-bool cjc = false;
-ClickEncoder *encoder;                                                // Encoder object 
-PID myPID(&Input, &Output, &Setpoint, K[0][0], K[1][0], K[2][0], DIRECT);    // PID Object
-#pragma endregion
+//Non-modified libraries (have to be present in the arduino libraries folder)
+#include <SPI.h>
+
+//Modified, but not imported into the cppproj (one-time changes)
+#include "libraries\MAX6675-master\src\max6675.h" //SPI thermocouple amplifier
+#include "libraries\Average-master\Average.h"
+#include "libraries\MsTimer2\MsTimer2.h"
+#include "libraries\TimerOne-master\TimerOne.h"
+
+#pragma region Variables
 
 bool max6675Ready = true;                                                     // Flag of readiness for reading (for MAX6675 proper timing: >400ms)
 bool updateDisplay = true;                                                        // Flag for display update enable
@@ -51,6 +29,8 @@ uint16_t counterForDisplay = 0;                                                 
 
 MAX6675 thermocouple;                                  // MAX6675 thermocouple amplifier object
 Average<float> averageContainer(3);                                                // Averaging container
+
+#pragma endregion
 
 #pragma region ISRs
 ISR(TIMER1_OVF_vect)                               // 1 sec timer routine

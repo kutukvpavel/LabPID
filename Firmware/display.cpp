@@ -1,5 +1,8 @@
 #include "thermo.h"
 
+//Non-modified libraries (have to be present in the arduino libraries folder)
+#include <LiquidCrystal.h>
+
 bool menuBlankState = 0;                                                      // Backup used to determine if some fields are already blanked out and no update is needed (menu in mode #2)
 int16_t encoderValue = 0;
 uint8_t relativeCursorX = 0;                                                              //
