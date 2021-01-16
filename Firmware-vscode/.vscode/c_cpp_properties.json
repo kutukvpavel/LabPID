@@ -1,0 +1,62 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
+                "E:\\Doc\\Паша\\Программирование\\arduino\\libraries\\**",
+                "C:\\arduino-1.8.5\\libraries\\**",
+                "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.21\\**"
+            ],
+            "forcedInclude": [
+                "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.21\\cores\\arduino\\Arduino.h"
+            ],
+            "defines": [
+                "USBCON"
+            ],
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.27.29110/bin/Hostx64/x64/cl.exe"
+        },
+        {
+            "name": "AVR8",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:\\arduino-1.8.5\\hardware\\tools\\**",
+                "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\**",
+                "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
+                "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\**",
+                "E:\\Doc\\Паша\\Программирование\\arduino\\libraries\\**",
+                "C:\\arduino-1.8.5\\libraries\\**"
+            ],
+            "defines": [
+                "__AVR__",
+                "ARDUINO_AVR_NANO",
+                "ARDUINO_ARCH_AVR",
+                "__AVR_ATmega328__",
+                "ARDUINO 185"
+            ],
+            "windowsSdkVersion": "10.0.18362.0",
+            "compilerPath": "",
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "gcc-arm",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/**",
+                    "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\**",
+                    "C:\\arduino-1.8.5\\hardware\\tools\\**",
+                    "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\**",
+                    "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
+                    "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\**",
+                    "E:\\Doc\\Паша\\Программирование\\arduino\\libraries\\**",
+                    "C:\\arduino-1.8.5\\libraries\\**"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "forcedInclude": [
+                "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\4.9.2-atmel3.5.4-arduino2\\avr\\include\\stdint.h",
+                "C:\\Users\\Павел\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.21\\cores\\arduino\\Arduino.h"
+            ]
+        }
+    ],
+    "version": 4
+}
