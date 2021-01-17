@@ -20,3 +20,6 @@ B - Distill bias
 L - Current DS indexes (2 lines, starting with ">S:")
 W - Manual mode power
 O - Tolerated overshoot for d-mode
+
+J - CJC enable
+N - Enable cooler output
