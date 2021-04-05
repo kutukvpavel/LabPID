@@ -14,6 +14,11 @@ LiquidCrystal lcd(PIN_RS, PIN_E, PIN_D4, PIN_D5, PIN_D6, PIN_D7);
 void print_double(double dbl, int x, int y);
 void pwrprint();
 
+void lcd_send_space()
+{
+	lcd.print(' ');
+}
+
 void lcd_init()
 {
 	pinMode(PIN_RW, OUTPUT);
@@ -68,18 +73,18 @@ void print_double(double dbl, int x, int y)   //Encapsulated for convenience, pr
 {
 	char b[7];
 	dtostrf(dbl, 6, 2, b);
-	//sprintf(b, "%s", str_temp);
 	lcd.setCursor(x, y);
 	lcd.print(b);
 }
 
 void pwrprint()
 {
-	char b[6];
-	sprintf(b, "%4i%%", power);
+	uint8_t ap = abs(power);
+	lcd.setCursor(RIGHT_COLUMN_MARGIN + (ap > 9_ui8 ? (ap > 99_ui8 ? 0_ui8 : 1_ui8) : 2_ui8), 1);
+	lcd.print(power < 0 ? '-' : ' ');
+	lcd.print(power);
+	lcd.print('%');
 	prevPower = power;
-	lcd.setCursor(RIGHT_COLUMN_MARGIN, 1);
-	lcd.print(b);
 }
 
 void lcd_process_cursor_position()                             // Setting the cursor position, including shift chosen according to the field being edited
@@ -235,12 +240,12 @@ void lcd_process_slow()
 			for (uint8_t i = 0; i < LBLVALUE_LEN; i++)
 			{
 				lcd.setCursor(LEFT_COLUMN_MARGIN + i, 1);
-				lcd.print(' ');
+				lcd_send_space();
 			}
 			for (uint8_t i = 0; i < LBLPOWER_LEN; i++)
 			{
 				lcd.setCursor(RIGHT_COLUMN_MARGIN + i, 1);
-				lcd.print(' ');
+				lcd_send_space();
 			}
 			menuBlankState = true;
 		}
@@ -267,10 +272,13 @@ void lcd_process_slow()
 	{
 		if ((channelIndex != prevChannelIndex) || (regulationMode != prevRegulationMode))             // Mode field structure (normal): "M: {N,A,D,M}[0..2]{!}"
 		{
-			char b[5];
-			sprintf(b, " %c%1u ", convert_regulation_mode(regulationMode), channelIndex);
+			//char b[5];
+			//sprintf(b, " %c%1u ", convert_regulation_mode(regulationMode), channelIndex);
 			lcd.setCursor(RIGHT_COLUMN_MARGIN, 0);
-			lcd.print(b);
+			lcd_send_space();
+			lcd.print(convert_regulation_mode(regulationMode));
+			lcd.print(channelIndex);
+			lcd_send_space();
 			prevChannelIndex = channelIndex;
 			prevRegulationMode = regulationMode;
 			if (!myPID.GetMode() == MANUAL) myPID.SetMode(AUTOMATIC); //Reset PID to fix a strange bug causing power to stay at ~20% after channel selection no matter how input changes

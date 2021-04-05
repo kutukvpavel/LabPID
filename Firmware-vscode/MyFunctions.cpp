@@ -176,3 +176,28 @@ int freeMemory()
 }
 
 #endif // 
+
+uint16_t OPTanalogRead()
+{
+	// without a delay, we seem to read from the wrong channel
+	//delay(1);
+	// start the conversion
+	ADCSRA |= 1_ui8 << static_cast<uint8_t>(ADSC);
+	// ADSC is cleared when the conversion finishes
+	while (bit_is_set(ADCSRA, ADSC));
+	// we have to read ADCL first; doing so locks both ADCL
+	// and ADCH until ADCH is read.  reading ADCL second would
+	// cause the results of each conversion to be discarded,
+	// as ADCL and ADCH would be locked when it completed.
+	uint8_t low, high;
+	low  = ADCL;
+	high = ADCH;
+	// combine the two bytes
+	return (static_cast<uint16_t>(high) << 8_ui8) | low;
+}
+
+void OPTsetADMUX(uint8_t analog_reference, uint8_t pin)
+{
+	pin -= 14; // allow for pin numbers ONLY
+	ADMUX = (analog_reference << 6) | (pin & 0x07);
+}

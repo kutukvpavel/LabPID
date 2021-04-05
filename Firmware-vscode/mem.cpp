@@ -34,7 +34,9 @@ void mem_rw(bool wrt)
 	mem(&distillExtraPower, wrt);
 	mem(&distillTempWindow, wrt);
 	mem(&rampStepLimit, wrt);
-	mem(&gpioMode, wrt);
+	uint16_t io;
+	mem(&io, wrt);
+	gpio_write_all(io);
 	mem(&cjc, wrt);
 	mem(&enableCooler, wrt);
 	eepromCurrentAddr = eepromStart;

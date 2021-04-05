@@ -39,6 +39,14 @@
 
 // ----------------------------------------------------------------------------
 
+#define PIN_TO_BASEREG(pin)             (portInputRegister(digitalPinToPort(pin)))
+#define PIN_TO_BITMASK(pin)             (digitalPinToBitMask(pin))
+#define DIRECT_READ(base, mask)         (((*(base)) & (mask)) ? 1 : 0)
+#define DIRECT_MODE_INPUT(base, mask)   ((*((base)+1)) &= ~(mask))
+#define DIRECT_MODE_OUTPUT(base, mask)  ((*((base)+1)) |= (mask))
+#define DIRECT_WRITE_LOW(base, mask)    ((*((base)+2)) &= ~(mask))
+#define DIRECT_WRITE_HIGH(base, mask)   ((*((base)+2)) |= (mask))
+
 class ClickEncoder
 {
 public:
@@ -95,9 +103,15 @@ public:
   }
 
 private:
-  const uint8_t pinA;
+    uint8_t bitmaskA;
+    volatile uint8_t *baseRegA;
+    uint8_t bitmaskB;
+    volatile uint8_t *baseRegB;
+    uint8_t bitmaskButton;
+    volatile uint8_t *baseRegButton;
+  /*const uint8_t pinA;
   const uint8_t pinB;
-  const uint8_t pinBTN;
+  const uint8_t pinBTN;*/
   const bool pinsActive;
   volatile int16_t delta;
   volatile int16_t last;

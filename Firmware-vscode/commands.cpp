@@ -8,6 +8,7 @@ void sendSpace();
 float convert(float def);
 void cmd();
 void cfOut();
+void serial_print_float(float val, uint8_t precision, bool ln = false, uint8_t width = 1);
 
 void sendSpace()
 {
@@ -180,15 +181,16 @@ void cmd()                       // Handling PC commands, general packet structu
 #endif
 		break;
 	case 'L':                                           // S - current sensors' addresses
-		Serial.println(">S:");
+		Serial.print(">S:");
 		for (uint8_t k = 0; k < arraySize(dsAddresses); k++)
 		{
+			sendSpace();
 			for (short j = 0; j < 8; j++)
 			{
 				Serial.print(dsAddresses[k][j]);
 			}
-			Serial.print(k > 0 ? "\r\n" : " ");
 		}
+		Serial.println();
 		break;
 	case 'W':                                     // W - set power (only for manual mode)
 		if (regulationMode != MODE_MANUAL) break;
@@ -210,14 +212,24 @@ void cmd()                       // Handling PC commands, general packet structu
 #endif
 		break;
 	case 'G':
-		gpioMode = static_cast<uint8_t>(convert(gpioMode));
-		EEPROM.put(GPIO_ADDR, gpioMode);
+	{
+		if (!gpioOK)
+		{
+			Serial.println(">E:GPIO");
+			break;
+		}
+		uint8_t data = static_cast<uint8_t>(convert(0xFF));
+		if (data != 0xFF_ui8) {
+		gpio_write(data);
+		EEPROM.put(GPIO_ADDR, gpio_get_output_register());
 #ifdef DEBUG
 		Serial.println(gpioMode, BIN);
 #endif
+		}
 		Serial.print(">G:");
-		Serial.println(digitalRead(PIN_GPIO));
+		Serial.println(gpio_read_all());
 		break;
+	}
 	case 'J':
 		cjc = (convert(cjc) > 0);
 		EEPROM.put(CJC_ADDR, cjc);
@@ -240,35 +252,35 @@ void cmd()                       // Handling PC commands, general packet structu
 void cfOut()                              //Outputs all the current technical data
 {
 	Serial.println(">D:");
-	Serial.print(Input); sendSpace();
-	Serial.print(ambientTemp); sendSpace();
+	serial_print_float(Input, 2);
+	serial_print_float(ambientTemp, 2);
 	Serial.print(convert_regulation_mode(regulationMode)); Serial.println(static_cast<int>(channelIndex));
 	for (uint8_t i = 0; i < arraySize(K[0]); ++i)
 	{
 		for (uint8_t j = 0; j < (arraySize(K) - 1_ui8); ++j)
 		{
-			Serial.print(K[j][i], 4); sendSpace();
+			serial_print_float(K[j][i], 4);
 		}
-		Serial.println(K[arraySize(K) - 1_ui8][i], 4);
+		serial_print_float(K[arraySize(K) - 1_ui8][i], 4, true);
 	}
-	Serial.print(integralTermLimit, 4); sendSpace();
-	Serial.print(distillExtraPower, 4); sendSpace();
-	Serial.println(amplifierCoeff, 4);
+	serial_print_float(integralTermLimit, 4);
+	serial_print_float(distillExtraPower, 4);
+	serial_print_float(amplifierCoeff, 4, true);
 	for (uint8_t i = 0; i < (arraySize(calibration) - 1_ui8); i++)
 	{
-		Serial.print(calibration[i], 4); sendSpace();
+		serial_print_float(calibration[i], 4);
 	}
-	Serial.println(calibration[arraySize(calibration) - 1_ui8], 4);
+	serial_print_float(calibration[arraySize(calibration) - 1_ui8], 4, true);
 	for (uint8_t i = 0; i < (arraySize(averaging) - 1_ui8); i++)
 	{
-		Serial.print(averaging[i], 4); sendSpace();
+		serial_print_float(averaging[i], 4);
 	}
-	Serial.println(averaging[arraySize(averaging) - 1_ui8], 4);
-	Serial.print(Setpoint); sendSpace();
-	Serial.print(defaultAmbientTemp); sendSpace();
-	Serial.println(distillTempWindow);
-	Serial.print(rampStepLimit); sendSpace();
-	Serial.print(static_cast<int>(gpioMode)); sendSpace();
+	serial_print_float(averaging[arraySize(averaging) - 1_ui8], 4, true);
+	serial_print_float(Setpoint, 2);
+	serial_print_float(defaultAmbientTemp, 2);
+	serial_print_float(distillTempWindow, 2, true);
+	serial_print_float(rampStepLimit, 2);
+	Serial.print(static_cast<int>(gpio_read_all())); sendSpace();
 	Serial.println(cjc);
 	for (uint8_t i = 0; i < (CHANNEL_COUNT - 1_ui8); i++)
 	{
@@ -277,21 +289,29 @@ void cfOut()                              //Outputs all the current technical da
 	Serial.println(static_cast<uint8_t>(enableCooler[CHANNEL_COUNT - 1_ui8]));
 }
 
+void serial_print_float(float val, uint8_t precision, bool ln, uint8_t width)
+{
+	char s[16];
+	dtostrf(val, 1, precision, s);
+	if (ln)
+	{
+		Serial.println(s);
+	}
+	else
+	{
+		Serial.print(s); sendSpace();
+	}
+}
+
 void serial_send_log()
 {
-	char s[7][7];
-	dtostrf(prevSetpoint, 6, 2, s[0]);    //Build up the strings. TODO: consider improving execution speed.
-	dtostrf(prevInputValue, 6, 2, s[1]);
-	dtostrf(ambientTemp, 6, 2, s[2]);
-	sprintf(s[3], "%i", prevPower);
-	sprintf(s[4], "%c%1u", convert_regulation_mode(regulationMode), prevChannelIndex);
-	dtostrf(dsChannelTemp, 6, 2, s[5]);
-	sprintf(s[6], "%i", digitalRead(PIN_GPIO));
 	Serial.print(">L:");
-	for (uint8_t i = 0; i < arraySize(s); i++)
-	{
-		sendSpace();
-		Serial.print(s[i]);
-	}
-	Serial.println();
+	serial_print_float(prevSetpoint, 2, false, 6);    //Build up the strings. TODO: consider improving execution speed.
+	serial_print_float(prevInputValue, 2, false, 6);
+	serial_print_float(ambientTemp, 2, false, 6);
+	Serial.print(static_cast<int>(prevPower)); sendSpace();
+	Serial.print(convert_regulation_mode(regulationMode)); sendSpace();
+	Serial.print(static_cast<int>(prevChannelIndex)); sendSpace();
+	serial_print_float(dsChannelTemp, 2, false, 6);
+	Serial.println(static_cast<long>(gpio_read_all()));
 }

@@ -162,3 +162,7 @@ struct BitField
 	BitField(uint8_t);
 	~BitField();
 };
+
+void OPTsetADMUX(uint8_t analog_reference, uint8_t pin);
+
+uint16_t OPTanalogRead();

@@ -55,6 +55,12 @@
     </Compile>
     <Compile Include="CommPort.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="GpioTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GpioTools.Designer.cs">
+      <DependentUpon>GpioTools.cs</DependentUpon>
+    </Compile>
     <Compile Include="Info.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +90,9 @@
     </Compile>
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GpioTools.resx">
+      <DependentUpon>GpioTools.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Info.resx">
       <DependentUpon>Info.cs</DependentUpon>

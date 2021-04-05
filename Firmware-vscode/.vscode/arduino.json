@@ -1,5 +1,6 @@
 {
     "sketch": "thermo.ino",
     "board": "arduino:avr:nano",
-    "configuration": "cpu=atmega328"
+    "configuration": "cpu=atmega328",
+    "port": "COM31"
 }
