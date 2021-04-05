@@ -19,7 +19,6 @@
 
 #define AVERAGING_WINDOW 3_ui8
 #define PIN_COOLER A4
-#define PIN_GPIO 11                     //General purpose IO pin
 #define PIN_INPUT A7                    //ADC input
 #define TIMING 1000                     //Timing for PID in milliseconds
 #define PIN_PWM 9                       //Pin for PWM PID output
@@ -33,6 +32,7 @@
 #define PIN_D5 7
 #define PIN_D6 6
 #define PIN_D7 5
+#define PIN_FUSE_SENSE A6
 #define LBL_SPACING 1_ui8 //" "
 #define LBL_LEN 2_ui8 //"S:"
 #define LBLVALUE_LEN 6_ui8 //"123.45"            //Display configuration
@@ -53,9 +53,8 @@
 #define PWM_MIN -1
 #define ENCODER_STEPS 4_ui8
 
-#define GPIO_DIRECTION(var) (((BV8(1) | BV8(2)) & (var)) >> 1_ui8)
-#define GPIO_VALUE(var) (BV8(0) & (var))
-#define SET_GPIO_DIRECTION(var, val) (var) &= BV8(0); (var) |= ((val) << 1_ui8)
+#define GPIO_MODE_MAP 12, 4  //Number of consequtive inputs (element index % 2 != 0) / outputs (element index % 2 == 0)
+#define GPIO_IC_ADDRESS 0x20_ui8
 #define MODE_NORMAL 0_ui8
 #define MODE_AGGRESSIVE 1_ui8
 #define MODE_DISTILL 2_ui8
@@ -90,7 +89,7 @@
 #define DISTILL_WINDOW_ADDR (DISTILL_POWER_ADDR + sizeof(distillExtraPower)) //63
 #define RAMP_LIMIT_ADDR (DISTILL_WINDOW_ADDR + sizeof(distillTempWindow)) //67
 #define GPIO_ADDR (RAMP_LIMIT_ADDR + sizeof(rampStepLimit)) //71
-#define CJC_ADDR (GPIO_ADDR + sizeof(gpioMode)) //72
+#define CJC_ADDR (GPIO_ADDR + sizeof(uint16_t)) //72
 #define COOLER_ADDR (CJC_ADDR + sizeof(cjc)) //73
 #pragma endregion
 
@@ -106,7 +105,6 @@ extern uint8_t channelIndex;
 extern uint8_t prevChannelIndex;
 extern uint8_t regulationMode;
 extern uint8_t dsAddresses[2][8];
-extern uint8_t gpioMode;
 extern float prevSetpoint;
 extern float prevInputValue;
 extern float Setpoint, Input, Output;
@@ -130,6 +128,7 @@ extern bool logging[2];
 extern bool condition[4];      
 extern bool cjc;
 extern bool enableCooler[CHANNEL_COUNT];
+extern bool gpioOK;
 
 extern ClickEncoder* encoder;
 extern PID myPID;
@@ -184,5 +183,17 @@ void serial_send_log();
 
 void mem_rw(bool wrt);
 void mem_save_persistent();
+
+#pragma endregion
+
+#pragma region GPIO
+
+void gpio_init();
+uint16_t gpio_read_all();
+void gpio_write_all(uint16_t val);
+bool gpio_read(uint8_t address);
+void gpio_write(uint8_t address, bool value);
+void gpio_write(uint8_t code);
+uint16_t gpio_get_output_register();
 
 #pragma endregion

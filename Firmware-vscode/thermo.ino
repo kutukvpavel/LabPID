@@ -106,13 +106,15 @@ void check_power()
 
 void check_safety() // Check if something goes wrong (real temp rises more than 20C above the setpoint, ambient temperature rises above 60C, ds18b20 failed, no ds18b20 when using mode #2, broken thermocouple)
 {
+	bool fuse = !digitalRead(PIN_FUSE_SENSE);
 	condition[0] = (
 		((Input - Setpoint > 20) && (Output > 0)) ||
 		(ambientTemp > 60) ||
 		(ambientTemp < -25) ||
 		(dsChannelTemp < -25) ||
 		(condition[2] && (channelIndex == CHANNEL_DS18B20)) ||
-		(!(Input == Input)));
+		(!(Input == Input)) ||
+		fuse);
 	if (condition[0])
 	{
 		if (errorStatusDelay > ERROR_TIMEOUT)
@@ -120,7 +122,7 @@ void check_safety() // Check if something goes wrong (real temp rises more than 
 			if (myPID.GetMode() == AUTOMATIC)
 			{
 				myPID.SetMode(MANUAL);
-				Serial.println(">E!");
+				Serial.println(fuse ? ">E:FUSE" : ">E!");
 			}
 			Output = 0;
 		}
@@ -149,7 +151,7 @@ void read_input()                           //Update input according to the mode
 	switch (channelIndex)
 	{
 	case CHANNEL_ADC:                              // 0 - external amplifier (ADC input)
-		in = analogRead(PIN_INPUT) * amplifierCoeff + (cjc ? ambientTemp : 0);
+		in = OPTanalogRead() * amplifierCoeff + (cjc ? ambientTemp : 0);
 		break;
 	case CHANNEL_MAX6675:                              // 1 - max6675 (SPI)
 		in = static_cast<float>(thermocouple.readCelsius());
@@ -242,11 +244,10 @@ void setup() {
 	pinMode(PIN_INPUT, INPUT);
 	pinMode(PIN_PWM, OUTPUT);
 	digitalWrite(PIN_PWM, LOW);
+	gpio_init();
+	OPTsetADMUX(EXTERNAL, PIN_INPUT);
 
 	mem_rw(false);
-
-	pinMode(PIN_GPIO, GPIO_DIRECTION(gpioMode));
-	digitalWrite(PIN_GPIO, GPIO_VALUE(gpioMode));
 
 #ifdef DEBUG
 	cfOut();
