@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
@@ -13,12 +14,6 @@ namespace LabPID
     {
 
         #region Static
-        public enum GpioDirectionType : byte
-        {
-            Input = 0,
-            InputPullup,
-            Output
-        }
         public enum TempType
         {
             CurrentChannel,
@@ -66,12 +61,6 @@ namespace LabPID
                 { PidCoeff.Integral, 'I' },
                 { PidCoeff.Differential, 'D' },
             };
-        public static readonly Dictionary<GpioDirectionType, string> DirectionDesignator = new Dictionary<GpioDirectionType, string>
-            {
-                { GpioDirectionType.Input, "I" },
-                { GpioDirectionType.InputPullup, "IP" },
-                { GpioDirectionType.Output, "O" }
-            };
         public const short ChannelNumber = 3;
         #endregion
 
@@ -95,7 +84,6 @@ namespace LabPID
         short _CurrentLineIndex = 0;
         ModeType _Mode;
         byte _Channel;
-        byte _GPIOMode = 0;
         bool _IsConnected = false;
         bool _Logging = false;
         bool[] _Average = new bool[ChannelNumber];
@@ -255,16 +243,6 @@ namespace LabPID
                 Send('7', value);
             }
         }
-        public byte GpioMode
-        {
-            get { return _GPIOMode; }
-            set
-            {
-                if (value == _GPIOMode) return;
-                _GPIOMode = value;
-                Send('G', value);
-            }
-        }
         public bool IsPortOpen
         {
             get { return devSerial.IsOpen; }
@@ -311,29 +289,7 @@ namespace LabPID
                 Send('J', value ? 1f : 0f);
             }
         }
-        public GpioDirectionType GpioDirection
-        {
-            get { return (GpioDirectionType)(_GPIOMode >> 1); }
-            set
-            {
-                GpioDirectionType cur = (GpioDirectionType)(_GPIOMode >> 1);
-                if (value == cur) return;
-                _GPIOMode &= 1;
-                _GPIOMode |= (byte)((int)value << 1);
-                Send('G', _GPIOMode);
-            }
-        }
-        public bool GpioState
-        {
-            get { return (_GPIOMode & 1u) > 0; }
-            set
-            {
-                bool cur = (_GPIOMode & 1u) > 0;
-                if (value == cur) return;
-                SetGpioState(value);
-                Send('G', _GPIOMode);
-            }
-        }
+        public GpioDescriptor GpioState { get; } = new GpioDescriptor();
         public bool[] Averages
         {
             get { return _Average; }
@@ -341,9 +297,11 @@ namespace LabPID
         #endregion
 
         #region Public methods
-        public void CheckDevicePresent()
+        public void SetGpioOutput(int index, bool value)
         {
-            Send('V', 0f);
+            byte code = (byte)(index);
+            if (value) code |= 1 << 7;
+            Send('G', code);
         }
         public void Update()
         {
@@ -433,18 +391,7 @@ namespace LabPID
             if (b.Length > 5)
             {
                 _Temp[3] = Convert(b[5]);
-                SetGpioState((b[6][0] - '0') > 0);
-            }
-        }
-        private void SetGpioState(bool state)
-        {
-            if (state)
-            {
-                _GPIOMode |= 1;
-            }
-            else
-            {
-                _GPIOMode &= (byte)((~1u) & 0xFFu);
+                GpioState.Parse((uint)int.Parse(b[6]));
             }
         }
         private void LineReceived(string line)
@@ -542,7 +489,7 @@ namespace LabPID
                     break;
                 case 8:
                     _RampStep = Convert(b[0]);
-                    _GPIOMode = byte.Parse(b[1]);
+                    GpioState.Parse((uint)int.Parse(b[1]));
                     _CJC = (b[2][0] - '0') > 0;
                     return true;
                 default:
@@ -613,5 +560,48 @@ namespace LabPID
             Program.frmTerm.SetStatus(Status);
         }
         #endregion
+    }
+
+    public class GpioDescriptor
+    {
+        #region Private
+
+        private const int InputCount = 4;
+        private const int OutputCount = 12;
+        private bool HoldEvents = false;
+        private void RaiseChanged(object sender, EventArgs e)
+        {
+            if (!HoldEvents) Changed?.Invoke(sender, e);
+        }
+
+        #endregion
+
+        public event EventHandler Changed;
+
+        ObservableCollection<bool> Inputs { get; }
+        ObservableCollection<bool> Outputs { get; }
+
+        public GpioDescriptor()
+        {
+            Inputs = new ObservableCollection<bool>(new bool[InputCount]);
+            Outputs = new ObservableCollection<bool>(new bool[OutputCount]);
+            Inputs.CollectionChanged += RaiseChanged;
+            Outputs.CollectionChanged += RaiseChanged;
+        }
+
+        public void Parse(uint raw)
+        {
+            HoldEvents = true;
+            for (int i = 0; i < OutputCount; i++)
+            {
+                Outputs[i] = (raw & (1u << i)) != 0;
+            }
+            for (int i = 0; i < InputCount; i++)
+            {
+                Inputs[i] = (raw & (1u << (i + OutputCount))) != 0;
+            }
+            HoldEvents = false;
+            RaiseChanged(this, null);
+        }
     }
 }

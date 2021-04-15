@@ -18,6 +18,7 @@ namespace LabPID
 		public static Settings frmSet;
 		public static AboutBox frmAbout;
 		public static Profile frmProfile;
+		public static GpioTools frmGpioTools;
 		public static Controller clsControl;
 		public static Log clsLog;
 		public static TemperatureProfile clsProfile; 
@@ -38,6 +39,7 @@ namespace LabPID
 			frmSet = new Settings();
 			frmAbout = new AboutBox();
 			frmProfile = new Profile();
+			frmGpioTools = new GpioTools();
 			clsControl = new Controller();
 			clsProfile = new TemperatureProfile();
 			clsLog = new Log(Log.GenerateFilename("log"));

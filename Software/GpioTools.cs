@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace pid
+namespace LabPID
 {
     public partial class GpioTools : Form
     {

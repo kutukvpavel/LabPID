@@ -158,7 +158,6 @@ namespace LabPID
             mtbSetpoint.Text = Program.clsControl.Setpoint.ToString(Program.ShortFloatFormat); 
             updMode.SelectedIndex = updMode.Items.IndexOf(Controller.ModeDesignator[Program.clsControl.Mode].ToString());
             updChannel.SelectedIndex = Program.clsControl.Channel;
-            chkGpioState.Checked = Program.clsControl.GpioState;
             if (!partially)
             {
                 mtbC0.Text = Program.clsControl.Calibrations[0].ToString(Program.ShortFloatFormat);
@@ -179,7 +178,6 @@ namespace LabPID
                 chkAv2.Checked = Program.clsControl.Averages[1];
                 chkAv3.Checked = Program.clsControl.Averages[2];
                 chkCJC.Checked = Program.clsControl.EnableCjc;
-                updGpioMode.SelectedIndex = (int)Program.clsControl.GpioDirection;
                 Program.frmSet.AmbientUpdate();
                 foreach (PictureBox item in Program.FlattenChildren(tableLayoutPanel1).OfType<PictureBox>())
                 {
@@ -806,31 +804,6 @@ namespace LabPID
             File.WriteAllText(Program.Log.GenerateFilename("csv"), s.ToString());
         }
 
-        private void pctGpioState_Click(object sender, EventArgs e)
-        {
-            if (((Control)sender).Tag.ToString() != "0") return;
-            try
-            {
-                Program.clsControl.GpioDirection = (Controller.GpioDirectionType)updGpioMode.SelectedIndex;
-                Program.clsControl.GpioState = chkGpioState.Checked;
-                RemoveSign(ref pctGpioState);
-            }
-            catch (InvalidCastException)
-            {
-                MessageBox.Show("Выбор за пределами диапазона.");
-            }
-        }
-
-        private void chkGpioState_CheckedChanged(object sender, EventArgs e)
-        {
-            DisplaySign(ref pctGpioState);
-        }
-
-        private void updGpioMode_SelectedItemChanged(object sender, EventArgs e)
-        {
-            DisplaySign(ref pctGpioState);
-        }
-
         private void chkCJC_CheckedChanged(object sender, EventArgs e)
         {
             DisplaySign(ref pctCJC);
@@ -841,6 +814,11 @@ namespace LabPID
             if (((Control)sender).Tag.ToString() != "0") return;
             Program.clsControl.EnableCjc = chkCJC.Checked;
             RemoveSign(ref pctCJC);
+        }
+
+        private void label6_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
         }
     }
 }
