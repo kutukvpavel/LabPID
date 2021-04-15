@@ -818,7 +818,7 @@ namespace LabPID
 
         private void label6_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            Program.frmGpioTools.Show();
         }
     }
 }

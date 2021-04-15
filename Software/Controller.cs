@@ -578,8 +578,8 @@ namespace LabPID
 
         public event EventHandler Changed;
 
-        ObservableCollection<bool> Inputs { get; }
-        ObservableCollection<bool> Outputs { get; }
+        public ObservableCollection<bool> Inputs { get; }
+        public ObservableCollection<bool> Outputs { get; }
 
         public GpioDescriptor()
         {

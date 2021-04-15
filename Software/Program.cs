@@ -34,15 +34,15 @@ namespace LabPID
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			clsControl = new Controller();
+			clsProfile = new TemperatureProfile();
+			clsLog = new Log(Log.GenerateFilename("log"));
 			frmInfo = new Info();
 			frmTerm = new Terminal();
 			frmSet = new Settings();
 			frmAbout = new AboutBox();
 			frmProfile = new Profile();
-			frmGpioTools = new GpioTools();
-			clsControl = new Controller();
-			clsProfile = new TemperatureProfile();
-			clsLog = new Log(Log.GenerateFilename("log"));
+			frmGpioTools = new GpioTools(clsControl.GpioState);
 			Application.Run(frmInfo);
 		}
 
