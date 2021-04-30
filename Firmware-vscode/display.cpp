@@ -21,22 +21,14 @@ void lcd_send_space()
 
 void lcd_init()
 {
-	pinMode(PIN_RW, OUTPUT);
-	digitalWrite(PIN_RW, LOW);
 	lcd.begin(LCD_X, LCD_Y);
 	lcd.clear();
 }
 
-void lcd_draw_boot_screen()
+void lcd_draw_message(const char* msg)
 {
-	lcd.home();
-	lcd.print("Booting...");
-}
-
-void lcd_draw_reset_screen()
-{
-	lcd.home();
-	lcd.print("Resetting...");
+	lcd.clear();
+	lcd.print(msg);
 }
 
 void lcd_draw_interface()

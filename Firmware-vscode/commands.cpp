@@ -280,7 +280,7 @@ void cfOut()                              //Outputs all the current technical da
 	serial_print_float(defaultAmbientTemp, 2);
 	serial_print_float(distillTempWindow, 2, true);
 	serial_print_float(rampStepLimit, 2);
-	Serial.print(static_cast<int>(gpio_read_all())); sendSpace();
+	Serial.print(gpio_read_all()); sendSpace();
 	Serial.println(cjc);
 	for (uint8_t i = 0; i < (CHANNEL_COUNT - 1_ui8); i++)
 	{

@@ -19,11 +19,26 @@
 
 #pragma region Variables
 
-bool max6675Ready = true;                                                     // Flag of readiness for reading (for MAX6675 proper timing: >400ms)
-bool updateDisplay = true;                                                        // Flag for display update enable
-uint16_t counter750ms = 0;                                                             // Virtual timer counter (750ms)
-uint16_t counter500ms = 0;                                                            // Virtual timer counter (500ms)
-uint16_t counterForDisplay = 0;                                                           // Virtual timer counter (display)
+const char lcd_booting_message[] = "Booting...";
+const char lcd_resetting_message[] = "Resetting...";
+
+#ifdef DEBUG_STARTUP
+const char lcd_spi_message[] = "SPI";
+const char lcd_serial_message[] = "Serial";
+const char lcd_button_message[] = "Button";
+const char lcd_gpio_message[] = "GPIO";
+const char lcd_eeprom_message[] = "EEPROM";
+const char lcd_pid_message[] = "PID";
+const char lcd_max6675_message[] = "MAX6675";
+const char lcd_ds_message[] = "DS18B20";
+const char lcd_adc_message[] = "ADC";
+#endif
+
+volatile bool max6675Ready = true;                                                     // Flag of readiness for reading (for MAX6675 proper timing: >400ms)
+volatile bool updateDisplay = true;                                                        // Flag for display update enable
+volatile uint16_t counter750ms = 0;                                                             // Virtual timer counter (750ms)
+volatile uint16_t counter500ms = 0;                                                            // Virtual timer counter (500ms)
+volatile uint16_t counterForDisplay = 0;                                                           // Virtual timer counter (display)
 float averagingBuffer[AVERAGING_WINDOW];
 
 MAX6675 thermocouple;                                  // MAX6675 thermocouple amplifier object
@@ -34,6 +49,9 @@ Average<float> averagingObject(AVERAGING_WINDOW, averagingBuffer);              
 #pragma region ISRs
 ISR(TIMER1_OVF_vect)                               // 1 sec timer routine
 {
+#ifdef DEBUG_TIMERS
+	Serial.write('1');
+#endif
 	myPID.Compute();                            // For PID computations, safety check and output updating
 	check_safety();
 	uint16_t duty = (Output > 0) ? static_cast<uint16_t>(Output) : 0;
@@ -42,8 +60,11 @@ ISR(TIMER1_OVF_vect)                               // 1 sec timer routine
 	logging[1] = true;                            //Also enables logging flag for the log to be periodically created (with 1 sec period, of course)
 }
 
-ISR(TIMER2_OVF_vect)                               // 1 ms timer routine
+ISR(TIMER2_COMPA_vect)                               // 1 ms timer routine
 {
+#ifdef DEBUG_TIMERS
+	Serial.write('2');
+#endif
 	encoder->service();                         // For encoder poll
 	if (counterForDisplay > 199)
 	{
@@ -106,7 +127,8 @@ void check_power()
 
 void check_safety() // Check if something goes wrong (real temp rises more than 20C above the setpoint, ambient temperature rises above 60C, ds18b20 failed, no ds18b20 when using mode #2, broken thermocouple)
 {
-	bool fuse = !digitalRead(PIN_FUSE_SENSE);
+	OPTsetADMUX(EXTERNAL, PIN_FUSE_SENSE);
+	bool fuse = OPTanalogRead() < 512u;
 	condition[0] = (
 		((Input - Setpoint > 20) && (Output > 0)) ||
 		(ambientTemp > 60) ||
@@ -151,6 +173,7 @@ void read_input()                           //Update input according to the mode
 	switch (channelIndex)
 	{
 	case CHANNEL_ADC:                              // 0 - external amplifier (ADC input)
+		OPTsetADMUX(EXTERNAL, PIN_INPUT);
 		in = OPTanalogRead() * amplifierCoeff + (cjc ? ambientTemp : 0);
 		break;
 	case CHANNEL_MAX6675:                              // 1 - max6675 (SPI)
@@ -212,21 +235,32 @@ void pid_process()
 #pragma endregion
 
 void setup() {
+	lcd_init();
+	#ifdef DEBUG_STARTUP
+	lcd_draw_message(lcd_serial_message);
+#else
+	lcd_draw_message(lcd_booting_message);
+#endif
+
 	asm("cli");   // No interrupts while we aren't ready yet
 				  // put your setup code here, to run once:
-	
-	lcd_init();
-	lcd_draw_boot_screen();
 	Serial.begin(9600);                                     // Initialize serial communications with the PC
+#ifdef DEBUG_STARTUP
+	Serial.println("LabPID");
+	lcd_draw_message(lcd_spi_message);
+#endif
 	SPI.begin();                                            // Init hardware SPI for max6675-compatible devices
 	uint8_t t = 0;
 
+#ifdef DEBUG_STARTUP
+	lcd_draw_message(lcd_button_message);
+#endif
 	pinMode(PIN_BUTTON, INPUT_PULLUP);                          //Provide ability to reset to factory defaults by holding encoder's button while booting up
 	
 	t = EEPROM.read(0);                                           //Check if this is the first run and we'll have to fill the EEPROM up too
 	if ((t != 0x01) || (!digitalRead(PIN_BUTTON)))
 	{
-		lcd_draw_reset_screen();
+		lcd_draw_message(lcd_resetting_message);
 		delay(500);
 		for (uint16_t i = 0; i < EEPROM.length(); ++i) EEPROM.write(i, 0);
 		Setpoint = 18.0f;
@@ -237,20 +271,29 @@ void setup() {
 #ifdef DEBUG
 		Serial.println("EEPROM refilled.");
 #endif
-		lcd_draw_boot_screen();
+		lcd_draw_message(lcd_booting_message);
 	}
 
-	analogReference(EXTERNAL);                              // Initialize ADC stuff
+	pinMode(PIN_FUSE_SENSE, INPUT);
 	pinMode(PIN_INPUT, INPUT);
 	pinMode(PIN_PWM, OUTPUT);
 	digitalWrite(PIN_PWM, LOW);
-	gpio_init();
-	OPTsetADMUX(EXTERNAL, PIN_INPUT);
 
+#ifdef DEBUG_STARTUP
+	lcd_draw_message(lcd_adc_message);
+#endif
+	analogReference(EXTERNAL);                              // Initialize ADC stuff
+
+#ifdef DEBUG_STARTUP
+	lcd_draw_message(lcd_eeprom_message);
+#endif
 	mem_rw(false);
-
 #ifdef DEBUG
 	cfOut();
+#endif
+
+#ifdef DEBUG_STARTUP
+	lcd_draw_message(lcd_pid_message);
 #endif
 	myPID.SetSampleTime(TIMING);                          //Time-related stuff init
 	myPID.SetOutputLimits(PWM_MIN, PWM_MAX);
@@ -258,14 +301,27 @@ void setup() {
 	encoder = new ClickEncoder(PIN_ENCODER1, PIN_ENCODER2, PIN_BUTTON, ENCODER_STEPS, 0);   //Encoder init
 																							//turn the PID on
 	myPID.SetMode(AUTOMATIC);
+
+	asm("sei");                                         // Remember to turn the interrupts back on
+
+#ifdef DEBUG_STARTUP
+	lcd_draw_message(lcd_max6675_message);
+#endif
 	thermocouple.begin(PIN_SS);
+
 #ifndef NO_DS
+#ifdef DEBUG_STARTUP
+	lcd_draw_message(lcd_ds_message);
+#endif
 	ds_init();                                          //Setup OneWire sensors
 #endif       
 
 	lcd_draw_interface();
-	
-	asm("sei");                                         // Remember to turn the interrupts back on
+
+#ifdef DEBUG_STARTUP
+	lcd_draw_message(lcd_gpio_message);
+#endif
+	gpio_init();
 }
 
 void loop() {
@@ -287,6 +343,9 @@ void loop() {
 	pid_process();
 	if (updateDisplay && (counterForDisplay < 180))                        //Display logic (printing part, cursor part has been moved to the ISR). This condition was intended to synchronize interrupt and main loop parts
 	{                                                     //  for the cursor not to jump around occasionally. It works somehow.
+		#ifdef DEBUG_DISPLAY
+			Serial.println("UPD");
+		#endif
 		lcd_process_slow();
 		lcd_process_cursor_position();                           // Move cursor back to it's position immediately to prevent jumping to the last filled field
 		updateDisplay = false;                           // Reset the flag

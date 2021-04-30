@@ -12,8 +12,8 @@ template<typename T> void mem(T* variable, bool wrt = false)    //Function templ
 
 void mem_save_persistent()
 {
-	EEPROM.put(SETPOINT_ADDR, Setpoint);   // Load some parameters (which can be changed by means of display-encoder interface) into EEPROM
-	EEPROM.put(CHANNEL_ADDR, channelIndex);
+	eepromCurrentAddr = SETPOINT_ADDR;
+	mem(&Setpoint, true);	// Load some parameters (which can be changed by means of display-encoder interface) into EEPROM
 	eepromCurrentAddr = MODE_ADDR;
 	mem(&regulationMode, true);
 	mem(&calibration, true);
@@ -21,6 +21,7 @@ void mem_save_persistent()
 
 void mem_rw(bool wrt)
 {
+	eepromCurrentAddr = eepromStart;
 	mem(&Setpoint, wrt);
 	mem(&K, wrt);
 	mem(&amplifierCoeff, wrt);

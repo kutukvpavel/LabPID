@@ -43,5 +43,5 @@ void timers_init()
     TIMSK1=0x01;
 
     // Timer/Counter 2 Interrupt(s) initialization
-    TIMSK2=0x01;
+    TIMSK2 |= (1 << OCIE2A);
 }

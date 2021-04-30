@@ -10,6 +10,9 @@
 
 //Definitions of constants
 //#define DEBUG  //Debug info enable. Warning: consumes flash memory space and may impair communication with software!!
+//#define DEBUG_STARTUP //LCD detailed startup info
+//#define DEBUG_DISPLAY
+//#define DEBUG_TIMERS
 
 #pragma region Definitions
 //#define NO_DS  -- Deprecated! [No Cold Junction Compensation (i.e. no ds18b20)]
@@ -18,19 +21,18 @@
 #define INFO "Lab PID temperature controller with GPIO."
 
 #define AVERAGING_WINDOW 3_ui8
-#define PIN_COOLER A4
+#define PIN_COOLER 3
 #define PIN_INPUT A7                    //ADC input
 #define TIMING 1000                     //Timing for PID in milliseconds
 #define PIN_PWM 9                       //Pin for PWM PID output
-#define PIN_ENCODER1 2                  //Encoder pins
-#define PIN_ENCODER2 4
-#define PIN_BUTTON 3
-#define PIN_RW A2                       //LCD pins
-#define PIN_RS A1
-#define PIN_E A0
-#define PIN_D4 8
-#define PIN_D5 7
-#define PIN_D6 6
+#define PIN_ENCODER1 A0                  //Encoder pins
+#define PIN_ENCODER2 A1
+#define PIN_BUTTON A2
+#define PIN_RS 7                //LCD pins
+#define PIN_E 6
+#define PIN_D4 2
+#define PIN_D5 A3
+#define PIN_D6 4
 #define PIN_D7 5
 #define PIN_FUSE_SENSE A6
 #define LBL_SPACING 1_ui8 //" "
@@ -45,7 +47,7 @@
 #define LCD_X 16_ui8
 #define LCD_Y 2_ui8
 #define INIT_AMP_COEFF 0.3                     //Factory-default temperature coeff. for external amplifier
-#define PIN_ONEWIRE A3                 //OneWire bus pin
+#define PIN_ONEWIRE 8                 //OneWire bus pin
 #define PIN_SS 10
 #define EEPROM_START 1                  //EEPROM virtual start address
 #define ERROR_TIMEOUT 7_ui8                 //Number of seconds to wait (re-checking the conditions) before showing error status
@@ -124,7 +126,7 @@ extern int8_t prevPower;
 extern uint8_t cursorType;   
 extern uint8_t errorStatusDelay;    
 extern bool averaging[CHANNEL_COUNT]; 
-extern bool logging[2];        
+extern volatile bool logging[2];        
 extern bool condition[4];      
 extern bool cjc;
 extern bool enableCooler[CHANNEL_COUNT];
@@ -162,8 +164,7 @@ void ds_read();
 #pragma region Display logic
 
 void lcd_init();
-void lcd_draw_boot_screen();
-void lcd_draw_reset_screen();
+void lcd_draw_message(const char* msg);
 void lcd_draw_interface();
 void lcd_process_cursor_type();
 void lcd_process_cursor_position();

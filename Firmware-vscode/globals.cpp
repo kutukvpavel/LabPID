@@ -26,7 +26,7 @@ int8_t prevPower = -1;                                                        //
 uint8_t cursorType = CURSOR_NONE;                                                            // Current cursor type
 uint8_t errorStatusDelay = 0;                                                           // Delay before error status (for the device not to lock when lowering setpoint manually)
 bool averaging[CHANNEL_COUNT] = { 1, 1, 0 };                                             // Averaging state array: {mode 0, mode 1, mode 2}
-bool logging[] = { 0, 0 };                                                 // Logging enable flags
+volatile bool logging[] = { 0, 0 };                                                 // Logging enable flags
 bool condition[4] = { 0, 0, 0, 0 };                                          // Flags for error states behavior control {Safety error, DS chain: <= 1 sensor, DS chain: 0 sensors, DS chain changed}
 bool cjc = false;
 bool enableCooler[CHANNEL_COUNT] = { 0, 0, 0 };
