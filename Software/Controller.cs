@@ -263,7 +263,7 @@ namespace LabPID
         }
         public bool IsBusy
         {
-            get { return _CurrentResponseType != ResponseType.None; }
+            get { return _CurrentResponseType != ResponseType.None /*&& _CurrentResponseType != ResponseType.Log*/; }
         }
         public bool Error
         {
@@ -387,12 +387,9 @@ namespace LabPID
             _Temp[1] = Convert(b[2]);
             _Power = short.Parse(b[3]);
             _Mode = ModeDesignator.First(x => x.Value == b[4][0]).Key;
-            _Channel = (byte)(b[4][1] - '0');
-            if (b.Length > 5)
-            {
-                _Temp[3] = Convert(b[5]);
-                GpioState.Parse((uint)int.Parse(b[6]));
-            }
+            _Channel = (byte)(b[5][0] - '0');
+            _Temp[2] = Convert(b[6]);
+            GpioState.Parse((uint)int.Parse(b[7]));
         }
         private void LineReceived(string line)
         {
@@ -416,6 +413,7 @@ namespace LabPID
                     break;
                 case ResponseType.None:
                     _CurrentResponseType = ProcessFirstLine(line);
+                    reset = _CurrentResponseType == ResponseType.None;
                     Program.frmInfo.RefreshDisplay();
                     break;
                 default:
@@ -509,7 +507,7 @@ namespace LabPID
                         _Logging = true;
                         UpdateFromLog(firstLine);
                         Program.frmInfo.ChartDataAdd();
-                        break;
+                        return ResponseType.None; //One-liner, no more response data left
                     case ResponseType.Error:
                         _Error = true;
                         break;

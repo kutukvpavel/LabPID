@@ -41,6 +41,8 @@ namespace LabPID
 
         private void dgdOutputs_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0) return;
+            if (!(dgdOutputs.Rows.Count > e.RowIndex)) return;
             Program.clsControl.SetGpioOutput(e.RowIndex, (bool)dgdOutputs[0, e.RowIndex].Value);
         }
 

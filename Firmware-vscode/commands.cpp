@@ -75,7 +75,7 @@ void cmd()                       // Handling PC commands, general packet structu
 #endif
 		break;
 	case '9':                           // 9 - Log
-		logging[0] = (convert(logging[0]) > 0);
+		logging = (convert(logging) > 0);
 #ifdef DEBUG
 		Serial.println(logging[0]);
 #endif
@@ -289,7 +289,7 @@ void serial_print_float(float val, uint8_t precision, bool ln, uint8_t width)
 
 void serial_send_log()
 {
-	Serial.print(">L:");
+	Serial.print(">L: ");
 	serial_print_float(prevSetpoint, 2, false, 6);    //Build up the strings. TODO: consider improving execution speed.
 	serial_print_float(prevInputValue, 2, false, 6);
 	serial_print_float(ambientTemp, 2, false, 6);

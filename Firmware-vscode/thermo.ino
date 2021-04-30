@@ -34,6 +34,7 @@ const char lcd_ds_message[] = "DS18B20";
 const char lcd_adc_message[] = "ADC";
 #endif
 
+volatile uint8_t counterForLog = 0;
 volatile bool max6675Ready = true;                                                     // Flag of readiness for reading (for MAX6675 proper timing: >400ms)
 volatile bool updateDisplay = true;                                                        // Flag for display update enable
 volatile uint16_t counter750ms = 0;                                                             // Virtual timer counter (750ms)
@@ -57,7 +58,7 @@ ISR(TIMER1_OVF_vect)                               // 1 sec timer routine
 	uint16_t duty = (Output > 0) ? static_cast<uint16_t>(Output) : 0;
 	timers_set_pwm_duty(duty);
 	if (enableCooler[channelIndex]) digitalWrite(PIN_COOLER, Output < 0);
-	logging[1] = true;                            //Also enables logging flag for the log to be periodically created (with 1 sec period, of course)
+	counterForLog++;                            //Also enables logging flag for the log to be periodically created (with 1 sec period, of course)
 }
 
 ISR(TIMER2_COMPA_vect)                               // 1 ms timer routine
@@ -347,10 +348,10 @@ void loop() {
 		updateDisplay = false;                           // Reset the flag
 	}					   
 	mem_save_persistent();
-	if (logging[0] && logging[1])        // Check whether logging is enabled and it's time to send the info
+	if (logging && (counterForLog > 0))        // Check whether logging is enabled and it's time to send the info
 	{
 		serial_send_log();
-		logging[1] = false;             //Reset the timing flag
+		counterForLog = 0;
 	}
 	lcd_process_cursor_type();                          // Encapsulated for convenience, changes cursor according to 'cursorType' volatile variable
 	lcd_process_cursor_position();

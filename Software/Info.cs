@@ -296,14 +296,22 @@ namespace LabPID
             updChannel.Enabled = !включитьЗаписьToolStripMenuItem.Checked;
             updMode.Enabled = !включитьЗаписьToolStripMenuItem.Checked;
             SetStatus(включитьЗаписьToolStripMenuItem.Checked ? "Запись включена." : "Запись отключена.");
-            Program.SkipLine = true;
+            //Program.SkipLine = true;
             MarkLoggingState();
         }
 
         private void проверитьПодключениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Program.clsControl.PollDevicePresence();
-            SetStatus("Проверка подключения...");
+            try
+            {
+                Program.clsControl.PollDevicePresence();
+                SetStatus("Проверка подключения...");
+            }
+            catch (Exception ex)
+            {
+                SetStatus("Ошибка...");
+                Program.clsLog.Write(ex.ToString());
+            }
             load = true;
             timer1.Start();
         }

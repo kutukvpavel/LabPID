@@ -107,7 +107,7 @@ extern int8_t prevPower;
 extern uint8_t cursorType;   
 extern uint8_t errorStatusDelay;    
 extern bool averaging[CHANNEL_COUNT]; 
-extern volatile bool logging[2];        
+extern bool logging;        
 extern bool condition[4];      
 extern bool cjc;
 extern bool enableCooler[CHANNEL_COUNT];
