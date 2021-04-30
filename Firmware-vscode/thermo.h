@@ -1,9 +1,8 @@
 #pragma once
 
+#include <avr/eeprom.h>
 //Libraries imported into the project (continuous changes)
 #include "MyFunctions.h"
-//Non-modified libraries (have to be present in the arduino libraries folder)
-#include <EEPROM.h> 
 //Modified, but not imported into the cppproj (one-time changes)
 #include "src\encoder-arduino\ClickEncoder.h"
 #include "src\PID\PID_v1.h" //Heavily modified
@@ -76,23 +75,6 @@
 #define RIGHT_COLUMN_MARGIN (RIGHT_COLUMN_OFFSET + LBL_LEN)
 #define LEFT_COLUMN_OFFSET 0_ui8
 #define LEFT_COLUMN_MARGIN (LEFT_COLUMN_OFFSET + LBL_LEN)
-
-#define SETPOINT_ADDR eepromStart //0
-#define K_ADDR (SETPOINT_ADDR + sizeof(Setpoint)) //4
-#define COEFF_ADDR (K_ADDR + sizeof(K)) //28
-#define INTEGRAL_LIMIT_ADDR (COEFF_ADDR + sizeof(amplifierCoeff)) //32
-#define CHANNEL_ADDR (INTEGRAL_LIMIT_ADDR + sizeof(integralTermLimit)) //36
-#define AVERAGING_ADDR (CHANNEL_ADDR + sizeof(channelIndex)) //37
-#define DSINDEX_ADDR (AVERAGING_ADDR + sizeof(averaging)) //40
-#define DSDEFAULT_ADDR (DSINDEX_ADDR + sizeof(dsIndexes)) //42
-#define MODE_ADDR (DSDEFAULT_ADDR + sizeof(defaultAmbientTemp)) //46
-#define CALIBRATION_ADDR (MODE_ADDR + sizeof(regulationMode)) //47
-#define DISTILL_POWER_ADDR (CALIBRATION_ADDR + sizeof(calibration)) //59
-#define DISTILL_WINDOW_ADDR (DISTILL_POWER_ADDR + sizeof(distillExtraPower)) //63
-#define RAMP_LIMIT_ADDR (DISTILL_WINDOW_ADDR + sizeof(distillTempWindow)) //67
-#define GPIO_ADDR (RAMP_LIMIT_ADDR + sizeof(rampStepLimit)) //71
-#define CJC_ADDR (GPIO_ADDR + sizeof(uint16_t)) //72
-#define COOLER_ADDR (CJC_ADDR + sizeof(cjc)) //73
 #pragma endregion
 
 #pragma region Globals
@@ -101,7 +83,6 @@
 //  but it's easier to estimate required space using arduino IDE if most of the vars are global. 
 //Also, it seems the program has plenty of RAM left even with vars being organized in the way they are now, so nobody cares.
 
-extern const uint8_t eepromStart;
 extern const float mult[5];
 extern uint8_t channelIndex;
 extern uint8_t prevChannelIndex;
@@ -142,7 +123,7 @@ void timers_init();
 inline void timers_set_pwm_duty(uint16_t) __attribute__((always_inline));
 void timers_set_pwm_duty(uint16_t v)
 {
-    OCR1B = v;
+    OCR1A = v;
 }
 
 #pragma endregion
@@ -182,7 +163,10 @@ void serial_send_log();
 
 #pragma region EEPROM memory
 
-void mem_rw(bool wrt);
+bool mem_get_first_run();
+void mem_set_first_run();
+void mem_save();
+void mem_load();
 void mem_save_persistent();
 
 #pragma endregion

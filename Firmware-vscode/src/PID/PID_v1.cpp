@@ -58,7 +58,7 @@ bool PID::Compute()
 	  float input = *myInput;
       float error = *mySetpoint - input;
 	  
-	  if((*mySetpoint - SetpointBcp) <= RampMaxDifference)				//MODIFIED!
+	  if(abs(*mySetpoint - SetpointBcp) <= RampMaxDifference)				//MODIFIED!
 	  {
 		ITerm += (ki * error);
 		if(ITerm > ITermMax) ITerm = ITermMax;

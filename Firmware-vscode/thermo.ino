@@ -257,17 +257,13 @@ void setup() {
 #endif
 	pinMode(PIN_BUTTON, INPUT_PULLUP);                          //Provide ability to reset to factory defaults by holding encoder's button while booting up
 	
-	t = EEPROM.read(0);                                           //Check if this is the first run and we'll have to fill the EEPROM up too
-	if ((t != 0x01) || (!digitalRead(PIN_BUTTON)))
+	//Check if this is the first run and we'll have to fill the EEPROM up too
+	if (mem_get_first_run() || (!digitalRead(PIN_BUTTON)))
 	{
 		lcd_draw_message(lcd_resetting_message);
-		delay(500);
-		for (uint16_t i = 0; i < EEPROM.length(); ++i) EEPROM.write(i, 0);
-		Setpoint = 18.0f;
-		mem_rw(true);
-		EEPROM.write(0, 0x01);                                //Set the 'filled' flag on
-		static_assert(EEPROM_START > 0, "Address 0 is reserved for the first run flag!");
-		
+		delay(1000);
+		mem_save(); //Defaults have already been loaded in the BSS section
+		mem_set_first_run();
 #ifdef DEBUG
 		Serial.println("EEPROM refilled.");
 #endif
@@ -287,7 +283,7 @@ void setup() {
 #ifdef DEBUG_STARTUP
 	lcd_draw_message(lcd_eeprom_message);
 #endif
-	mem_rw(false);
+	mem_load();
 #ifdef DEBUG
 	cfOut();
 #endif

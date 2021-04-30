@@ -10,12 +10,10 @@ DallasTemperature dsSensors(&oneWire);                                  // DS18B
 void ds_init()
 {
 	dsSensors.begin();                            //Init OneWire bus and sensors
-	condition[1] = false;                             //Defaulting, required for further calls
 	int dsc = dsSensors.getDeviceCount();         //Get the number of sensors
-	if (dsc)   //Warn in case of one or more sensors aren't present
-	{
-		if (dsc > 1)
-		{
+	condition[1] = dsc == 1;
+	condition[2] = dsc == 0;
+	if (condition[2]) return;
 			for (uint8_t i = 0; i < 2; i++)
 			{
 				if (dsc <= dsIndexes[i])
@@ -36,36 +34,28 @@ void ds_init()
 				}
 				dsSensors.getAddress(dsAddresses[i], dsIndexes[i]);      //If everything's OK then load addresses (to make further communication processes faster) and send request to start the conversion
 			}
-		}
-		else
-		{
-			condition[1] = 1;
-			dsSensors.getAddress(dsAddresses[1], dsIndexes[1]); //Treat single sensor as a channel (not as ambient)
-		}
 		dsSensors.requestTemperatures();
-	}
-	else
-	{
-		condition[1] = 1;
-		condition[2] = 1;
-	}
 }
 
 void ds_read()         // One-wire devices poll routine
 {
-	if (condition[2] || condition[1])                          //If there are no sensors then set default ambient temperature
+	if (condition[2])                          //If there are no sensors then set default ambient temperature
 	{
 		ambientTemp = defaultAmbientTemp;
 	}
 	else
 	{
 		ambientTemp = dsSensors.getTempC(dsAddresses[0]);
-	}
-	if (!condition[2])
-	{
-		if (channelIndex == CHANNEL_DS18B20)                           // Poll second sensor only in mode 2
+		if (condition[1]) //If only 1 sensor give the user an ooportunity to monitor it as a channel
 		{
-			dsChannelTemp = dsSensors.getTempC(dsAddresses[1]);
+			dsChannelTemp = ambientTemp;
+		}
+		else
+		{
+			if (channelIndex == CHANNEL_DS18B20)                           // Poll second sensor only in mode 2
+			{
+				dsChannelTemp = dsSensors.getTempC(dsAddresses[1]);
+			}
 		}
 		dsSensors.requestTemperatures();
 	}

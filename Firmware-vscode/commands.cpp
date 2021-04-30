@@ -58,22 +58,18 @@ void cmd()                       // Handling PC commands, general packet structu
 		break;
 	case '1':
 		K[0][0] = convert(K[0][0]);                // 1 - First coeff. (P)
-		EEPROM.put(K_ADDR, K);
 #ifdef DEBUG
-		EEPROM.get(K_ADDR, K);
 		Serial.println(K[0][0], 5);
 #endif
 		break;
 	case '2':
 		K[1][0] = convert(K[1][0]);                // 2 - Second coeff. (I)
-		EEPROM.put(K_ADDR, K);
 #ifdef DEBUG
 		Serial.println(K[1][0], 5);
 #endif
 		break;
 	case '3':
 		K[2][0] = convert(K[2][0]);                // 3 - Third coeff. (D)
-		EEPROM.put(K_ADDR, K);
 #ifdef DEBUG
 		Serial.println(K[2][0], 5);
 #endif
@@ -83,20 +79,18 @@ void cmd()                       // Handling PC commands, general packet structu
 #ifdef DEBUG
 		Serial.println(logging[0]);
 #endif
-		break;
+		return;
 	case '8':                           // 8 - Info
 		cfOut();
-		break;
+		return;
 	case '4':
 		amplifierCoeff = convert(amplifierCoeff);                     // 4 - external amplifier coefficient
-		EEPROM.put(COEFF_ADDR, amplifierCoeff);
 #ifdef DEBUG
 		Serial.println(amplifierCoeff, 4);
 #endif   
 		break;
 	case '5':
 		integralTermLimit = convert(integralTermLimit);                // 5 - integral cut-off threshold
-		EEPROM.put(INTEGRAL_LIMIT_ADDR, integralTermLimit);
 #ifdef DEBUG
 		Serial.println(integralTermLimit, 4);
 #endif   
@@ -109,7 +103,6 @@ void cmd()                       // Handling PC commands, general packet structu
 		break;
 	case '6':                                 // 6 - Averaging enable/disable for current mode
 		averaging[channelIndex] = (convert(averaging[channelIndex]) > 0);
-		EEPROM.put(AVERAGING_ADDR, averaging);
 #ifdef DEBUG
 		Serial.print(averaging[0]); Serial.print(" ");
 		Serial.print(averaging[1]); Serial.print(" ");
@@ -118,7 +111,6 @@ void cmd()                       // Handling PC commands, general packet structu
 		break;
 	case 'T':                                  // T - Default ambient temperature
 		defaultAmbientTemp = convert(defaultAmbientTemp);
-		EEPROM.put(DSDEFAULT_ADDR, defaultAmbientTemp);
 #ifdef DEBUG
 		Serial.println(defaultAmbientTemp);
 #endif      
@@ -131,21 +123,18 @@ void cmd()                       // Handling PC commands, general packet structu
 		break;
 	case 'P':
 		K[0][1] = convert(K[0][1]);                      // P - First aggressive coeff. (Pa)
-		EEPROM.put(K_ADDR, K);
 #ifdef DEBUG
 		Serial.println(K[0][1], 5);
 #endif
 		break;
 	case 'I':
 		K[1][1] = convert(K[1][1]);                      // I - Second aggressive coeff. (Ia)
-		EEPROM.put(K_ADDR, K);
 #ifdef DEBUG
 		Serial.println(K[1][1], 5);
 #endif
 		break;
 	case 'D':
 		K[2][1] = convert(K[2][1]);                      // D - Third aggressive coeff. (Da)
-		EEPROM.put(K_ADDR, K);
 #ifdef DEBUG
 		Serial.println(K[2][1], 5);
 #endif
@@ -154,7 +143,6 @@ void cmd()                       // Handling PC commands, general packet structu
 	{
 		dsIndexes[0] = static_cast<uint8_t>(serialBuffer[2] - '0');
 		dsIndexes[1] = static_cast<uint8_t>(serialBuffer[3] - '0');
-		EEPROM.put(DSINDEX_ADDR, dsIndexes);
 #ifdef DEBUG
 		Serial.print(dsIndexes[0]); Serial.print(" "); Serial.println(dsIndexes[1]);
 #endif     
@@ -172,10 +160,9 @@ void cmd()                       // Handling PC commands, general packet structu
 		Serial.println(">I:");
 		Serial.print("Firmware version: "); Serial.println(FIRMWARE_VERSION);
 		Serial.print("Additional info: "); Serial.println(INFO);
-		break;
+		return;
 	case 'B':                                         // B - distillation bias
 		distillExtraPower = convert(distillExtraPower);
-		EEPROM.put(DISTILL_POWER_ADDR, distillExtraPower);
 #ifdef DEBUG
 		Serial.println(distillExtraPower, 4);
 #endif
@@ -191,7 +178,7 @@ void cmd()                       // Handling PC commands, general packet structu
 			}
 		}
 		Serial.println();
-		break;
+		return;
 	case 'W':                                     // W - set power (only for manual mode)
 		if (regulationMode != MODE_MANUAL) break;
 		power = static_cast<int8_t>(convert(power));
@@ -199,14 +186,12 @@ void cmd()                       // Handling PC commands, general packet structu
 		break;
 	case 'O':                                         // O - tolerated distillation overshoot
 		distillTempWindow = abs(convert(distillTempWindow));
-		EEPROM.put(DISTILL_WINDOW_ADDR, distillTempWindow);
 #ifdef DEBUG
 		Serial.println(distillTempWindow, 2);
 #endif
 		break;
 	case 'R':
 		rampStepLimit = convert(rampStepLimit);
-		EEPROM.put(RAMP_LIMIT_ADDR, rampStepLimit);
 #ifdef DEBUG
 		Serial.println(rampStepLimit, 2);
 #endif
@@ -221,7 +206,6 @@ void cmd()                       // Handling PC commands, general packet structu
 		uint8_t data = static_cast<uint8_t>(convert(0xFF));
 		if (data != 0xFF_ui8) {
 		gpio_write(data);
-		EEPROM.put(GPIO_ADDR, gpio_get_output_register());
 #ifdef DEBUG
 		Serial.println(gpioMode, BIN);
 #endif
@@ -232,7 +216,6 @@ void cmd()                       // Handling PC commands, general packet structu
 	}
 	case 'J':
 		cjc = (convert(cjc) > 0);
-		EEPROM.put(CJC_ADDR, cjc);
 #ifdef DEBUG
 		Serial.println(cjc);
 #endif
@@ -245,8 +228,9 @@ void cmd()                       // Handling PC commands, general packet structu
 		Serial.println(static_cast<uint8_t>(enableCooler[2]));
 #endif
 		break;
-	default: break;
+	default: return;
 	}
+	mem_save();
 }
 
 void cfOut()                              //Outputs all the current technical data
