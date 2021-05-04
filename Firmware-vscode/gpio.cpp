@@ -5,10 +5,11 @@
 PCA9555 gpio_port(GPIO_IC_ADDRESS);
 
 uint8_t gpio_map[] = { GPIO_MODE_MAP };
-bool gpioOK;
+bool gpioOK = false;
 
 void gpio_init()
 {
+    if (gpioOK) return;
     gpioOK = gpio_port.begin();
     if (!gpioOK) return;
     gpio_port.setClock(400000);
@@ -47,7 +48,7 @@ void gpio_write(uint8_t address, bool value)
 
 void gpio_write(uint8_t code)
 {
-    gpio_write(code & 0x7F_ui8, (code & 0x80_ui8) != 0);
+    gpio_write(code & 0x7F_ui8, (code & 0x80_ui8) != 0_ui8);
 }
 
 uint16_t gpio_get_output_register()

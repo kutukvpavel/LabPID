@@ -110,6 +110,15 @@ namespace LabPID
 						DataReceived(SerialIn);
 					}
 					catch (TimeoutException) { }
+					catch (UnauthorizedAccessException) //Modified
+					{
+						_keepReading = false;
+						try
+						{
+							Close();
+						}
+						catch (Exception) { }
+					}
 					catch (Exception) { }
 				}
 				else
@@ -202,7 +211,7 @@ namespace LabPID
 		{
 			if (IsOpen)
 			{
-                if (lne) data += "\r\n";
+				if (lne) data += "\r\n";
 				_serialPort.Write(data);
 			}
 		}

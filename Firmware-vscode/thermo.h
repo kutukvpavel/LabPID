@@ -11,12 +11,12 @@
 //#define DEBUG  //Debug info enable. Warning: consumes flash memory space and may impair communication with software!!
 //#define DEBUG_STARTUP //LCD detailed startup info
 //#define DEBUG_DISPLAY
-//#define DEBUG_TIMERS
+//#define DEBUG_TIMERS //Warning: may overflow serial buffer (outputs characters '1' and '2' when corresponding ISRs fire).
 
 #pragma region Definitions
 //#define NO_DS  -- Deprecated! [No Cold Junction Compensation (i.e. no ds18b20)]
 
-#define FIRMWARE_VERSION "2b"
+#define FIRMWARE_VERSION "2.1"
 #define INFO "Lab PID temperature controller with GPIO."
 
 #define AVERAGING_WINDOW 3_ui8
@@ -51,7 +51,7 @@
 #define EEPROM_START 1                  //EEPROM virtual start address
 #define ERROR_TIMEOUT 7_ui8                 //Number of seconds to wait (re-checking the conditions) before showing error status
 #define PWM_MAX 62499u
-#define PWM_MIN -1
+#define PWM_MIN -255
 #define ENCODER_STEPS 4_ui8
 
 #define GPIO_MODE_MAP 12, 4  //Number of consequtive inputs (element index % 2 != 0) / outputs (element index % 2 == 0)
@@ -120,10 +120,15 @@ extern PID myPID;
 #pragma region Timers
 
 void timers_init();
-inline void timers_set_pwm_duty(uint16_t) __attribute__((always_inline));
-void timers_set_pwm_duty(uint16_t v)
+inline void timers_set_heater_duty(uint16_t) __attribute__((always_inline));
+void timers_set_heater_duty(uint16_t v)
 {
     OCR1A = v;
+}
+inline void timers_set_cooler_duty(uint8_t) __attribute__((always_inline));
+void timers_set_cooler_duty(uint8_t v)
+{
+    OCR2B = v;
 }
 
 #pragma endregion

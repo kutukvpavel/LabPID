@@ -51,7 +51,7 @@
  */
 PCA9555::PCA9555(uint8_t address/*, int interruptPin*/) {
     _address         = address;        // save the address id
-    _valueRegister   = 0;
+    _valueRegister   = 0xFFFFu;
     Wire.begin();                      // start I2C communication
 
     /*if(interruptPin >= 0)
@@ -70,6 +70,7 @@ bool PCA9555::begin(){
     if(_error != 0){
       return false;
     }else{
+
       return true;
     }
 }

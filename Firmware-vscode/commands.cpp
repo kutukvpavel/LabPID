@@ -205,9 +205,9 @@ void cmd()                       // Handling PC commands, general packet structu
 		}
 		uint8_t data = static_cast<uint8_t>(convert(0xFF));
 		if (data != 0xFF_ui8) {
-		gpio_write(data);
+			gpio_write(data);
 #ifdef DEBUG
-		Serial.println(gpioMode, BIN);
+			Serial.println(gpioMode, BIN);
 #endif
 		}
 		Serial.print(">G:");
@@ -238,39 +238,39 @@ void cfOut()                              //Outputs all the current technical da
 	Serial.println(">D:");
 	serial_print_float(Input, 2);
 	serial_print_float(ambientTemp, 2);
-	Serial.print(convert_regulation_mode(regulationMode)); Serial.println(static_cast<int>(channelIndex));
+	Serial.print(convert_regulation_mode(regulationMode)); Serial.println(static_cast<int>(channelIndex)); //1
 	for (uint8_t i = 0; i < arraySize(K[0]); ++i)
 	{
 		for (uint8_t j = 0; j < (arraySize(K) - 1_ui8); ++j)
 		{
 			serial_print_float(K[j][i], 4);
 		}
-		serial_print_float(K[arraySize(K) - 1_ui8][i], 4, true);
+		serial_print_float(K[arraySize(K) - 1_ui8][i], 4, true); //2
 	}
 	serial_print_float(integralTermLimit, 4);
 	serial_print_float(distillExtraPower, 4);
-	serial_print_float(amplifierCoeff, 4, true);
+	serial_print_float(amplifierCoeff, 4, true); //3
 	for (uint8_t i = 0; i < (arraySize(calibration) - 1_ui8); i++)
 	{
 		serial_print_float(calibration[i], 4);
 	}
-	serial_print_float(calibration[arraySize(calibration) - 1_ui8], 4, true);
+	serial_print_float(calibration[arraySize(calibration) - 1_ui8], 4, true); //4
 	for (uint8_t i = 0; i < (arraySize(averaging) - 1_ui8); i++)
 	{
 		serial_print_float(averaging[i], 4);
 	}
-	serial_print_float(averaging[arraySize(averaging) - 1_ui8], 4, true);
+	serial_print_float(averaging[arraySize(averaging) - 1_ui8], 4, true); //5
 	serial_print_float(Setpoint, 2);
 	serial_print_float(defaultAmbientTemp, 2);
-	serial_print_float(distillTempWindow, 2, true);
+	serial_print_float(distillTempWindow, 2, true); //6
 	serial_print_float(rampStepLimit, 2);
 	Serial.print(gpio_read_all()); sendSpace();
-	Serial.println(cjc);
+	Serial.println(cjc); //7
 	for (uint8_t i = 0; i < (CHANNEL_COUNT - 1_ui8); i++)
 	{
 		Serial.print(static_cast<uint8_t>(enableCooler[i])); sendSpace();
 	}
-	Serial.println(static_cast<uint8_t>(enableCooler[CHANNEL_COUNT - 1_ui8]));
+	Serial.println(static_cast<uint8_t>(enableCooler[CHANNEL_COUNT - 1_ui8])); //8
 }
 
 void serial_print_float(float val, uint8_t precision, bool ln, uint8_t width)

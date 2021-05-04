@@ -2,7 +2,7 @@
 * NB! Some of the libraries used (e.g. PID) have been modified! The code is valid only if modified libs are used.
 *
 *  Current major TODO:
-*  Improve interface performance
+*  None
 *  _____________________________________
 *  Developed by Kutukov Pavel, 2016-2021.
 *  This software was developed to fulfill the author's personal needs only and is provided strictly as-is.
@@ -35,11 +35,11 @@ const char lcd_adc_message[] = "ADC";
 #endif
 
 volatile uint8_t counterForLog = 0;
-volatile bool max6675Ready = true;                                                     // Flag of readiness for reading (for MAX6675 proper timing: >400ms)
+volatile uint32_t counterForDisplay = 0;                                                           // Virtual timer counter (display)
 volatile bool updateDisplay = true;                                                        // Flag for display update enable
-volatile uint16_t counter750ms = 0;                                                             // Virtual timer counter (750ms)
-volatile uint16_t counter500ms = 0;                                                            // Virtual timer counter (500ms)
-volatile uint16_t counterForDisplay = 0;                                                           // Virtual timer counter (display)
+
+uint32_t counter750ms = 0;                                                             // Virtual timer counter (750ms)
+uint32_t counter500ms = 0;                                                           // Virtual timer counter (500ms)
 float averagingBuffer[AVERAGING_WINDOW];
 
 MAX6675 thermocouple;                                  // MAX6675 thermocouple amplifier object
@@ -48,6 +48,21 @@ Average<float> averagingObject(AVERAGING_WINDOW, averagingBuffer);              
 #pragma endregion
 
 #pragma region ISRs
+
+ISR(TIMER2_OVF_vect) //16mS
+{
+#ifdef DEBUG_TIMERS
+	Serial.write('2');
+#endif                         // For encoder poll
+	uint32_t now = millis();
+	if (static_cast<uint16_t>(now - counterForDisplay) > 199u)
+	{
+		lcd_process_fast();                          // Display update logic
+		updateDisplay = 1;
+		counterForDisplay = now;
+	}
+}
+
 ISR(TIMER1_OVF_vect)                               // 1 sec timer routine
 {
 #ifdef DEBUG_TIMERS
@@ -55,32 +70,19 @@ ISR(TIMER1_OVF_vect)                               // 1 sec timer routine
 #endif
 	myPID.Compute();                            // For PID computations, safety check and output updating
 	check_safety();
-	uint16_t duty = (Output > 0) ? static_cast<uint16_t>(Output) : 0;
-	timers_set_pwm_duty(duty);
-	if (enableCooler[channelIndex]) digitalWrite(PIN_COOLER, Output < 0);
+	timers_set_heater_duty((Output > 0) ? static_cast<uint16_t>(Output) : 0);
+	timers_set_cooler_duty(static_cast<uint8_t>(
+		(Output < 0 && enableCooler[channelIndex]) ? -Output : 0
+		));
 	counterForLog++;                            //Also enables logging flag for the log to be periodically created (with 1 sec period, of course)
 }
 
-ISR(TIMER2_COMPA_vect)                               // 1 ms timer routine
+ISR(TIMER0_COMPA_vect)
 {
 #ifdef DEBUG_TIMERS
-	Serial.write('2');
-#endif
-	encoder->service();                         // For encoder poll
-	if (counterForDisplay > 199)
-	{
-		lcd_process_fast();                          // Display update logic
-		updateDisplay = 1;
-		counterForDisplay = 0;
-	}
-	if (counter500ms > 499)                          // Timer for max6675 thermocouple interface polling (500ms)
-	{
-		max6675Ready = 1;
-		counter500ms = 0;
-	}
-	counter750ms++;                                       //OneWire poll timer
-	counter500ms++;                                      //max6675 timer
-	counterForDisplay++;                                     //Display timer
+	Serial.write('0');
+#endif    
+	encoder->service();
 }
 #pragma endregion
 
@@ -116,9 +118,10 @@ char convert_regulation_mode(char src)  //Routine for converting user-friendly i
 
 void check_power()
 {
-	if (power < 0 && !enableCooler[channelIndex])
+	if (power < 0)
 	{
-		power = 0;
+		if (!enableCooler[channelIndex]) power = 0;
+		else if (power < -100) power = -100;
 	}
 	else
 	{
@@ -225,11 +228,18 @@ void pid_process()
 	if (regulationMode == MODE_MANUAL)            //If manual mode is enabled then turn off the PID and count output value based on power value
 	{
 		if (myPID.GetMode() != MANUAL) myPID.SetMode(MANUAL);
-		Output = static_cast<float>((PWM_MAX * (power < 0 ? 0 : static_cast<uint32_t>(power))) / 100);
+		if (power < 0)
+		{
+			Output = static_cast<float>(-PWM_MIN) * 0.01f * static_cast<float>(enableCooler[channelIndex] ? power : 0);
+		}
+		else
+		{
+			Output = static_cast<float>(PWM_MAX) * 0.01f * static_cast<float>(power);
+		}
 	}
 	else
 	{
-		power = static_cast<int8_t>((Output * 100) / PWM_MAX);             //Else - count power value based on output
+		power = static_cast<int8_t>((Output * 100) / (Output < 0 ? -PWM_MIN : PWM_MAX));             //Else - count power value based on output
 	}
 }
 
@@ -243,8 +253,6 @@ void setup() {
 	lcd_draw_message(lcd_booting_message);
 #endif
 
-	asm("cli");   // No interrupts while we aren't ready yet
-				  // put your setup code here, to run once:
 	Serial.begin(9600);                                     // Initialize serial communications with the PC
 #ifdef DEBUG_STARTUP
 	Serial.println("LabPID");
@@ -263,6 +271,11 @@ void setup() {
 	{
 		lcd_draw_message(lcd_resetting_message);
 		delay(1000);
+#ifdef DEBUG_STARTUP
+		lcd_draw_message(lcd_gpio_message);
+#endif
+		gpio_init();
+		gpio_write_all(0u);
 		mem_save(); //Defaults have already been loaded in the BSS section
 		mem_set_first_run();
 #ifdef DEBUG
@@ -274,12 +287,19 @@ void setup() {
 	pinMode(PIN_FUSE_SENSE, INPUT);
 	pinMode(PIN_INPUT, INPUT);
 	pinMode(PIN_PWM, OUTPUT);
+	pinMode(PIN_COOLER, OUTPUT);
 	digitalWrite(PIN_PWM, LOW);
+	digitalWrite(PIN_COOLER, LOW);
 
 #ifdef DEBUG_STARTUP
 	lcd_draw_message(lcd_adc_message);
 #endif
 	analogReference(EXTERNAL);                              // Initialize ADC stuff
+
+#ifdef DEBUG_STARTUP
+	lcd_draw_message(lcd_gpio_message);
+#endif
+	gpio_init();
 
 #ifdef DEBUG_STARTUP
 	lcd_draw_message(lcd_eeprom_message);
@@ -294,12 +314,12 @@ void setup() {
 #endif
 	myPID.SetSampleTime(TIMING);                          //Time-related stuff init
 	myPID.SetOutputLimits(PWM_MIN, PWM_MAX);
+	asm("cli");
 	timers_init();
 	encoder = new ClickEncoder(PIN_ENCODER1, PIN_ENCODER2, PIN_BUTTON, ENCODER_STEPS, 0);   //Encoder init
-																							//turn the PID on
+	//turn the PID on
 	myPID.SetMode(AUTOMATIC);
-
-	asm("sei");                                         // Remember to turn the interrupts back on
+	asm("sei");
 
 #ifdef DEBUG_STARTUP
 	lcd_draw_message(lcd_max6675_message);
@@ -314,31 +334,27 @@ void setup() {
 #endif       
 
 	lcd_draw_interface();
-
-#ifdef DEBUG_STARTUP
-	lcd_draw_message(lcd_gpio_message);
-#endif
-	gpio_init();
 }
 
 void loop() {
 	// put your main code here, to run repeatedly:
 	serial_process();                             // First, check for serial data
-	if (counter750ms > 700)                                    //OneWire communications
+	uint32_t now = millis();
+	if (static_cast<uint16_t>(now - counter750ms) > 700u)                                    //OneWire communications
 	{
 		if (cursorType == CURSOR_NONE)       // And for polling sensors (worst-case period of conversion: 750ms, may actually reach 600-650ms),
 		{                                           // don't poll when cursor is on (for the interface not to freeze)
 			ds_read();
-			counter750ms = 0;                                   //Don't forget to reset the virtual timer
+			counter750ms = now;                                   //Don't forget to reset the virtual timer
 		}
 	}
-	if (max6675Ready)                                 //Read inputs' values
+	if (static_cast<uint16_t>(now - counter500ms) > 499u)                                 //Read inputs' values
 	{
 		read_input();
-		max6675Ready = false;
+		counter500ms = now;
 	}
 	pid_process();
-	if (updateDisplay && (counterForDisplay < 180))                        //Display logic (printing part, cursor part has been moved to the ISR). This condition was intended to synchronize interrupt and main loop parts
+	if (updateDisplay /*&& ((now - counterForDisplay) < 180)*/)                        //Display logic (printing part, cursor part has been moved to the ISR). This condition was intended to synchronize interrupt and main loop parts
 	{                                                     //  for the cursor not to jump around occasionally. It works somehow.
 		#ifdef DEBUG_DISPLAY
 			Serial.println("UPD");

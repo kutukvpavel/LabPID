@@ -72,9 +72,14 @@ void print_double(double dbl, int x, int y)   //Encapsulated for convenience, pr
 void pwrprint()
 {
 	uint8_t ap = abs(power);
-	lcd.setCursor(RIGHT_COLUMN_MARGIN + (ap > 9_ui8 ? (ap > 99_ui8 ? 0_ui8 : 1_ui8) : 2_ui8), 1);
+	lcd.setCursor(RIGHT_COLUMN_MARGIN, 1_ui8);
+	uint8_t spaces = ap > 9_ui8 ? (ap > 99_ui8 ? 0_ui8 : 1_ui8) : 2_ui8;
+	while (spaces-- > 0_ui8) //Clear previously printed characters that may not be overwritten
+	{
+		lcd.print(' ');
+	}
 	lcd.print(power < 0 ? '-' : ' ');
-	lcd.print(power);
+	lcd.print(ap);
 	lcd.print('%');
 	prevPower = power;
 }
@@ -87,9 +92,8 @@ void lcd_process_cursor_position()                             // Setting the cu
 	switch (menuState)
 	{
 	case MENU_STATE_MODE:
-		++margin;
 	case MENU_STATE_POWER:
-		margin += RIGHT_COLUMN_MARGIN;
+		margin += RIGHT_COLUMN_MARGIN + 1_ui8; // + Sign or space
 		break;
 	default:
 		margin = LEFT_COLUMN_MARGIN;

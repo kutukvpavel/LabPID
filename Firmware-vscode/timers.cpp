@@ -28,20 +28,24 @@ void timers_init()
 
     // Timer/Counter 2 initialization
     // Clock source: System Clock
-    // Clock value: 125,000 kHz
-    // Mode: CTC top=OCR2A
+    // Clock value: 15,625 kHz
+    // Mode: Ph. correct PWM top=OCR2A
     // OC2A output: Disconnected
-    // OC2B output: Disconnected
+    // OC2B output: Non-Inverted PWM
     ASSR=0x00;
-    TCCR2A=0x02;
-    TCCR2B=0x05;
+    TCCR2A=0x21;
+    TCCR2B=0x0F;
     TCNT2=0x00;
-    OCR2A=0x7F; // (~1mS)
+    OCR2A=0xFF; //16.3mS
     OCR2B=0x00;
 
     // Timer/Counter 1 Interrupt(s) initialization
     TIMSK1=0x01;
 
     // Timer/Counter 2 Interrupt(s) initialization
-    TIMSK2 |= (1 << OCIE2A);
+    TIMSK2=0x01;
+
+    // Timer0 (millis) COMPA interrupt reuse
+    OCR0A = 0x7F; //Half period phase shift drom millis in order to minimize interference
+    TIMSK0 |= BV8(OCIE0A);
 }

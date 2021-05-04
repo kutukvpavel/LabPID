@@ -16,7 +16,7 @@
 #include "WProgram.h"
 #endif
 
-#define DEBUG 1
+//#define DEBUG 1
 
 /** enum with names of ports ED0 - ED15 */
 enum {

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.dgdOutputs = new System.Windows.Forms.DataGridView();
+            this.Outputs = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgdInputs = new System.Windows.Forms.DataGridView();
-            this.Outputs = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Inputs = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgdOutputs)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -49,9 +49,16 @@
             this.dgdOutputs.Location = new System.Drawing.Point(3, 3);
             this.dgdOutputs.Name = "dgdOutputs";
             this.dgdOutputs.RowHeadersWidth = 45;
-            this.dgdOutputs.Size = new System.Drawing.Size(190, 284);
+            this.dgdOutputs.Size = new System.Drawing.Size(186, 370);
             this.dgdOutputs.TabIndex = 0;
             this.dgdOutputs.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgdOutputs_CellValueChanged);
+            // 
+            // Outputs
+            // 
+            this.Outputs.HeaderText = "Выходы";
+            this.Outputs.MinimumWidth = 6;
+            this.Outputs.Name = "Outputs";
+            this.Outputs.Width = 110;
             // 
             // tableLayoutPanel1
             // 
@@ -66,7 +73,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(393, 290);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(385, 376);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // dgdInputs
@@ -77,19 +84,13 @@
             this.dgdInputs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Inputs});
             this.dgdInputs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgdInputs.Location = new System.Drawing.Point(199, 3);
+            this.dgdInputs.Location = new System.Drawing.Point(195, 3);
             this.dgdInputs.Name = "dgdInputs";
+            this.dgdInputs.ReadOnly = true;
             this.dgdInputs.RowHeadersWidth = 45;
-            this.dgdInputs.Size = new System.Drawing.Size(191, 284);
+            this.dgdInputs.Size = new System.Drawing.Size(187, 370);
             this.dgdInputs.TabIndex = 1;
             this.dgdInputs.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgdInputs_CellValueChanged);
-            // 
-            // Outputs
-            // 
-            this.Outputs.HeaderText = "Выходы";
-            this.Outputs.MinimumWidth = 6;
-            this.Outputs.Name = "Outputs";
-            this.Outputs.Width = 110;
             // 
             // Inputs
             // 
@@ -103,11 +104,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(393, 290);
+            this.ClientSize = new System.Drawing.Size(385, 376);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "GpioTools";
             this.Text = "GpioTools";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GpioTools_FormClosing);
             this.Load += new System.EventHandler(this.GpioTools_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgdOutputs)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);

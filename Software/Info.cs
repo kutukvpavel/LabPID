@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -18,7 +17,10 @@ namespace LabPID
         public Info()
         {
             InitializeComponent();
+            Program.clsControl.GpioState.Changed += GpioState_Changed;
         }
+
+        #region Form event handlers
 
         private void Info_Load(object sender, EventArgs e)
         {
@@ -37,6 +39,74 @@ namespace LabPID
             }
             LoadSettings();
             Program.clsLog.FilterInput = "\r|,\n|";         //Enables basic line feed formatting
+        }
+
+        private void Info_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.clsControl.Dispose();
+            Program.clsLog.Dispose();
+            if (this.Size == this.MinimumSize)
+            {
+                Properties.Settings.Default.chrtShow = false;
+            }
+            else
+            {
+                Properties.Settings.Default.chrtShow = true;
+                Properties.Settings.Default.frmInfoSize = this.Size;
+            }
+            Properties.Settings.Default.Save();
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private bool ApplyMode()
+        {
+            try
+            {
+                Program.clsControl.Mode = (Controller.ModeType)updMode.SelectedIndex;
+                return false;
+            }
+            catch (InvalidCastException)
+            {
+                MessageBox.Show("Выбор режима за пределами диапазона.");
+            }
+            return true;
+        }
+
+        private void DisplaySignIfCompleted(ref PictureBox pct, bool completed)
+        {
+            if (completed)
+            {
+                DisplaySign(ref pct);
+            }
+            else
+            {
+                pct.Image = null;
+            }
+        }
+        private void DisplaySign(ref PictureBox pct)
+        {
+            Sign(ref pct, Properties.Resources.warning_icon, "По готовности, нажмите, чтобы отправить данные контроллеру.", "0");
+        }
+        private void RemoveSign(ref PictureBox pct)
+        {
+            if (pct.Tag.ToString() == "0")
+            {
+                Sign(ref pct, Properties.Resources.Actions_dialog_ok_apply_icon, "Данные отправлены.", "1");
+            }
+        }
+        private void Sign(ref PictureBox pct, Image img, string tooltip, string tag)
+        {
+            pct.Image = img;
+            pct.Tag = tag;
+            toolTip1.SetToolTip(pct, tooltip);
+        }
+
+        private Tuple<float, float> GetTempAndSetpoint()
+        {
+            return new Tuple<float, float>(Program.clsControl.Temp[0], Program.clsControl.Setpoint);
         }
 
         private void DisplayQSigns()
@@ -105,57 +175,15 @@ namespace LabPID
             }
         }
 
-        void buf_Click(object sender, EventArgs e)
-        {
-            PortChanged(((ToolStripItem)sender).Text);
-        }
-
-        private void mnPortsUpdate_Click(object sender, EventArgs e)
-        {
-            UpdatePorts();
-        }
-
-        private void запроситьИнформациюToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Program.clsControl.Update();
-            timer1.Start();
-            SetStatus("Обновление информации...");
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            timer1.Stop();
-            if (load)
-            {
-                включитьЗаписьToolStripMenuItem.Enabled = Program.clsControl.IsConnected;
-                запроситьИнформациюToolStripMenuItem.Enabled = Program.clsControl.IsConnected;
-                if (Program.clsControl.IsConnected)
-                {
-                    SetStatus("Подключено.");
-                }
-                else
-                {
-                    SetStatus("Устройство не обнаружено.");
-                    включитьЗаписьToolStripMenuItem.Checked = false;
-                }
-                load = false;
-            }
-            else
-            {
-                UpdateDisplay();
-                SetStatus("Готов.");
-            }
-        }
-
         private void UpdateDisplay(bool partially = false)
         {
             lblTemp1.Text = Program.clsControl.Temp[0].ToString() + " °C";
             lblTemp2.Text = Program.clsControl.Temp[1].ToString() + " °C";
             if (Program.clsControl.Mode != Controller.ModeType.Manual)
             {
-                mtbPower.Text = Program.clsControl.Power.ToString("000");
+                mtbPower.Text = Program.clsControl.Power.ToString("+000;-000");
             }
-            mtbSetpoint.Text = Program.clsControl.Setpoint.ToString(Program.ShortFloatFormat); 
+            mtbSetpoint.Text = Program.clsControl.Setpoint.ToString(Program.ShortFloatFormat);
             updMode.SelectedIndex = updMode.Items.IndexOf(Controller.ModeDesignator[Program.clsControl.Mode].ToString());
             updChannel.SelectedIndex = Program.clsControl.Channel;
             if (!partially)
@@ -177,6 +205,9 @@ namespace LabPID
                 chkAv1.Checked = Program.clsControl.Averages[0];
                 chkAv2.Checked = Program.clsControl.Averages[1];
                 chkAv3.Checked = Program.clsControl.Averages[2];
+                chkCooler0.Checked = Program.clsControl.Coolers[0];
+                chkCooler1.Checked = Program.clsControl.Coolers[1];
+                chkCooler2.Checked = Program.clsControl.Coolers[2];
                 chkCJC.Checked = Program.clsControl.EnableCjc;
                 Program.frmSet.AmbientUpdate();
                 foreach (PictureBox item in Program.FlattenChildren(tableLayoutPanel1).OfType<PictureBox>())
@@ -184,17 +215,19 @@ namespace LabPID
                     item.Image = null;
                     item.Tag = "-1";
                 }
-
                 toolTip1.RemoveAll();
                 bool b = (updChannel.SelectedIndex == 0);
                 mtbC0.Enabled = b;
                 chkAv1.Enabled = b;
+                chkCooler0.Enabled = b;
                 b = (updChannel.SelectedIndex == 1);
                 mtbC1.Enabled = b;
                 chkAv2.Enabled = b;
+                chkCooler1.Enabled = b;
                 b = (updChannel.SelectedIndex == 2);
                 mtbC2.Enabled = b;
                 chkAv3.Enabled = b;
+                chkCooler2.Enabled = b;
             }
             if (Program.clsControl.Error)
             {
@@ -260,6 +293,27 @@ namespace LabPID
             }
         }
 
+        #endregion
+
+        #region UI event handlers
+
+        void buf_Click(object sender, EventArgs e)
+        {
+            PortChanged(((ToolStripItem)sender).Text);
+        }
+
+        private void mnPortsUpdate_Click(object sender, EventArgs e)
+        {
+            UpdatePorts();
+        }
+
+        private void запроситьИнформациюToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Program.clsControl.Update();
+            timer1.Start();
+            SetStatus("Обновление информации...");
+        }
+
         private void maskedTextBox8_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
 
@@ -316,22 +370,6 @@ namespace LabPID
             timer1.Start();
         }
 
-        private void Info_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Program.clsControl.Dispose();
-            Program.clsLog.Dispose();
-            if (this.Size == this.MinimumSize)
-            {
-                Properties.Settings.Default.chrtShow = false;
-            }
-            else
-            {
-                Properties.Settings.Default.chrtShow = true;
-                Properties.Settings.Default.frmInfoSize = this.Size;
-            }
-            Properties.Settings.Default.Save();
-        }
-
         private void mnTerminal_Click(object sender, EventArgs e)
         {
             Program.frmTerm.Show();
@@ -374,35 +412,6 @@ namespace LabPID
             //DisplaySign(ref pctAutoPwr);
         }
 
-        private void DisplaySignIfCompleted(ref PictureBox pct, bool completed)
-        {
-            if (completed)
-            {
-                DisplaySign(ref pct);
-            }
-            else
-            {
-                pct.Image = null;
-            }
-        }
-        private void DisplaySign(ref PictureBox pct)
-        {
-            Sign(ref pct, Properties.Resources.warning_icon, "По готовности, нажмите, чтобы отправить данные контроллеру.", "0");
-        }
-        private void RemoveSign(ref PictureBox pct)
-        {
-            if (pct.Tag.ToString() == "0")
-            {
-                Sign(ref pct, Properties.Resources.Actions_dialog_ok_apply_icon, "Данные отправлены.", "1");
-            }
-        }
-        private void Sign(ref PictureBox pct, Image img, string tooltip, string tag)
-        {
-            pct.Image = img;
-            pct.Tag = tag;
-            toolTip1.SetToolTip(pct, tooltip);
-        }
-
         private void chkAv1_CheckedChanged(object sender, EventArgs e)
         {
             DisplaySign(ref pctAv1);
@@ -441,20 +450,6 @@ namespace LabPID
                 pctWarning.Image = null;
                 Program.clsControl.ClearError();
             }
-        }
-
-        private bool ApplyMode()
-        {
-            try
-            {
-                Program.clsControl.Mode = (Controller.ModeType)updMode.SelectedIndex;
-                return false;
-            }
-            catch (InvalidCastException)
-            {
-                MessageBox.Show("Выбор режима за пределами диапазона.");
-            }
-            return true;
         }
 
         private void pctAutoPwr_Click(object sender, EventArgs e)
@@ -703,11 +698,6 @@ namespace LabPID
             }
         }
 
-        private Tuple<float, float> GetTempAndSetpoint()
-        {
-            return new Tuple<float, float>(Program.clsControl.Temp[0], Program.clsControl.Setpoint);
-        }
-
         private void начатьВыполнениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Program.clsProfile.TimeToChangeSetpoint += ClsProfile_TimeToChangeSetpoint;
@@ -722,30 +712,6 @@ namespace LabPID
             } 
             btnSession.Enabled = false;
             lblProfile.Text = (lblProfile.Tag as string) + Program.clsProfile.Name;
-        }
-
-        private void ClsProfile_TimeToIssueCustomCommand(object sender, CustomCommandEventArgs e)
-        {
-            Program.clsControl.SendCustom(e.Command);
-        }
-
-        private void ClsProfile_ExecutionFinished(object sender, EventArgs e)
-        {
-            Program.clsProfile.ExecutionFinished -= ClsProfile_ExecutionFinished;
-            Program.clsProfile.TimeToChangeSetpoint -= ClsProfile_TimeToChangeSetpoint;
-            Program.clsProfile.TemperatureValidationCallback -= GetTempAndSetpoint;
-            Invoke((Action)(() => 
-            {
-                btnSession.Enabled = true;
-                включитьЗаписьToolStripMenuItem.Checked = false;
-                включитьЗаписьToolStripMenuItem_Click(this, new EventArgs());
-                lblProfile.Text = (lblProfile.Tag as string) + "нет";
-            }));
-        }
-
-        private void ClsProfile_TimeToChangeSetpoint(object sender, TemperatureEventArgs e)
-        {
-            Program.clsControl.Setpoint = e.Temperature;
         }
 
         private void остановитьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -826,7 +792,105 @@ namespace LabPID
 
         private void label6_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            if (!Program.clsControl.Logging) Program.clsControl.SetGpioOutput(0xFF, false);
             Program.frmGpioTools.Show();
         }
+
+        private void chkCooler0_CheckedChanged(object sender, EventArgs e)
+        {
+            DisplaySign(ref pctCooler0);
+        }
+
+        private void chkCooler1_CheckedChanged(object sender, EventArgs e)
+        {
+            DisplaySign(ref pctCooler1);
+        }
+
+        private void chkCooler2_CheckedChanged(object sender, EventArgs e)
+        {
+            DisplaySign(ref pctCooler2);
+        }
+
+        private void pctCooler0_Click(object sender, EventArgs e)
+        {
+            if (((Control)sender).Tag.ToString() != "0") return;
+            Program.clsControl.CurrentCooler = chkCooler0.Checked;
+            RemoveSign(ref pctCooler0);
+        }
+
+        private void pctCooler1_Click(object sender, EventArgs e)
+        {
+            if (((Control)sender).Tag.ToString() != "0") return;
+            Program.clsControl.CurrentCooler = chkCooler1.Checked;
+            RemoveSign(ref pctCooler1);
+        }
+
+        private void pctCooler2_Click(object sender, EventArgs e)
+        {
+            if (((Control)sender).Tag.ToString() != "0") return;
+            Program.clsControl.CurrentCooler = chkCooler2.Checked;
+            RemoveSign(ref pctCooler2);
+        }
+
+        #endregion
+
+        #region Timer, GPIO, Profile events
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            if (load)
+            {
+                включитьЗаписьToolStripMenuItem.Enabled = Program.clsControl.IsConnected;
+                запроситьИнформациюToolStripMenuItem.Enabled = Program.clsControl.IsConnected;
+                if (Program.clsControl.IsConnected)
+                {
+                    SetStatus("Подключено.");
+                }
+                else
+                {
+                    SetStatus("Устройство не обнаружено.");
+                    включитьЗаписьToolStripMenuItem.Checked = false;
+                }
+                load = false;
+            }
+            else
+            {
+                UpdateDisplay();
+                SetStatus("Готов.");
+            }
+        }
+
+        private void GpioState_Changed(object sender, System.ComponentModel.HandledEventArgs e)
+        {
+            if (!e.Handled)
+                Invoke((Action)(() => { lblGpio.Text = Program.clsControl.GpioState.ToString(); }));
+        }
+
+        private void ClsProfile_TimeToIssueCustomCommand(object sender, CustomCommandEventArgs e)
+        {
+            Program.clsControl.SendCustom(e.Command);
+        }
+
+        private void ClsProfile_ExecutionFinished(object sender, EventArgs e)
+        {
+            Program.clsProfile.ExecutionFinished -= ClsProfile_ExecutionFinished;
+            Program.clsProfile.TimeToChangeSetpoint -= ClsProfile_TimeToChangeSetpoint;
+            Program.clsProfile.TemperatureValidationCallback -= GetTempAndSetpoint;
+            Invoke((Action)(() =>
+            {
+                btnSession.Enabled = true;
+                включитьЗаписьToolStripMenuItem.Checked = false;
+                включитьЗаписьToolStripMenuItem_Click(this, new EventArgs());
+                lblProfile.Text = (lblProfile.Tag as string) + "нет";
+            }));
+        }
+
+        private void ClsProfile_TimeToChangeSetpoint(object sender, TemperatureEventArgs e)
+        {
+            Program.clsControl.Setpoint = e.Temperature;
+        }
+
+        #endregion
     }
 }

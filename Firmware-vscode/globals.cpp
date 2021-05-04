@@ -13,7 +13,7 @@ float integralTermLimit = 0.35;                                                /
 float K[CHANNEL_COUNT][2] = { { 18, 35 },{ 0.006, 0.19 },{ 15, 16 } };                       // Current regulation constants
 float amplifierCoeff = INIT_AMP_COEFF;                                                    // Coefficient used for working with external amplifier
 float calibration[CHANNEL_COUNT] = { 0, 0, 0 };                                        // Input calibration values
-float distillExtraPower = 0;                                                          // Bias for distillation
+float distillExtraPower = 20;                                                          // Bias for distillation
 float ambientTemp = 0;                                                       // Current DS18B20 (ambient) temperature
 float defaultAmbientTemp = 25.0f;                                                  // Default ambient temperature
 float distillTempWindow = 5;                                                          // Tolerated setpoint overshoot in D-mode
@@ -28,7 +28,7 @@ bool averaging[CHANNEL_COUNT] = { 1, 1, 0 };                                    
 bool logging = false;                                                 // Logging enable flags
 bool condition[4] = { 0, 0, 0, 0 };                                          // Flags for error states behavior control {Safety error, DS chain: <= 1 sensor, DS chain: 0 sensors, DS chain changed}
 bool cjc = false;
-bool enableCooler[CHANNEL_COUNT] = { 0, 0, 0 };
+bool enableCooler[CHANNEL_COUNT] = { 1, 1, 1 };
 
 ClickEncoder* encoder;                                                // Encoder object 
 PID myPID(&Input, &Output, &Setpoint, K[0][0], K[1][0], K[2][0], DIRECT);    // PID Object

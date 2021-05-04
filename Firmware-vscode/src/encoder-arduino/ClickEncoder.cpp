@@ -14,7 +14,7 @@
 // ----------------------------------------------------------------------------
 // Button configuration (values for 1ms timer service calls)
 //
-#define ENC_BUTTONINTERVAL    10  // check button every x milliseconds, also debouce time
+#define ENC_BUTTONINTERVAL    20  // check button every x milliseconds, also debouce time
 #define ENC_DOUBLECLICKTIME  600  // second click within 600ms
 #define ENC_HOLDTIME        3000  // report held button after 3s
 
@@ -22,8 +22,8 @@
 // Acceleration configuration (for 1000Hz calls to ::service())
 //
 #define ENC_ACCEL_TOP      3072   // max. acceleration: *12 (val >> 8)
-#define ENC_ACCEL_INC        50
-#define ENC_ACCEL_DEC         2
+#define ENC_ACCEL_INC       100
+#define ENC_ACCEL_DEC        4
 
 // ----------------------------------------------------------------------------
 

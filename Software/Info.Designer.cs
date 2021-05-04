@@ -30,12 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Info));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -158,6 +158,18 @@
             this.сохранитьКакCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.label20 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
+            this.chkCooler2 = new System.Windows.Forms.CheckBox();
+            this.chkCooler1 = new System.Windows.Forms.CheckBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.chkCooler0 = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
+            this.pctCooler2 = new System.Windows.Forms.PictureBox();
+            this.pctCooler0 = new System.Windows.Forms.PictureBox();
+            this.pctCooler1 = new System.Windows.Forms.PictureBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -200,6 +212,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.pctGpioState)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
+            this.tableLayoutPanel13.SuspendLayout();
+            this.tableLayoutPanel14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pctCooler2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pctCooler0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pctCooler1)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -449,7 +466,9 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 128F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel14, 2, 14);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel13, 1, 14);
             this.tableLayoutPanel1.Controls.Add(this.pctCJC, 2, 13);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel10, 2, 11);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel9, 1, 11);
@@ -492,11 +511,12 @@
             this.tableLayoutPanel1.Controls.Add(this.chkCJC, 1, 13);
             this.tableLayoutPanel1.Controls.Add(this.lblGpio, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label6, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label20, 0, 14);
             this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.MinimumSize = new System.Drawing.Size(325, 611);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 14;
+            this.tableLayoutPanel1.RowCount = 15;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
@@ -511,17 +531,18 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(325, 676);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(325, 763);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
             // pctCJC
             // 
             this.pctCJC.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pctCJC.Image = global::LabPID.Properties.Resources.warning_icon;
-            this.pctCJC.Location = new System.Drawing.Point(249, 643);
+            this.pctCJC.Location = new System.Drawing.Point(247, 643);
             this.pctCJC.Margin = new System.Windows.Forms.Padding(1);
             this.pctCJC.Name = "pctCJC";
-            this.pctCJC.Size = new System.Drawing.Size(73, 33);
+            this.pctCJC.Size = new System.Drawing.Size(75, 33);
             this.pctCJC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctCJC.TabIndex = 63;
             this.pctCJC.TabStop = false;
@@ -535,7 +556,7 @@
             this.tableLayoutPanel10.Controls.Add(this.pctAv1, 0, 0);
             this.tableLayoutPanel10.Controls.Add(this.pctAv2, 0, 1);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(248, 519);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(246, 519);
             this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 3;
@@ -543,7 +564,7 @@
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(75, 80);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(77, 80);
             this.tableLayoutPanel10.TabIndex = 35;
             // 
             // pctAv3
@@ -556,7 +577,7 @@
             this.pctAv3.Location = new System.Drawing.Point(1, 53);
             this.pctAv3.Margin = new System.Windows.Forms.Padding(1);
             this.pctAv3.Name = "pctAv3";
-            this.pctAv3.Size = new System.Drawing.Size(73, 26);
+            this.pctAv3.Size = new System.Drawing.Size(75, 26);
             this.pctAv3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctAv3.TabIndex = 29;
             this.pctAv3.TabStop = false;
@@ -572,7 +593,7 @@
             this.pctAv1.Location = new System.Drawing.Point(1, 1);
             this.pctAv1.Margin = new System.Windows.Forms.Padding(1);
             this.pctAv1.Name = "pctAv1";
-            this.pctAv1.Size = new System.Drawing.Size(73, 24);
+            this.pctAv1.Size = new System.Drawing.Size(75, 24);
             this.pctAv1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctAv1.TabIndex = 28;
             this.pctAv1.TabStop = false;
@@ -588,7 +609,7 @@
             this.pctAv2.Location = new System.Drawing.Point(1, 27);
             this.pctAv2.Margin = new System.Windows.Forms.Padding(1);
             this.pctAv2.Name = "pctAv2";
-            this.pctAv2.Size = new System.Drawing.Size(73, 24);
+            this.pctAv2.Size = new System.Drawing.Size(75, 24);
             this.pctAv2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctAv2.TabIndex = 30;
             this.pctAv2.TabStop = false;
@@ -614,7 +635,7 @@
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(114, 80);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(112, 80);
             this.tableLayoutPanel9.TabIndex = 43;
             // 
             // chkAv3
@@ -626,7 +647,7 @@
             this.chkAv3.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAv3.Location = new System.Drawing.Point(35, 56);
             this.chkAv3.Name = "chkAv3";
-            this.chkAv3.Size = new System.Drawing.Size(75, 20);
+            this.chkAv3.Size = new System.Drawing.Size(73, 20);
             this.chkAv3.TabIndex = 20;
             this.chkAv3.UseVisualStyleBackColor = true;
             this.chkAv3.CheckedChanged += new System.EventHandler(this.chkAv3_CheckedChanged);
@@ -640,7 +661,7 @@
             this.chkAv2.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAv2.Location = new System.Drawing.Point(35, 30);
             this.chkAv2.Name = "chkAv2";
-            this.chkAv2.Size = new System.Drawing.Size(75, 19);
+            this.chkAv2.Size = new System.Drawing.Size(73, 19);
             this.chkAv2.TabIndex = 19;
             this.chkAv2.UseVisualStyleBackColor = true;
             this.chkAv2.CheckedChanged += new System.EventHandler(this.chkAv2_CheckedChanged);
@@ -693,7 +714,7 @@
             this.chkAv1.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAv1.Location = new System.Drawing.Point(35, 4);
             this.chkAv1.Name = "chkAv1";
-            this.chkAv1.Size = new System.Drawing.Size(75, 19);
+            this.chkAv1.Size = new System.Drawing.Size(73, 19);
             this.chkAv1.TabIndex = 18;
             this.chkAv1.UseVisualStyleBackColor = true;
             this.chkAv1.CheckedChanged += new System.EventHandler(this.chkAv1_CheckedChanged);
@@ -706,7 +727,7 @@
             this.tableLayoutPanel8.Controls.Add(this.pctC1, 0, 1);
             this.tableLayoutPanel8.Controls.Add(this.pctC2, 0, 2);
             this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(248, 147);
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(246, 147);
             this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 3;
@@ -714,7 +735,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(75, 80);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(77, 80);
             this.tableLayoutPanel8.TabIndex = 46;
             // 
             // pctC0
@@ -727,7 +748,7 @@
             this.pctC0.Location = new System.Drawing.Point(1, 1);
             this.pctC0.Margin = new System.Windows.Forms.Padding(1);
             this.pctC0.Name = "pctC0";
-            this.pctC0.Size = new System.Drawing.Size(73, 24);
+            this.pctC0.Size = new System.Drawing.Size(75, 24);
             this.pctC0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctC0.TabIndex = 28;
             this.pctC0.TabStop = false;
@@ -743,7 +764,7 @@
             this.pctC1.Location = new System.Drawing.Point(1, 27);
             this.pctC1.Margin = new System.Windows.Forms.Padding(1);
             this.pctC1.Name = "pctC1";
-            this.pctC1.Size = new System.Drawing.Size(73, 24);
+            this.pctC1.Size = new System.Drawing.Size(75, 24);
             this.pctC1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctC1.TabIndex = 30;
             this.pctC1.TabStop = false;
@@ -759,7 +780,7 @@
             this.pctC2.Location = new System.Drawing.Point(1, 53);
             this.pctC2.Margin = new System.Windows.Forms.Padding(1);
             this.pctC2.Name = "pctC2";
-            this.pctC2.Size = new System.Drawing.Size(73, 26);
+            this.pctC2.Size = new System.Drawing.Size(75, 26);
             this.pctC2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctC2.TabIndex = 29;
             this.pctC2.TabStop = false;
@@ -773,7 +794,7 @@
             this.tableLayoutPanel6.Controls.Add(this.pctAP, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.pctAI, 0, 1);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(248, 311);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(246, 311);
             this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 3;
@@ -781,7 +802,7 @@
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(75, 80);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(77, 80);
             this.tableLayoutPanel6.TabIndex = 35;
             // 
             // pctAD
@@ -794,7 +815,7 @@
             this.pctAD.Location = new System.Drawing.Point(1, 53);
             this.pctAD.Margin = new System.Windows.Forms.Padding(1);
             this.pctAD.Name = "pctAD";
-            this.pctAD.Size = new System.Drawing.Size(73, 26);
+            this.pctAD.Size = new System.Drawing.Size(75, 26);
             this.pctAD.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctAD.TabIndex = 29;
             this.pctAD.TabStop = false;
@@ -810,7 +831,7 @@
             this.pctAP.Location = new System.Drawing.Point(1, 1);
             this.pctAP.Margin = new System.Windows.Forms.Padding(1);
             this.pctAP.Name = "pctAP";
-            this.pctAP.Size = new System.Drawing.Size(73, 24);
+            this.pctAP.Size = new System.Drawing.Size(75, 24);
             this.pctAP.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctAP.TabIndex = 28;
             this.pctAP.TabStop = false;
@@ -826,7 +847,7 @@
             this.pctAI.Location = new System.Drawing.Point(1, 27);
             this.pctAI.Margin = new System.Windows.Forms.Padding(1);
             this.pctAI.Name = "pctAI";
-            this.pctAI.Size = new System.Drawing.Size(73, 24);
+            this.pctAI.Size = new System.Drawing.Size(75, 24);
             this.pctAI.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctAI.TabIndex = 30;
             this.pctAI.TabStop = false;
@@ -839,10 +860,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pctAmplifier.Image = ((System.Drawing.Image)(resources.GetObject("pctAmplifier.Image")));
             this.pctAmplifier.InitialImage = null;
-            this.pctAmplifier.Location = new System.Drawing.Point(249, 483);
+            this.pctAmplifier.Location = new System.Drawing.Point(247, 483);
             this.pctAmplifier.Margin = new System.Windows.Forms.Padding(1);
             this.pctAmplifier.Name = "pctAmplifier";
-            this.pctAmplifier.Size = new System.Drawing.Size(73, 33);
+            this.pctAmplifier.Size = new System.Drawing.Size(75, 33);
             this.pctAmplifier.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctAmplifier.TabIndex = 33;
             this.pctAmplifier.TabStop = false;
@@ -856,7 +877,7 @@
             this.mtbAmplifier.Location = new System.Drawing.Point(135, 485);
             this.mtbAmplifier.Mask = "#000.0000";
             this.mtbAmplifier.Name = "mtbAmplifier";
-            this.mtbAmplifier.Size = new System.Drawing.Size(108, 20);
+            this.mtbAmplifier.Size = new System.Drawing.Size(106, 20);
             this.mtbAmplifier.TabIndex = 32;
             this.mtbAmplifier.TextChanged += new System.EventHandler(this.mtbAmplifier_TextChanged);
             // 
@@ -867,10 +888,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pctPower.Image = ((System.Drawing.Image)(resources.GetObject("pctPower.Image")));
             this.pctPower.InitialImage = null;
-            this.pctPower.Location = new System.Drawing.Point(249, 446);
+            this.pctPower.Location = new System.Drawing.Point(247, 446);
             this.pctPower.Margin = new System.Windows.Forms.Padding(1);
             this.pctPower.Name = "pctPower";
-            this.pctPower.Size = new System.Drawing.Size(73, 33);
+            this.pctPower.Size = new System.Drawing.Size(75, 33);
             this.pctPower.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctPower.TabIndex = 31;
             this.pctPower.TabStop = false;
@@ -883,10 +904,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pctIntegral.Image = ((System.Drawing.Image)(resources.GetObject("pctIntegral.Image")));
             this.pctIntegral.InitialImage = null;
-            this.pctIntegral.Location = new System.Drawing.Point(249, 394);
+            this.pctIntegral.Location = new System.Drawing.Point(247, 394);
             this.pctIntegral.Margin = new System.Windows.Forms.Padding(1);
             this.pctIntegral.Name = "pctIntegral";
-            this.pctIntegral.Size = new System.Drawing.Size(73, 48);
+            this.pctIntegral.Size = new System.Drawing.Size(75, 48);
             this.pctIntegral.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctIntegral.TabIndex = 30;
             this.pctIntegral.TabStop = false;
@@ -899,10 +920,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pctMode.Image = ((System.Drawing.Image)(resources.GetObject("pctMode.Image")));
             this.pctMode.InitialImage = null;
-            this.pctMode.Location = new System.Drawing.Point(249, 121);
+            this.pctMode.Location = new System.Drawing.Point(247, 121);
             this.pctMode.Margin = new System.Windows.Forms.Padding(1);
             this.pctMode.Name = "pctMode";
-            this.pctMode.Size = new System.Drawing.Size(73, 23);
+            this.pctMode.Size = new System.Drawing.Size(75, 23);
             this.pctMode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctMode.TabIndex = 26;
             this.pctMode.TabStop = false;
@@ -915,10 +936,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pctSet.Image = ((System.Drawing.Image)(resources.GetObject("pctSet.Image")));
             this.pctSet.InitialImage = null;
-            this.pctSet.Location = new System.Drawing.Point(249, 94);
+            this.pctSet.Location = new System.Drawing.Point(247, 94);
             this.pctSet.Margin = new System.Windows.Forms.Padding(1);
             this.pctSet.Name = "pctSet";
-            this.pctSet.Size = new System.Drawing.Size(73, 23);
+            this.pctSet.Size = new System.Drawing.Size(75, 23);
             this.pctSet.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctSet.TabIndex = 25;
             this.pctSet.TabStop = false;
@@ -957,7 +978,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(114, 80);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(112, 80);
             this.tableLayoutPanel4.TabIndex = 18;
             // 
             // label11
@@ -1007,7 +1028,7 @@
             this.mtbKAP.Location = new System.Drawing.Point(35, 4);
             this.mtbKAP.Mask = "#000.0000";
             this.mtbKAP.Name = "mtbKAP";
-            this.mtbKAP.Size = new System.Drawing.Size(75, 20);
+            this.mtbKAP.Size = new System.Drawing.Size(73, 20);
             this.mtbKAP.TabIndex = 14;
             this.mtbKAP.TextChanged += new System.EventHandler(this.mtbKAP_TextChanged);
             // 
@@ -1019,7 +1040,7 @@
             this.mtbKAI.Location = new System.Drawing.Point(35, 30);
             this.mtbKAI.Mask = "#000.0000";
             this.mtbKAI.Name = "mtbKAI";
-            this.mtbKAI.Size = new System.Drawing.Size(75, 20);
+            this.mtbKAI.Size = new System.Drawing.Size(73, 20);
             this.mtbKAI.TabIndex = 15;
             this.mtbKAI.TextChanged += new System.EventHandler(this.mtbKAI_TextChanged);
             // 
@@ -1031,7 +1052,7 @@
             this.mtbKAD.Location = new System.Drawing.Point(35, 56);
             this.mtbKAD.Mask = "#000.0000";
             this.mtbKAD.Name = "mtbKAD";
-            this.mtbKAD.Size = new System.Drawing.Size(75, 20);
+            this.mtbKAD.Size = new System.Drawing.Size(73, 20);
             this.mtbKAD.TabIndex = 16;
             this.mtbKAD.TextChanged += new System.EventHandler(this.mtbKAD_TextChanged);
             // 
@@ -1048,7 +1069,7 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(114, 25);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(112, 25);
             this.tableLayoutPanel2.TabIndex = 15;
             // 
             // updChannel
@@ -1059,9 +1080,9 @@
             this.updChannel.Items.Add("0");
             this.updChannel.Items.Add("1");
             this.updChannel.Items.Add("2");
-            this.updChannel.Location = new System.Drawing.Point(60, 3);
+            this.updChannel.Location = new System.Drawing.Point(59, 3);
             this.updChannel.Name = "updChannel";
-            this.updChannel.Size = new System.Drawing.Size(51, 20);
+            this.updChannel.Size = new System.Drawing.Size(50, 20);
             this.updChannel.TabIndex = 1;
             this.updChannel.Wrap = true;
             this.updChannel.SelectedItemChanged += new System.EventHandler(this.updChannel_SelectedItemChanged);
@@ -1077,7 +1098,7 @@
             this.updMode.Items.Add("M");
             this.updMode.Location = new System.Drawing.Point(3, 3);
             this.updMode.Name = "updMode";
-            this.updMode.Size = new System.Drawing.Size(51, 20);
+            this.updMode.Size = new System.Drawing.Size(50, 20);
             this.updMode.TabIndex = 0;
             this.updMode.Wrap = true;
             this.updMode.SelectedItemChanged += new System.EventHandler(this.updMode_SelectedItemChanged);
@@ -1155,7 +1176,7 @@
             this.mtbSetpoint.Location = new System.Drawing.Point(135, 96);
             this.mtbSetpoint.Mask = "#000.00 °С";
             this.mtbSetpoint.Name = "mtbSetpoint";
-            this.mtbSetpoint.Size = new System.Drawing.Size(108, 20);
+            this.mtbSetpoint.Size = new System.Drawing.Size(106, 20);
             this.mtbSetpoint.TabIndex = 11;
             this.mtbSetpoint.TextChanged += new System.EventHandler(this.mtbSetpoint_TextChanged);
             // 
@@ -1179,7 +1200,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(114, 80);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(112, 80);
             this.tableLayoutPanel3.TabIndex = 14;
             // 
             // mtbKPD
@@ -1190,7 +1211,7 @@
             this.mtbKPD.Location = new System.Drawing.Point(35, 56);
             this.mtbKPD.Mask = "#000.0000";
             this.mtbKPD.Name = "mtbKPD";
-            this.mtbKPD.Size = new System.Drawing.Size(75, 20);
+            this.mtbKPD.Size = new System.Drawing.Size(73, 20);
             this.mtbKPD.TabIndex = 15;
             this.mtbKPD.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox8_MaskInputRejected);
             this.mtbKPD.TextChanged += new System.EventHandler(this.mtbKPD_TextChanged);
@@ -1203,7 +1224,7 @@
             this.mtbKPI.Location = new System.Drawing.Point(35, 30);
             this.mtbKPI.Mask = "#000.0000";
             this.mtbKPI.Name = "mtbKPI";
-            this.mtbKPI.Size = new System.Drawing.Size(75, 20);
+            this.mtbKPI.Size = new System.Drawing.Size(73, 20);
             this.mtbKPI.TabIndex = 14;
             this.mtbKPI.TextChanged += new System.EventHandler(this.mtbKPI_TextChanged);
             // 
@@ -1254,7 +1275,7 @@
             this.mtbKPP.Location = new System.Drawing.Point(35, 4);
             this.mtbKPP.Mask = "#000.0000";
             this.mtbKPP.Name = "mtbKPP";
-            this.mtbKPP.Size = new System.Drawing.Size(75, 20);
+            this.mtbKPP.Size = new System.Drawing.Size(73, 20);
             this.mtbKPP.TabIndex = 13;
             this.mtbKPP.TextChanged += new System.EventHandler(this.mtbKPP_TextChanged);
             // 
@@ -1279,7 +1300,7 @@
             this.mtbIntegral.Location = new System.Drawing.Point(135, 396);
             this.mtbIntegral.Mask = "000.00 %";
             this.mtbIntegral.Name = "mtbIntegral";
-            this.mtbIntegral.Size = new System.Drawing.Size(108, 20);
+            this.mtbIntegral.Size = new System.Drawing.Size(106, 20);
             this.mtbIntegral.TabIndex = 20;
             this.mtbIntegral.TextChanged += new System.EventHandler(this.mtbIntegral_TextChanged);
             // 
@@ -1317,7 +1338,7 @@
             this.mtbDisitill.Location = new System.Drawing.Point(135, 448);
             this.mtbDisitill.Mask = "000.00 %";
             this.mtbDisitill.Name = "mtbDisitill";
-            this.mtbDisitill.Size = new System.Drawing.Size(108, 20);
+            this.mtbDisitill.Size = new System.Drawing.Size(106, 20);
             this.mtbDisitill.TabIndex = 22;
             this.mtbDisitill.TextChanged += new System.EventHandler(this.mtbDisitill_TextChanged);
             // 
@@ -1329,7 +1350,7 @@
             this.tableLayoutPanel5.Controls.Add(this.pctNP, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.pctNI, 0, 1);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(248, 229);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(246, 229);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 3;
@@ -1337,7 +1358,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(75, 80);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(77, 80);
             this.tableLayoutPanel5.TabIndex = 34;
             // 
             // pctND
@@ -1350,7 +1371,7 @@
             this.pctND.Location = new System.Drawing.Point(1, 53);
             this.pctND.Margin = new System.Windows.Forms.Padding(1);
             this.pctND.Name = "pctND";
-            this.pctND.Size = new System.Drawing.Size(73, 26);
+            this.pctND.Size = new System.Drawing.Size(75, 26);
             this.pctND.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctND.TabIndex = 29;
             this.pctND.TabStop = false;
@@ -1366,7 +1387,7 @@
             this.pctNP.Location = new System.Drawing.Point(1, 1);
             this.pctNP.Margin = new System.Windows.Forms.Padding(1);
             this.pctNP.Name = "pctNP";
-            this.pctNP.Size = new System.Drawing.Size(73, 24);
+            this.pctNP.Size = new System.Drawing.Size(75, 24);
             this.pctNP.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctNP.TabIndex = 28;
             this.pctNP.TabStop = false;
@@ -1382,7 +1403,7 @@
             this.pctNI.Location = new System.Drawing.Point(1, 27);
             this.pctNI.Margin = new System.Windows.Forms.Padding(1);
             this.pctNI.Name = "pctNI";
-            this.pctNI.Size = new System.Drawing.Size(73, 24);
+            this.pctNI.Size = new System.Drawing.Size(75, 24);
             this.pctNI.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctNI.TabIndex = 30;
             this.pctNI.TabStop = false;
@@ -1421,7 +1442,7 @@
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(114, 80);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(112, 80);
             this.tableLayoutPanel7.TabIndex = 42;
             // 
             // label23
@@ -1471,7 +1492,7 @@
             this.mtbC0.Location = new System.Drawing.Point(35, 4);
             this.mtbC0.Mask = "#000.00 °С";
             this.mtbC0.Name = "mtbC0";
-            this.mtbC0.Size = new System.Drawing.Size(75, 20);
+            this.mtbC0.Size = new System.Drawing.Size(73, 20);
             this.mtbC0.TabIndex = 12;
             this.mtbC0.TextChanged += new System.EventHandler(this.mtbC0_TextChanged);
             // 
@@ -1483,7 +1504,7 @@
             this.mtbC1.Location = new System.Drawing.Point(35, 30);
             this.mtbC1.Mask = "#000.00 °С";
             this.mtbC1.Name = "mtbC1";
-            this.mtbC1.Size = new System.Drawing.Size(75, 20);
+            this.mtbC1.Size = new System.Drawing.Size(73, 20);
             this.mtbC1.TabIndex = 13;
             this.mtbC1.TextChanged += new System.EventHandler(this.mtbC1_TextChanged);
             // 
@@ -1495,7 +1516,7 @@
             this.mtbC2.Location = new System.Drawing.Point(35, 56);
             this.mtbC2.Mask = "#000.00 °С";
             this.mtbC2.Name = "mtbC2";
-            this.mtbC2.Size = new System.Drawing.Size(75, 20);
+            this.mtbC2.Size = new System.Drawing.Size(73, 20);
             this.mtbC2.TabIndex = 14;
             this.mtbC2.TextChanged += new System.EventHandler(this.mtbC2_TextChanged);
             // 
@@ -1519,10 +1540,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pctAutoPwr.Image = ((System.Drawing.Image)(resources.GetObject("pctAutoPwr.Image")));
             this.pctAutoPwr.InitialImage = null;
-            this.pctAutoPwr.Location = new System.Drawing.Point(249, 67);
+            this.pctAutoPwr.Location = new System.Drawing.Point(247, 67);
             this.pctAutoPwr.Margin = new System.Windows.Forms.Padding(1);
             this.pctAutoPwr.Name = "pctAutoPwr";
-            this.pctAutoPwr.Size = new System.Drawing.Size(73, 23);
+            this.pctAutoPwr.Size = new System.Drawing.Size(75, 23);
             this.pctAutoPwr.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctAutoPwr.TabIndex = 48;
             this.pctAutoPwr.TabStop = false;
@@ -1540,15 +1561,15 @@
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 1;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(114, 25);
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(112, 25);
             this.tableLayoutPanel11.TabIndex = 49;
             // 
             // mtbPower
             // 
             this.mtbPower.Location = new System.Drawing.Point(3, 3);
-            this.mtbPower.Mask = "000 %";
+            this.mtbPower.Mask = "#000 %";
             this.mtbPower.Name = "mtbPower";
-            this.mtbPower.Size = new System.Drawing.Size(43, 20);
+            this.mtbPower.Size = new System.Drawing.Size(41, 20);
             this.mtbPower.TabIndex = 0;
             this.mtbPower.TextChanged += new System.EventHandler(this.mtbPower_TextChanged);
             // 
@@ -1556,7 +1577,7 @@
             // 
             this.chkAuto.AutoSize = true;
             this.chkAuto.Enabled = false;
-            this.chkAuto.Location = new System.Drawing.Point(52, 3);
+            this.chkAuto.Location = new System.Drawing.Point(50, 3);
             this.chkAuto.Name = "chkAuto";
             this.chkAuto.Size = new System.Drawing.Size(54, 19);
             this.chkAuto.TabIndex = 1;
@@ -1577,7 +1598,7 @@
             this.tableLayoutPanel12.Name = "tableLayoutPanel12";
             this.tableLayoutPanel12.RowCount = 1;
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(114, 25);
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(112, 25);
             this.tableLayoutPanel12.TabIndex = 50;
             // 
             // lblTemp1
@@ -1588,7 +1609,7 @@
             this.lblTemp1.AutoSize = true;
             this.lblTemp1.Location = new System.Drawing.Point(4, 1);
             this.lblTemp1.Name = "lblTemp1";
-            this.lblTemp1.Size = new System.Drawing.Size(49, 23);
+            this.lblTemp1.Size = new System.Drawing.Size(48, 23);
             this.lblTemp1.TabIndex = 42;
             this.lblTemp1.Text = "000.00 °С";
             this.lblTemp1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1599,9 +1620,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTemp2.AutoSize = true;
-            this.lblTemp2.Location = new System.Drawing.Point(60, 1);
+            this.lblTemp2.Location = new System.Drawing.Point(59, 1);
             this.lblTemp2.Name = "lblTemp2";
-            this.lblTemp2.Size = new System.Drawing.Size(50, 23);
+            this.lblTemp2.Size = new System.Drawing.Size(49, 23);
             this.lblTemp2.TabIndex = 41;
             this.lblTemp2.Text = "000.00 °С";
             this.lblTemp2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1611,10 +1632,10 @@
             this.pctWarning.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pctWarning.Image = global::LabPID.Properties.Resources.Warning_icon__1_;
             this.pctWarning.InitialImage = null;
-            this.pctWarning.Location = new System.Drawing.Point(248, 39);
+            this.pctWarning.Location = new System.Drawing.Point(246, 39);
             this.pctWarning.Margin = new System.Windows.Forms.Padding(0);
             this.pctWarning.Name = "pctWarning";
-            this.pctWarning.Size = new System.Drawing.Size(75, 25);
+            this.pctWarning.Size = new System.Drawing.Size(77, 25);
             this.pctWarning.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctWarning.TabIndex = 51;
             this.pctWarning.TabStop = false;
@@ -1637,7 +1658,7 @@
             this.mtbOver.Location = new System.Drawing.Point(135, 604);
             this.mtbOver.Mask = "000.00 °С";
             this.mtbOver.Name = "mtbOver";
-            this.mtbOver.Size = new System.Drawing.Size(108, 20);
+            this.mtbOver.Size = new System.Drawing.Size(106, 20);
             this.mtbOver.TabIndex = 55;
             this.mtbOver.TextChanged += new System.EventHandler(this.mtbOver_TextChanged);
             // 
@@ -1645,10 +1666,10 @@
             // 
             this.pctOver.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pctOver.Image = global::LabPID.Properties.Resources.warning_icon;
-            this.pctOver.Location = new System.Drawing.Point(249, 602);
+            this.pctOver.Location = new System.Drawing.Point(247, 602);
             this.pctOver.Margin = new System.Windows.Forms.Padding(1);
             this.pctOver.Name = "pctOver";
-            this.pctOver.Size = new System.Drawing.Size(73, 37);
+            this.pctOver.Size = new System.Drawing.Size(75, 37);
             this.pctOver.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctOver.TabIndex = 56;
             this.pctOver.TabStop = false;
@@ -1659,10 +1680,10 @@
             this.pctGpioState.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pctGpioState.Image = global::LabPID.Properties.Resources.warning_icon;
             this.pctGpioState.InitialImage = null;
-            this.pctGpioState.Location = new System.Drawing.Point(249, 3);
+            this.pctGpioState.Location = new System.Drawing.Point(247, 3);
             this.pctGpioState.Margin = new System.Windows.Forms.Padding(1);
             this.pctGpioState.Name = "pctGpioState";
-            this.pctGpioState.Size = new System.Drawing.Size(73, 33);
+            this.pctGpioState.Size = new System.Drawing.Size(75, 33);
             this.pctGpioState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pctGpioState.TabIndex = 59;
             this.pctGpioState.TabStop = false;
@@ -1685,7 +1706,7 @@
             this.chkCJC.Location = new System.Drawing.Point(137, 645);
             this.chkCJC.Margin = new System.Windows.Forms.Padding(5, 3, 3, 3);
             this.chkCJC.Name = "chkCJC";
-            this.chkCJC.Size = new System.Drawing.Size(106, 29);
+            this.chkCJC.Size = new System.Drawing.Size(104, 29);
             this.chkCJC.TabIndex = 62;
             this.chkCJC.Text = "Канал 0";
             this.chkCJC.UseVisualStyleBackColor = true;
@@ -1694,11 +1715,12 @@
             // lblGpio
             // 
             this.lblGpio.AutoSize = true;
+            this.lblGpio.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblGpio.Location = new System.Drawing.Point(135, 2);
             this.lblGpio.Name = "lblGpio";
-            this.lblGpio.Size = new System.Drawing.Size(97, 30);
+            this.lblGpio.Size = new System.Drawing.Size(106, 35);
             this.lblGpio.TabIndex = 64;
-            this.lblGpio.Text = "0000 0000 0000\r\n1111";
+            this.lblGpio.Text = "1111\r\n0000 0000 0000";
             // 
             // label6
             // 
@@ -1718,44 +1740,44 @@
             // 
             this.chart1.BorderlineColor = System.Drawing.SystemColors.ActiveBorder;
             this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea1.CursorX.IsUserEnabled = true;
-            chartArea1.CursorX.IsUserSelectionEnabled = true;
-            chartArea1.CursorY.IsUserEnabled = true;
-            chartArea1.CursorY.IsUserSelectionEnabled = true;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
+            chartArea2.CursorX.IsUserEnabled = true;
+            chartArea2.CursorX.IsUserSelectionEnabled = true;
+            chartArea2.CursorY.IsUserEnabled = true;
+            chartArea2.CursorY.IsUserSelectionEnabled = true;
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
             this.chart1.ContextMenuStrip = this.contextMenuStrip1;
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Alignment = System.Drawing.StringAlignment.Far;
-            legend1.DockedToChartArea = "ChartArea1";
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            legend2.Alignment = System.Drawing.StringAlignment.Far;
+            legend2.DockedToChartArea = "ChartArea1";
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(0, 0);
             this.chart1.Name = "chart1";
-            series1.BorderWidth = 2;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series1.Legend = "Legend1";
-            series1.Name = "Выбранный вход";
-            series2.BorderWidth = 2;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series2.Legend = "Legend1";
-            series2.Name = "DS (комната)";
-            series3.BorderWidth = 2;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series3.Legend = "Legend1";
-            series3.Name = "Мощность";
-            series4.BorderWidth = 2;
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series4.Legend = "Legend1";
-            series4.Name = "Уставка";
-            this.chart1.Series.Add(series1);
-            this.chart1.Series.Add(series2);
-            this.chart1.Series.Add(series3);
-            this.chart1.Series.Add(series4);
+            series5.BorderWidth = 2;
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series5.Legend = "Legend1";
+            series5.Name = "Выбранный вход";
+            series6.BorderWidth = 2;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series6.Legend = "Legend1";
+            series6.Name = "DS (комната)";
+            series7.BorderWidth = 2;
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series7.Legend = "Legend1";
+            series7.Name = "Мощность";
+            series8.BorderWidth = 2;
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series8.Legend = "Legend1";
+            series8.Name = "Уставка";
+            this.chart1.Series.Add(series5);
+            this.chart1.Series.Add(series6);
+            this.chart1.Series.Add(series7);
+            this.chart1.Series.Add(series8);
             this.chart1.Size = new System.Drawing.Size(594, 437);
             this.chart1.TabIndex = 1;
             this.chart1.Text = "chart1";
@@ -1840,6 +1862,188 @@
             this.timer1.Interval = 1200;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label20.Location = new System.Drawing.Point(5, 679);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(122, 82);
+            this.label20.TabIndex = 66;
+            this.label20.Text = "Включить  охладитель\r\n(по каналам)";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tableLayoutPanel13
+            // 
+            this.tableLayoutPanel13.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.tableLayoutPanel13.ColumnCount = 2;
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel13.Controls.Add(this.chkCooler2, 1, 2);
+            this.tableLayoutPanel13.Controls.Add(this.chkCooler1, 1, 1);
+            this.tableLayoutPanel13.Controls.Add(this.label28, 0, 2);
+            this.tableLayoutPanel13.Controls.Add(this.label29, 0, 1);
+            this.tableLayoutPanel13.Controls.Add(this.label30, 0, 0);
+            this.tableLayoutPanel13.Controls.Add(this.chkCooler0, 1, 0);
+            this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel13.Location = new System.Drawing.Point(132, 679);
+            this.tableLayoutPanel13.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel13.Name = "tableLayoutPanel13";
+            this.tableLayoutPanel13.RowCount = 3;
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(112, 82);
+            this.tableLayoutPanel13.TabIndex = 67;
+            // 
+            // chkCooler2
+            // 
+            this.chkCooler2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkCooler2.AutoSize = true;
+            this.chkCooler2.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkCooler2.Location = new System.Drawing.Point(35, 58);
+            this.chkCooler2.Name = "chkCooler2";
+            this.chkCooler2.Size = new System.Drawing.Size(73, 20);
+            this.chkCooler2.TabIndex = 20;
+            this.chkCooler2.UseVisualStyleBackColor = true;
+            this.chkCooler2.CheckedChanged += new System.EventHandler(this.chkCooler2_CheckedChanged);
+            // 
+            // chkCooler1
+            // 
+            this.chkCooler1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkCooler1.AutoSize = true;
+            this.chkCooler1.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkCooler1.Location = new System.Drawing.Point(35, 31);
+            this.chkCooler1.Name = "chkCooler1";
+            this.chkCooler1.Size = new System.Drawing.Size(73, 20);
+            this.chkCooler1.TabIndex = 19;
+            this.chkCooler1.UseVisualStyleBackColor = true;
+            this.chkCooler1.CheckedChanged += new System.EventHandler(this.chkCooler1_CheckedChanged);
+            // 
+            // label28
+            // 
+            this.label28.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(4, 55);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(24, 26);
+            this.label28.TabIndex = 17;
+            this.label28.Text = "2";
+            this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label29
+            // 
+            this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(4, 28);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(24, 26);
+            this.label29.TabIndex = 16;
+            this.label29.Text = "1";
+            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label30
+            // 
+            this.label30.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(4, 1);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(24, 26);
+            this.label30.TabIndex = 15;
+            this.label30.Text = "0";
+            this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkCooler0
+            // 
+            this.chkCooler0.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkCooler0.AutoSize = true;
+            this.chkCooler0.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkCooler0.Location = new System.Drawing.Point(35, 4);
+            this.chkCooler0.Name = "chkCooler0";
+            this.chkCooler0.Size = new System.Drawing.Size(73, 20);
+            this.chkCooler0.TabIndex = 18;
+            this.chkCooler0.UseVisualStyleBackColor = true;
+            this.chkCooler0.CheckedChanged += new System.EventHandler(this.chkCooler0_CheckedChanged);
+            // 
+            // tableLayoutPanel14
+            // 
+            this.tableLayoutPanel14.ColumnCount = 1;
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel14.Controls.Add(this.pctCooler2, 0, 2);
+            this.tableLayoutPanel14.Controls.Add(this.pctCooler0, 0, 0);
+            this.tableLayoutPanel14.Controls.Add(this.pctCooler1, 0, 1);
+            this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel14.Location = new System.Drawing.Point(246, 679);
+            this.tableLayoutPanel14.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel14.Name = "tableLayoutPanel14";
+            this.tableLayoutPanel14.RowCount = 3;
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(77, 82);
+            this.tableLayoutPanel14.TabIndex = 68;
+            // 
+            // pctCooler2
+            // 
+            this.pctCooler2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pctCooler2.Image = ((System.Drawing.Image)(resources.GetObject("pctCooler2.Image")));
+            this.pctCooler2.InitialImage = null;
+            this.pctCooler2.Location = new System.Drawing.Point(1, 55);
+            this.pctCooler2.Margin = new System.Windows.Forms.Padding(1);
+            this.pctCooler2.Name = "pctCooler2";
+            this.pctCooler2.Size = new System.Drawing.Size(75, 26);
+            this.pctCooler2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pctCooler2.TabIndex = 29;
+            this.pctCooler2.TabStop = false;
+            this.pctCooler2.Click += new System.EventHandler(this.pctCooler2_Click);
+            // 
+            // pctCooler0
+            // 
+            this.pctCooler0.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pctCooler0.Image = ((System.Drawing.Image)(resources.GetObject("pctCooler0.Image")));
+            this.pctCooler0.InitialImage = null;
+            this.pctCooler0.Location = new System.Drawing.Point(1, 1);
+            this.pctCooler0.Margin = new System.Windows.Forms.Padding(1);
+            this.pctCooler0.Name = "pctCooler0";
+            this.pctCooler0.Size = new System.Drawing.Size(75, 25);
+            this.pctCooler0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pctCooler0.TabIndex = 28;
+            this.pctCooler0.TabStop = false;
+            this.pctCooler0.Click += new System.EventHandler(this.pctCooler0_Click);
+            // 
+            // pctCooler1
+            // 
+            this.pctCooler1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pctCooler1.Image = ((System.Drawing.Image)(resources.GetObject("pctCooler1.Image")));
+            this.pctCooler1.InitialImage = null;
+            this.pctCooler1.Location = new System.Drawing.Point(1, 28);
+            this.pctCooler1.Margin = new System.Windows.Forms.Padding(1);
+            this.pctCooler1.Name = "pctCooler1";
+            this.pctCooler1.Size = new System.Drawing.Size(75, 25);
+            this.pctCooler1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pctCooler1.TabIndex = 30;
+            this.pctCooler1.TabStop = false;
+            this.pctCooler1.Click += new System.EventHandler(this.pctCooler1_Click);
+            // 
             // Info
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1905,6 +2109,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pctGpioState)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
+            this.tableLayoutPanel13.ResumeLayout(false);
+            this.tableLayoutPanel13.PerformLayout();
+            this.tableLayoutPanel14.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pctCooler2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pctCooler0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pctCooler1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2034,5 +2244,17 @@
         private System.Windows.Forms.CheckBox chkCJC;
         private System.Windows.Forms.Label lblGpio;
         private System.Windows.Forms.LinkLabel label6;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
+        private System.Windows.Forms.PictureBox pctCooler2;
+        private System.Windows.Forms.PictureBox pctCooler0;
+        private System.Windows.Forms.PictureBox pctCooler1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel13;
+        private System.Windows.Forms.CheckBox chkCooler2;
+        private System.Windows.Forms.CheckBox chkCooler1;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.CheckBox chkCooler0;
+        private System.Windows.Forms.Label label20;
     }
 }

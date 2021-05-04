@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace LabPID
             DataDump,
             Error,
             DeviceInfo,
+            GpioFeedback,
             None
         }
         public enum ModeType : byte
@@ -44,9 +46,10 @@ namespace LabPID
         private static readonly Dictionary<ResponseType, string> _ResponseKeyword = new Dictionary<ResponseType, string>
             {
                 { ResponseType.Log, ">L:" },
-                { ResponseType.Error, ">E!" },
+                { ResponseType.Error, ">E" },
                 { ResponseType.DataDump, ">D:" },
-                { ResponseType.DeviceInfo, ">I:" }
+                { ResponseType.DeviceInfo, ">I:" },
+                { ResponseType.GpioFeedback, ">G:" }
             };
         public static readonly Dictionary<ModeType, char> ModeDesignator = new Dictionary<ModeType, char>
             {
@@ -87,6 +90,7 @@ namespace LabPID
         bool _IsConnected = false;
         bool _Logging = false;
         bool[] _Average = new bool[ChannelNumber];
+        bool[] _EnableCooler = new bool[ChannelNumber];
         bool _Error = false;
         bool _CJC = false;
         ResponseType _CurrentResponseType = ResponseType.None;
@@ -294,6 +298,20 @@ namespace LabPID
         {
             get { return _Average; }
         }
+        public bool CurrentCooler
+        {
+            get => _EnableCooler[_Channel];
+            set
+            {
+                if (value == _EnableCooler[_Channel]) return;
+                _EnableCooler[_Channel] = value;
+                Send('N', value ? 1f : 0f);
+            }
+        }
+        public bool[] Coolers
+        {
+            get => _EnableCooler;
+        }
         #endregion
 
         #region Public methods
@@ -452,13 +470,13 @@ namespace LabPID
                     _Channel = (byte)(b[2][1] - '0');
                     break;
                 case 2:
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < ChannelNumber; i++)
                     {
                         _K[0][i] = Convert(b[i]);
                     }
                     break;
                 case 3:
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < ChannelNumber; i++)
                     {
                         _K[1][i] = Convert(b[i]);
                     }
@@ -469,13 +487,13 @@ namespace LabPID
                     _Amplifier = Convert(b[2]);
                     break;
                 case 5:
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < ChannelNumber; i++)
                     {
                         _Calibration[i] = Convert(b[i]);
                     }
                     break;
                 case 6:
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < ChannelNumber; i++)
                     {
                         _Average[i] = (Convert(b[i]) > 0);
                     }
@@ -489,6 +507,12 @@ namespace LabPID
                     _RampStep = Convert(b[0]);
                     GpioState.Parse((uint)int.Parse(b[1]));
                     _CJC = (b[2][0] - '0') > 0;
+                    break;
+                case 9:
+                    for (int i = 0; i < ChannelNumber; i++)
+                    {
+                        _EnableCooler[i] = (Convert(b[i]) > 0);
+                    }
                     return true;
                 default:
                     return true;
@@ -514,6 +538,9 @@ namespace LabPID
                     case ResponseType.DeviceInfo:
                         _IsConnected = true;
                         break;
+                    case ResponseType.GpioFeedback:
+                        GpioState.Parse(uint.Parse(firstLine.Remove(0, 3)));
+                        return ResponseType.None;
                     default:
                         break;
                 }
@@ -569,12 +596,12 @@ namespace LabPID
         private bool HoldEvents = false;
         private void RaiseChanged(object sender, EventArgs e)
         {
-            if (!HoldEvents) Changed?.Invoke(sender, e);
+            if (!HoldEvents) Changed?.Invoke(sender, new HandledEventArgs(false));
         }
 
         #endregion
 
-        public event EventHandler Changed;
+        public event EventHandler<HandledEventArgs> Changed;
 
         public ObservableCollection<bool> Inputs { get; }
         public ObservableCollection<bool> Outputs { get; }
@@ -600,6 +627,24 @@ namespace LabPID
             }
             HoldEvents = false;
             RaiseChanged(this, null);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder b = new StringBuilder((int)Math.Ceiling(
+                1.25 * Inputs.Count + 1.25 * Outputs.Count + Environment.NewLine.Length));
+            for (int i = 0; i < Inputs.Count; i++)
+            {
+                if ((i % 4 == 0) && (i != 0) && (i != (Inputs.Count - 1))) b.Append(' ');
+                b.Append(Inputs[i] ? '1' : '0');
+            }
+            b.AppendLine();
+            for (int i = 0; i < Outputs.Count; i++)
+            {
+                if ((i % 4 == 0) && (i != 0) && (i != (Outputs.Count - 1))) b.Append(' ');
+                b.Append(Outputs[i] ? '1' : '0');
+            }
+            return b.ToString();
         }
     }
 }

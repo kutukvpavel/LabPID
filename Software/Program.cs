@@ -2,12 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.IO.Ports;
-using System.IO;
-using System.Text;
-using System.Globalization;
 
 namespace LabPID
 {
@@ -114,11 +111,11 @@ namespace LabPID
 
 			public static string GenerateFilename(string ExtensionND)
 			{
-				return Path.Combine(LabPID.Properties.Settings.Default.LogPath, "LabPID " + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-') + "." + ExtensionND);
+				return Path.Combine(Properties.Settings.Default.LogPath, "LabPID " + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-') + "." + ExtensionND);
 			}
 			public void SelectFile(string path)
 			{
-				if (File.Exists(path) && LabPID.Properties.Settings.Default.AppendLog)
+				if (File.Exists(path) && Properties.Settings.Default.AppendLog)
 				{
 					stream = new StreamWriter(path, true);
 				}
