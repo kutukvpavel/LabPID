@@ -45,7 +45,7 @@ namespace LabPID
         public event EventHandler<TemperatureEventArgs> TimeToChangeSetpoint;
         public event EventHandler ExecutionFinished;
 
-        public Dictionary<int, string> CustomCommands;
+        public Dictionary<int, string> CustomCommands = new Dictionary<int, string>();
         public Func<Tuple<float, float>> TemperatureValidationCallback;
         public int ElapsedTime { get; private set; }
         public State CurrentState { get; private set; } = State.Stopped;
@@ -63,6 +63,7 @@ namespace LabPID
             if (_Finish > 0)   //A little delay for the plot not to miss the last setpoint
             {
                 if (_Finish++ > 3) Stop();
+                return;
             }
             if (DelaySegmentStart && !_Reached)
             {
@@ -87,7 +88,6 @@ namespace LabPID
             _Finish = 0;
             _Reached = false;
             ElapsedTime = 0;
-            CustomCommands = new Dictionary<int, string>();
         }
 
         public void Start()
@@ -154,12 +154,14 @@ namespace LabPID
         public override string ToString()
         {
             string arr = string.Join(Environment.NewLine,
-                this.Select(x => string.Format(CultureInfo.InvariantCulture, "{0} {1:F2}", x.Key, x.Value)));
-            StringBuilder s = new StringBuilder(arr.Length + Environment.NewLine.Length * 10 +
-                Name.Length + bool.FalseString.Length + DelayTolerance.ToString().Length);
+                this.Select(x => string.Format(CultureInfo.InvariantCulture, "{0} {1:F2}", x.Key, x.Value))
+                .Concat(CustomCommands.Select(x => string.Format(CultureInfo.InvariantCulture, "{0} \"{1}\"", x.Key, x.Value))));
+            string dt = DelayTolerance.ToString();
+            StringBuilder s = new StringBuilder(arr.Length + Environment.NewLine.Length * (this.Count + CustomCommands.Count) +
+                Name.Length + bool.FalseString.Length + dt.Length);
             s.AppendLine(Name);
             s.AppendLine(DelaySegmentStart.ToString());
-            s.AppendLine(DelayTolerance.ToString());
+            s.AppendLine(dt);
             s.Append(arr);
             return s.ToString();
         }

@@ -39,10 +39,18 @@ namespace LabPID
                 while (line != null)
                 {
                     string[] split = line.Split(' ');
-                    int time = int.Parse(split[0]);
+                    int time;
+                    if (split[0][0] == '+')
+                    {
+                        time = int.Parse(split[0].Remove(0, 1)) + _profile.Last().Key;
+                    }
+                    else
+                    {
+                        time = int.Parse(split[0]);
+                    }
                     if (split[1][0] == '"')
                     {
-                        _profile.CustomCommands.Add(time, split[1]);
+                        _profile.CustomCommands.Add(time, split[1].Trim('"'));
                     }
                     else
                     {
@@ -66,6 +74,15 @@ namespace LabPID
         private void Profile_Load(object sender, EventArgs e)
         {
             oKToolStripMenuItem.Enabled = (Program.clsProfile.CurrentState == TemperatureProfile.State.Stopped);
+            try
+            {
+                if (File.Exists(Properties.Settings.Default.LastProfile))
+                    ParseProfileString(File.ReadAllText(Properties.Settings.Default.LastProfile));
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void погрешностьВремениСтабилизацииToolStripMenuItem_Click(object sender, EventArgs e)
@@ -93,12 +110,21 @@ namespace LabPID
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            try
+            {
+                saveFileDialog1.InitialDirectory = Path.GetDirectoryName(Properties.Settings.Default.LastProfile);
+            }
+            catch (Exception)
+            {
+
+            }
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 ParseProfile();
                 try
                 {
                     File.WriteAllText(saveFileDialog1.FileName, _profile.ToString());
+                    Properties.Settings.Default.LastProfile = saveFileDialog1.FileName;
                 }
                 catch (Exception ex)
                 {
@@ -135,9 +161,19 @@ namespace LabPID
 
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            try
+            {
+                openFileDialog1.FileName = Path.GetFileName(Properties.Settings.Default.LastProfile);
+                openFileDialog1.InitialDirectory = Path.GetDirectoryName(Properties.Settings.Default.LastProfile);
+            }
+            catch (Exception)
+            {
+
+            }
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 ParseProfileString(File.ReadAllText(openFileDialog1.FileName));
+                Properties.Settings.Default.LastProfile = openFileDialog1.FileName;
             }
         }
 

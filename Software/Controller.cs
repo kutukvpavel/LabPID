@@ -416,7 +416,7 @@ namespace LabPID
                 Program.SkipLine = false;
                 return;
             }
-            line = line.Replace("\r\n", "").Trim('\0');
+            line = line.Replace("\r\n", "").Trim('\0', '\n', '\r');
             if (line.Length == 0) return;
             Program.frmTerm.AppendLine(line);
             string[] b = _CurrentResponseType == ResponseType.None ? null : line.Split(' ');
