@@ -342,11 +342,8 @@ void loop() {
 	uint32_t now = millis();
 	if (static_cast<uint16_t>(now - counter750ms) > 700u)                                    //OneWire communications
 	{
-		if (cursorType == CURSOR_NONE)       // And for polling sensors (worst-case period of conversion: 750ms, may actually reach 600-650ms),
-		{                                           // don't poll when cursor is on (for the interface not to freeze)
-			ds_read();
-			counter750ms = now;                                   //Don't forget to reset the virtual timer
-		}
+		ds_read();
+		counter750ms = now;                                   //Don't forget to reset the virtual timer
 	}
 	if (static_cast<uint16_t>(now - counter500ms) > 499u)                                 //Read inputs' values
 	{
@@ -356,19 +353,18 @@ void loop() {
 	pid_process();
 	if (updateDisplay /*&& ((now - counterForDisplay) < 180)*/)                        //Display logic (printing part, cursor part has been moved to the ISR). This condition was intended to synchronize interrupt and main loop parts
 	{                                                     //  for the cursor not to jump around occasionally. It works somehow.
-		#ifdef DEBUG_DISPLAY
-			Serial.println("UPD");
-		#endif
-		lcd_process_slow();
-		lcd_process_cursor_position();                           // Move cursor back to it's position immediately to prevent jumping to the last filled field
+#ifdef DEBUG_DISPLAY
+		Serial.println("UPD");
+#endif
+		lcd_process_slow();                           
 		updateDisplay = false;                           // Reset the flag
-	}					   
+	}		
+	lcd_process_cursor_position();		// Move cursor back to it's position immediately to prevent jumping to the last filled field	
+	lcd_process_cursor_type();    
 	mem_save_persistent();
 	if (logging && (counterForLog > 0))        // Check whether logging is enabled and it's time to send the info
 	{
 		serial_send_log();
 		counterForLog = 0;
 	}
-	lcd_process_cursor_type();                          // Encapsulated for convenience, changes cursor according to 'cursorType' volatile variable
-	lcd_process_cursor_position();
 }

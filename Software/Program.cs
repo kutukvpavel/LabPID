@@ -1,4 +1,4 @@
-﻿//TODO: Finish GPIO implementation!!
+﻿//TODO: Test profiles
 
 using System;
 using System.Collections.Generic;
@@ -54,14 +54,10 @@ namespace LabPID
 			public bool Enabled;
 			public bool TimeStamp;
 			public string _FilterInput;       //Pretty much reserved for (may be) future extended formatting capabilities
-			StreamWriter stream; 
-			string _FilePath;
+			StreamWriter stream;
 			List<string> rules;
 
-			public string FilePath
-			{
-				get { return _FilePath; }
-			}
+			public string FilePath { get; private set; }
 			/*
 			 *  Replacement rules are separated with commas (,), first goes current string and then goes new string separated with HB (|).  
 			 *  Replacement of formatting characters is supported and blank fields are supported.
@@ -128,7 +124,7 @@ namespace LabPID
 					}
 					stream = File.CreateText(path);
 				}
-				_FilePath = path;
+				FilePath = path;
 				stream.NewLine = Environment.NewLine;
 			}
 			public void Write(string Line)

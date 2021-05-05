@@ -34,6 +34,7 @@ void ds_init()
 				}
 				dsSensors.getAddress(dsAddresses[i], dsIndexes[i]);      //If everything's OK then load addresses (to make further communication processes faster) and send request to start the conversion
 			}
+		dsSensors.setWaitForConversion(false);
 		dsSensors.requestTemperatures();
 }
 

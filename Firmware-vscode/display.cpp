@@ -3,7 +3,7 @@
 //Non-modified libraries (have to be present in the arduino libraries folder)
 #include <LiquidCrystal.h>
 
-bool menuBlankState = 0;                                                      // Backup used to determine if some fields are already blanked out and no update is needed (menu in mode #2)
+//bool menuBlankState = 0;                                                      // Backup used to determine if some fields are already blanked out and no update is needed (menu in mode #2)
 int16_t encoderValue = 0;
 uint8_t relativeCursorX = 0;                                                              //
 uint8_t absoluteCursorY = 0;                                                              //
@@ -87,7 +87,6 @@ void pwrprint()
 void lcd_process_cursor_position()                             // Setting the cursor position, including shift chosen according to the field being edited
 {
 	absoluteCursorY = ((menuState == MENU_STATE_CALIBRATION) || (menuState == MENU_STATE_POWER)) ? 1 : 0;
-	//if ((menuState == MENU_STATE_MODE) && (relativeCursorX > 1_ui8)) relativeCursorX = 1;         // A workaround for mode field
 	uint8_t margin = 0;
 	switch (menuState)
 	{
@@ -224,40 +223,14 @@ void lcd_process_slow()
 		prevSetpoint = Setpoint;
 		print_double(prevSetpoint, 2, 0);
 	}
-	if ((cursorType != CURSOR_NONE) && (channelIndex == CHANNEL_DS18B20))              // Blank out input and power fields if menu is enabled in mode #2 (due to non-updating values)
+	if (Input != prevInputValue) // Remember to fill blanked fields
 	{
-		if (menuBlankState)
-		{
-			if (menuState == MENU_STATE_CALIBRATION) print_double(prevInputValue, LEFT_COLUMN_MARGIN, 1); // Don't blank out input field when user's editing calibration values
-			if (regulationMode == MODE_MANUAL) pwrprint();     // always update power value in manual mode (otherwise it will appear to be stuck while in fact it will be changing)
-		}
-		else
-		{
-			for (uint8_t i = 0; i < LBLVALUE_LEN; i++)
-			{
-				lcd.setCursor(LEFT_COLUMN_MARGIN + i, 1);
-				lcd_send_space();
-			}
-			for (uint8_t i = 0; i < LBLPOWER_LEN; i++)
-			{
-				lcd.setCursor(RIGHT_COLUMN_MARGIN + i, 1);
-				lcd_send_space();
-			}
-			menuBlankState = true;
-		}
+		prevInputValue = Input;
+		print_double(prevInputValue, LEFT_COLUMN_MARGIN, 1);
 	}
-	else
+	if (power != prevPower)
 	{
-		if ((Input != prevInputValue) || menuBlankState)   // Remember to fill blanked fields
-		{
-			prevInputValue = Input;
-			print_double(prevInputValue, LEFT_COLUMN_MARGIN, 1);
-		}
-		if ((power != prevPower) || menuBlankState)
-		{
-			pwrprint();
-		}
-		menuBlankState = 0;
+		pwrprint();
 	}
 	if (condition[0] && (errorStatusDelay > ERROR_TIMEOUT))                    // Major error sign - label "ERR!" in mode field
 	{
@@ -268,8 +241,6 @@ void lcd_process_slow()
 	{
 		if ((channelIndex != prevChannelIndex) || (regulationMode != prevRegulationMode))             // Mode field structure (normal): "M: {N,A,D,M}[0..2]{!}"
 		{
-			//char b[5];
-			//sprintf(b, " %c%1u ", convert_regulation_mode(regulationMode), channelIndex);
 			lcd.setCursor(RIGHT_COLUMN_MARGIN, 0);
 			lcd_send_space();
 			lcd.print(convert_regulation_mode(regulationMode));
