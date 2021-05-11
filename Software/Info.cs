@@ -237,6 +237,7 @@ namespace LabPID
             {
                 MarkLoggingState();
             }
+            NamedPipeService.Instance.BroadcastTemperature(Program.clsControl.Temp[0]);
         }
 
         private void MarkLoggingState()
@@ -863,8 +864,10 @@ namespace LabPID
 
         private void GpioState_Changed(object sender, System.ComponentModel.HandledEventArgs e)
         {
+            string s = Program.clsControl.GpioState.ToString();
             if (!e.Handled)
-                Invoke((Action)(() => { lblGpio.Text = Program.clsControl.GpioState.ToString(); }));
+                Invoke((Action)(() => { lblGpio.Text = s; }));
+            NamedPipeService.Instance.BroadcastCustomCommand(s);
         }
 
         private void ClsProfile_TimeToIssueCustomCommand(object sender, CustomCommandEventArgs e)
