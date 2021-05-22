@@ -33,7 +33,7 @@ The \*.lay PCB file contains an old prototyping PCB with mains power supply. Onl
  - Adjust all settings (PID coefficients, calibration values etc)
  - Real-time temperature plots (multiple channels, currently 3: selected input \[thermocouple, linear input, or "second ds18b20"\], "ambient" temperature ("first ds18b20") \[fixed\], "second ds18b20" \[fixed\])
  - Execute predefined temperature profiles and control GPIOs
- - Named pipe broadcast of event during profile execution for some interoperability
+ - Named pipe broadcast of events during profile execution for some interoperability
  
 # Building:
  - Firmware-VSCode workspace can be opened with VSCode with Arduino extension installed. DO NOT change existing folder structure of the workspace (/src/ is the only subdirectory name included in compilation by arduino-builder, all other subfolders will be ignored!). The project compiles under Arduino 1.8.5 (and, probably, later). Almost all non-standard libraries required have been modified, so don't try to update them without merging the modifications, all non-standard libraries are included under /src/.
