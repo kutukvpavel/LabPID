@@ -76,6 +76,11 @@ void mem_save()
 	mem_save_array_b(ee_cooler_enable, enableCooler, arraySize(ee_cooler_enable));
 }
 
+uint16_t mem_get_gpio()
+{
+	return eeprom_read_word(&ee_gpio);
+}
+
 void mem_load()
 {
 	Setpoint = eeprom_read_float(&ee_setpoint);
@@ -97,7 +102,6 @@ void mem_load()
 	distillExtraPower = eeprom_read_float(&ee_distillation_bias);
 	distillTempWindow = eeprom_read_float(&ee_distillation_window);
 	rampStepLimit = eeprom_read_float(&ee_ramp_step);
-	gpio_write_all(eeprom_read_word(&ee_gpio));
 	cjc = eeprom_read_byte(&ee_cjc);
 	mem_load_array_b(ee_cooler_enable, enableCooler, arraySize(ee_cooler_enable));
 }

@@ -13,8 +13,9 @@ void gpio_init()
     gpioOK = gpio_port.begin();
     if (!gpioOK) return;
     gpio_port.setClock(400000);
+    gpio_write_all(mem_get_gpio()); //Set output values first, since default value for output register is "all ON"
     uint8_t current_pin = 0;
-    for (uint8_t i = 0; i < arraySize(gpio_map); i++)
+    for (uint8_t i = 0; i < arraySize(gpio_map); i++) //Only then set pin modes so that they can actually become outputs
     {
         uint8_t state = i % 2 == 0 ? OUTPUT : INPUT;
         for (uint8_t j = 0; j < gpio_map[i]; j++)

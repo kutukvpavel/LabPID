@@ -173,6 +173,7 @@ void mem_set_first_run();
 void mem_save();
 void mem_load();
 void mem_save_persistent();
+uint16_t mem_get_gpio();
 
 #pragma endregion
 
