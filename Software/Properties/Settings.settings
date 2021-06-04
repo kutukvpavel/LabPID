@@ -8,9 +8,6 @@
     <Setting Name="LogPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">..\Log</Value>
     </Setting>
-    <Setting Name="AppendLog" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="ShowChart" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -45,7 +42,16 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="LastProfile" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">default</Value>
+    </Setting>
+    <Setting Name="frmInfoState" Type="System.Windows.Forms.FormWindowState" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
+    <Setting Name="LogFilenameFormatFull" Type="System.String" Scope="User">
+      <Value Profile="(Default)">LabPID_{0:yyyy-MM-dd_HH-mm-ss}.{1}</Value>
+    </Setting>
+    <Setting Name="LogFilenameFormatDate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">LabPID_{0:yyyy-MM-dd}.{1}</Value>
     </Setting>
   </Settings>
 </SettingsFile>

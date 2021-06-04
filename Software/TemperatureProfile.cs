@@ -45,8 +45,8 @@ namespace LabPID
         public event EventHandler<TemperatureEventArgs> TimeToChangeSetpoint;
         public event EventHandler ExecutionFinished;
 
-        public Dictionary<int, string> CustomCommands = new Dictionary<int, string>();
-        public Func<Tuple<float, float>> TemperatureValidationCallback;
+        public Dictionary<int, string> CustomCommands { get; } = new Dictionary<int, string>();
+        public Func<Tuple<float, float>> TemperatureValidationCallback { get; set; }
         public int ElapsedTime { get; private set; }
         public State CurrentState { get; private set; } = State.Stopped;
         public string Name { get; set; } = "Default";
@@ -65,7 +65,7 @@ namespace LabPID
                 if (_Finish++ > 3) Stop();
                 return;
             }
-            if (DelaySegmentStart && !_Reached)
+            if (DelaySegmentStart && !_Reached && (TemperatureValidationCallback != null))
             {
                 var t = TemperatureValidationCallback.Invoke();
                 _Reached = (Math.Abs(t.Item1 - t.Item2) < DelayTolerance);
@@ -86,7 +86,7 @@ namespace LabPID
         private void InitVariables()
         {
             _Finish = 0;
-            _Reached = false;
+            _Reached = true;
             ElapsedTime = 0;
         }
 
@@ -94,9 +94,12 @@ namespace LabPID
         {
             if (Count == 0) throw new InvalidOperationException("Can't start a profile that contains no points.");
             if (CurrentState == State.Running) throw new InvalidOperationException("The profile is already running!");
-            InitVariables();
-            _Enumerator = GetEnumerator();
-            _Enumerator.MoveNext(); //Initially enumerator is positioned before the first element            
+            if (CurrentState != State.Suspended)
+            {
+                InitVariables();
+                _Enumerator = GetEnumerator();
+                _Enumerator.MoveNext(); //Initially enumerator is positioned before the first element
+            }
             _OneSecondTimer.Start();
             CurrentState = State.Running;
         }

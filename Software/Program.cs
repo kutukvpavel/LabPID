@@ -1,4 +1,4 @@
-﻿//TODO: Test profiles
+﻿//TODO: 
 
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace LabPID
 			Application.SetCompatibleTextRenderingDefault(false);
 			clsControl = new Controller();
 			clsProfile = new TemperatureProfile();
-			clsLog = new Log(Log.GenerateFilename("log"));
+			clsLog = new Log(Log.GenerateFilename("log", true));
 			frmInfo = new Info();
 			frmTerm = new Terminal();
 			frmSet = new Settings();
@@ -105,13 +105,15 @@ namespace LabPID
 				FilterInput = "";
 			}
 
-			public static string GenerateFilename(string ExtensionND)
+			public static string GenerateFilename(string extensionNoDot, bool truncateTime = false)
 			{
-				return Path.Combine(Properties.Settings.Default.LogPath, "LabPID " + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-') + "." + ExtensionND);
+				return Path.Combine(Properties.Settings.Default.LogPath, 
+					string.Format(truncateTime ? Properties.Settings.Default.LogFilenameFormatDate
+					: Properties.Settings.Default.LogFilenameFormatFull, DateTime.Now, extensionNoDot));
 			}
 			public void SelectFile(string path)
 			{
-				if (File.Exists(path) && Properties.Settings.Default.AppendLog)
+				if (File.Exists(path))
 				{
 					stream = new StreamWriter(path, true);
 				}

@@ -53,6 +53,7 @@ namespace LabPID
             {
                 Properties.Settings.Default.chrtShow = true;
                 Properties.Settings.Default.frmInfoSize = this.Size;
+                Properties.Settings.Default.frmInfoState = this.WindowState;
             }
             Properties.Settings.Default.Save();
         }
@@ -140,6 +141,7 @@ namespace LabPID
                 item.ChartType = Properties.Settings.Default.ChartType;
             }
             this.Size = Properties.Settings.Default.chrtShow ? Properties.Settings.Default.frmInfoSize : this.MinimumSize;
+            this.WindowState = Properties.Settings.Default.frmInfoState;
         }
 
         private void PortChanged(string newName, bool mem = true)

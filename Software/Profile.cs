@@ -92,7 +92,7 @@ namespace LabPID
 
         private void отсчётСегментаОтВремениСтабилизацииToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
-
+            _profile.DelaySegmentStart = chkSegmentMode.Checked;
         }
 
         private void oKToolStripMenuItem_Click(object sender, EventArgs e)

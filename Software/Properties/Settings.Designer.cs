@@ -49,18 +49,6 @@ namespace LabPID.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AppendLog {
-            get {
-                return ((bool)(this["AppendLog"]));
-            }
-            set {
-                this["AppendLog"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ShowChart {
             get {
@@ -193,13 +181,49 @@ namespace LabPID.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("default")]
         public string LastProfile {
             get {
                 return ((string)(this["LastProfile"]));
             }
             set {
                 this["LastProfile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState frmInfoState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["frmInfoState"]));
+            }
+            set {
+                this["frmInfoState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("LabPID_{0:yyyy-MM-dd_HH-mm-ss}.{1}")]
+        public string LogFilenameFormatFull {
+            get {
+                return ((string)(this["LogFilenameFormatFull"]));
+            }
+            set {
+                this["LogFilenameFormatFull"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("LabPID_{0:yyyy-MM-dd}.{1}")]
+        public string LogFilenameFormatDate {
+            get {
+                return ((string)(this["LogFilenameFormatDate"]));
+            }
+            set {
+                this["LogFilenameFormatDate"] = value;
             }
         }
     }
