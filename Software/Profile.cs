@@ -42,7 +42,9 @@ namespace LabPID
                     int time;
                     if (split[0][0] == '+')
                     {
-                        time = int.Parse(split[0].Remove(0, 1)) + _profile.Last().Key;
+                        int tempLast = _profile.Last().Key;
+                        int cmdLast = _profile.CustomCommands.LastOrDefault().Key;
+                        time = int.Parse(split[0].Remove(0, 1)) + (tempLast > cmdLast ? tempLast : cmdLast);
                     }
                     else
                     {
