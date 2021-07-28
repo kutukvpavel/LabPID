@@ -226,5 +226,29 @@ namespace LabPID.Properties {
                 this["LogFilenameFormatDate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("F0")]
+        public string InfoFormTemperatureFormat {
+            get {
+                return ((string)(this["InfoFormTemperatureFormat"]));
+            }
+            set {
+                this["InfoFormTemperatureFormat"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".json")]
+        public string JsonExtension {
+            get {
+                return ((string)(this["JsonExtension"]));
+            }
+            set {
+                this["JsonExtension"] = value;
+            }
+        }
     }
 }

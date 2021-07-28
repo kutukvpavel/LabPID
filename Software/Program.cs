@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace LabPID
 {
@@ -21,6 +22,8 @@ namespace LabPID
 		public static TemperatureProfile clsProfile; 
 		public const string FloatFormat = "+000.0000;-000.0000";
 		public const string ShortFloatFormat = "+000.00;-000.00";
+		public const string InputLabelsJsonName = "inputs";
+		public const string OutputLabelsJsonName = "outputs";
 		public static bool SkipLine = false;
 
 		/// <summary>
@@ -40,7 +43,52 @@ namespace LabPID
 			frmAbout = new AboutBox();
 			frmProfile = new Profile();
 			frmGpioTools = new GpioTools(clsControl.GpioState);
+			clsControl.GpioState.InputLabels = Deserialize(InputLabelsJsonName, clsControl.GpioState.InputLabels);
+			clsControl.GpioState.OutputLabels = Deserialize(OutputLabelsJsonName, clsControl.GpioState.OutputLabels);
 			Application.Run(frmInfo);
+			Serialize(InputLabelsJsonName, clsControl.GpioState.InputLabels);
+			Serialize(OutputLabelsJsonName, clsControl.GpioState.OutputLabels);
+		}
+
+		private static string GetJsonFilePath(string name)
+		{
+			return Path.Combine(Environment.CurrentDirectory, name + Properties.Settings.Default.JsonExtension);
+		}
+
+		public static T Deserialize<T>(string name, T def)
+		{
+			try
+			{
+				var path = GetJsonFilePath(name);
+				if (File.Exists(path))
+				{
+					var o = JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
+					if (o == null) throw new JsonSerializationException();
+					return (T)o;
+				}
+				else
+				{
+					Serialize(name, def);
+				}
+			}
+			catch (Exception ex)
+			{
+				clsLog.Write(ex.ToString());
+			}
+			return def;
+		}
+
+		public static void Serialize<T>(string name, T value)
+		{
+			try
+			{
+				var p = GetJsonFilePath(name);
+				File.WriteAllText(p, JsonConvert.SerializeObject(value));
+			}
+			catch (Exception ex)
+			{
+				clsLog.Write(ex.ToString());
+			}
 		}
 
 		public static IEnumerable<Control> FlattenChildren(Control control)

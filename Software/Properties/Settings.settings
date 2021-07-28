@@ -53,5 +53,11 @@
     <Setting Name="LogFilenameFormatDate" Type="System.String" Scope="User">
       <Value Profile="(Default)">LabPID_{0:yyyy-MM-dd}.{1}</Value>
     </Setting>
+    <Setting Name="InfoFormTemperatureFormat" Type="System.String" Scope="User">
+      <Value Profile="(Default)">F0</Value>
+    </Setting>
+    <Setting Name="JsonExtension" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.json</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

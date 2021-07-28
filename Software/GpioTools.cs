@@ -10,13 +10,13 @@ namespace LabPID
             InitializeComponent();
             Descriptor = desc;
             desc.Changed += Desc_Changed;
-            foreach (var item in desc.Inputs)
+            for (int i = 0; i < desc.Inputs.Count; i++)
             {
-                dgdInputs.Rows.Add(item);
+                dgdInputs.Rows.Add(desc.InputLabels.ContainsKey(i) ? desc.InputLabels[i] : "", desc.Inputs[i]);
             }
-            foreach (var item in desc.Outputs)
+            for (int i = 0; i < desc.Outputs.Count; i++)
             {
-                dgdOutputs.Rows.Add(item);
+                dgdOutputs.Rows.Add(desc.OutputLabels.ContainsKey(i) ? desc.OutputLabels[i] : "", desc.Outputs[i]);
             }
         }
 
@@ -39,11 +39,11 @@ namespace LabPID
         {
             foreach (DataGridViewRow item in dgdInputs.Rows)
             {
-                item.HeaderCell.Value = item.Index;
+                item.HeaderCell.ToolTipText = item.Index.ToString();
             }
             foreach (DataGridViewRow item in dgdOutputs.Rows)
             {
-                item.HeaderCell.Value = item.Index;
+                item.HeaderCell.ToolTipText = item.Index.ToString();
             }
             Loaded = true;
         }
@@ -53,12 +53,25 @@ namespace LabPID
             if (!Loaded) return;
             if (e.RowIndex < 0) return;
             if (!(dgdOutputs.Rows.Count > e.RowIndex)) return;
-            Program.clsControl.SetGpioOutput(e.RowIndex, (bool)dgdOutputs[0, e.RowIndex].Value);
+            if (e.ColumnIndex == 1)
+            {
+                Program.clsControl.SetGpioOutput(e.RowIndex, (bool)dgdOutputs[1, e.RowIndex].Value);
+            }
+            else
+            {
+                if (!Descriptor.OutputLabels.ContainsKey(e.RowIndex)) Descriptor.OutputLabels.Add(e.RowIndex, "");
+                Descriptor.OutputLabels[e.RowIndex] = (string)dgdOutputs[0, e.RowIndex].Value;
+            }
         }
 
         private void dgdInputs_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-
+            if (!Loaded) return;
+            if (e.RowIndex < 0) return;
+            if (!(dgdInputs.Rows.Count > e.RowIndex)) return;
+            if (e.ColumnIndex != 0) return;
+            if (!Descriptor.InputLabels.ContainsKey(e.RowIndex)) Descriptor.InputLabels.Add(e.RowIndex, "");
+            Descriptor.InputLabels[e.RowIndex] = (string)dgdInputs[0, e.RowIndex].Value;
         }
 
         private void GpioTools_FormClosing(object sender, FormClosingEventArgs e)

@@ -179,8 +179,8 @@ namespace LabPID
 
         private void UpdateDisplay(bool partially = false)
         {
-            lblTemp1.Text = Program.clsControl.Temp[0].ToString() + " °C";
-            lblTemp2.Text = Program.clsControl.Temp[1].ToString() + " °C";
+            lblTemp1.Text = Program.clsControl.Temp[0].ToString(Properties.Settings.Default.InfoFormTemperatureFormat) + "°C";
+            lblTemp2.Text = Program.clsControl.Temp[1].ToString(Properties.Settings.Default.InfoFormTemperatureFormat) + "°C";
             if (Program.clsControl.Mode != Controller.ModeType.Manual)
             {
                 mtbPower.Text = Program.clsControl.Power.ToString("+000;-000");

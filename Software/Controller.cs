@@ -382,8 +382,17 @@ namespace LabPID
                 else
                 {
                     string buf = Cmd + Value.ToString(Program.FloatFormat, CultureInfo.InvariantCulture);
-                    devSerial.Send(buf);
-                    Program.frmTerm.AppendLine(buf, true);
+                    try
+                    {
+                        devSerial.Send(buf);
+                        Program.frmTerm.AppendLine(buf, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Program.clsLog.Write(ex.ToString());
+                        Program.frmInfo.SetStatus("Ошибка.");
+
+                    }
                 }
             }
             else
@@ -605,6 +614,17 @@ namespace LabPID
 
         public ObservableCollection<bool> Inputs { get; }
         public ObservableCollection<bool> Outputs { get; }
+
+        public Dictionary<int, string> InputLabels { get; set; } = new Dictionary<int, string>()
+        {
+            { 0, "IN 0" },
+            { 1, "IN 1" }
+        };
+        public Dictionary<int, string> OutputLabels { get; set; } = new Dictionary<int, string>()
+        {
+            { 0, "OUT 0" },
+            { 1, "OUT 1" }
+        };
 
         public GpioDescriptor()
         {
