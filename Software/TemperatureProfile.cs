@@ -45,7 +45,7 @@ namespace LabPID
         public event EventHandler<TemperatureEventArgs> TimeToChangeSetpoint;
         public event EventHandler ExecutionFinished;
 
-        public Dictionary<int, string> CustomCommands { get; } = new Dictionary<int, string>();
+        public SortedDictionary<int, string> CustomCommands { get; } = new SortedDictionary<int, string>();
         public Func<Tuple<float, float>> TemperatureValidationCallback { get; set; }
         public int ElapsedTime { get; private set; }
         public State CurrentState { get; private set; } = State.Stopped;
