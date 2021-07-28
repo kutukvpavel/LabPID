@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.dgdOutputs = new System.Windows.Forms.DataGridView();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.dgdInputs = new System.Windows.Forms.DataGridView();
             this.OutputLabels = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Outputs = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.dgdInputs = new System.Windows.Forms.DataGridView();
             this.InputLabels = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Inputs = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgdOutputs)).BeginInit();
@@ -55,6 +55,20 @@
             this.dgdOutputs.Size = new System.Drawing.Size(297, 370);
             this.dgdOutputs.TabIndex = 0;
             this.dgdOutputs.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgdOutputs_CellValueChanged);
+            // 
+            // OutputLabels
+            // 
+            this.OutputLabels.HeaderText = "Имя";
+            this.OutputLabels.MinimumWidth = 6;
+            this.OutputLabels.Name = "OutputLabels";
+            this.OutputLabels.Width = 110;
+            // 
+            // Outputs
+            // 
+            this.Outputs.HeaderText = "Состояние";
+            this.Outputs.MinimumWidth = 6;
+            this.Outputs.Name = "Outputs";
+            this.Outputs.Width = 110;
             // 
             // tableLayoutPanel1
             // 
@@ -89,20 +103,6 @@
             this.dgdInputs.TabIndex = 1;
             this.dgdInputs.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgdInputs_CellValueChanged);
             // 
-            // OutputLabels
-            // 
-            this.OutputLabels.HeaderText = "Имя";
-            this.OutputLabels.MinimumWidth = 6;
-            this.OutputLabels.Name = "OutputLabels";
-            this.OutputLabels.Width = 110;
-            // 
-            // Outputs
-            // 
-            this.Outputs.HeaderText = "Состояние";
-            this.Outputs.MinimumWidth = 6;
-            this.Outputs.Name = "Outputs";
-            this.Outputs.Width = 110;
-            // 
             // InputLabels
             // 
             this.InputLabels.HeaderText = "Имя";
@@ -129,6 +129,7 @@
             this.Text = "GpioTools";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GpioTools_FormClosing);
             this.Load += new System.EventHandler(this.GpioTools_Load);
+            this.Shown += new System.EventHandler(this.GpioTools_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dgdOutputs)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgdInputs)).EndInit();

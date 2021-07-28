@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace LabPID
 {
@@ -27,11 +28,11 @@ namespace LabPID
         {
             for (int i = 0; i < Descriptor.Inputs.Count; i++)
             {
-                dgdInputs[0, i].Value = Descriptor.Inputs[i];
+                dgdInputs[1, i].Value = Descriptor.Inputs[i];
             }
             for (int i = 0; i < Descriptor.Outputs.Count; i++)
             {
-                dgdOutputs[0, i].Value = Descriptor.Outputs[i];
+                dgdOutputs[1, i].Value = Descriptor.Outputs[i];
             }
         }
 
@@ -78,6 +79,20 @@ namespace LabPID
         {
             e.Cancel = true;
             Hide();
+        }
+
+        private void GpioTools_Shown(object sender, EventArgs e)
+        {
+            var i = Descriptor.InputLabels.ToDictionary(x => x.Key, x => x.Value);
+            var o = Descriptor.OutputLabels.ToDictionary(x => x.Key, x => x.Value);
+            foreach (var item in i)
+            {
+                dgdInputs[0, item.Key].Value = item.Value;
+            }
+            foreach (var item in o)
+            {
+                dgdOutputs[0, item.Key].Value = item.Value;
+            }
         }
     }
 }
