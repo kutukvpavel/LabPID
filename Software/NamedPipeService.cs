@@ -25,7 +25,7 @@ namespace LabPID
         }
 
         public string TemperatureFormat { get; set; } = "T{0:F2}";
-        public string CustomFormat { get; set; } = "С{0}";
+        public string CustomFormat { get; set; } = "C{0}";
 
         public void BroadcastTemperature(float t)
         {
