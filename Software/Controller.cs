@@ -389,7 +389,7 @@ namespace LabPID
                     }
                     catch (Exception ex)
                     {
-                        Program.clsLog.Write(ex.ToString());
+                        Program.clsLog.WriteError(ex);
                         Program.frmInfo.SetStatus("Ошибка.");
 
                     }

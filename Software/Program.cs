@@ -73,7 +73,7 @@ namespace LabPID
 			}
 			catch (Exception ex)
 			{
-				clsLog.Write(ex.ToString());
+				clsLog.WriteError(ex);
 			}
 			return def;
 		}
@@ -87,7 +87,7 @@ namespace LabPID
 			}
 			catch (Exception ex)
 			{
-				clsLog.Write(ex.ToString());
+				clsLog.WriteError(ex);
 			}
 		}
 
@@ -104,6 +104,7 @@ namespace LabPID
 			public string _FilterInput;       //Pretty much reserved for (may be) future extended formatting capabilities
 			StreamWriter stream;
 			List<string> rules;
+			readonly string _Path;
 
 			public string FilePath { get; private set; }
 			/*
@@ -147,7 +148,7 @@ namespace LabPID
 
 			public Log(string Path)
 			{
-				SelectFile(Path);
+				_Path = Path;
 				Enabled = false;
 				TimeStamp = true;
 				FilterInput = "";
@@ -179,39 +180,46 @@ namespace LabPID
 			}
 			public void Write(string Line)
 			{
-				if (Enabled)
-				{            
-					if (FilterInput.Length > 0)
-					{
-						foreach (string rule in rules)
-						{
-							string[] s = rule.Split('|');
-							if (s.Length > 2)
-							{
-								if (s.First().Length > 0)
-								{
-									s[1] = "|";
-								}
-								else
-								{
-									s[0] = "|";
-									s[1] = s[2];
-								}
-							}
-							Line = Line.Replace(s[0], s[1]);
-						}
-					}
-					if (TimeStamp)
-					{
-						Line = DateTime.Now.ToString() + " " + Line;
-					}
-					stream.WriteLine(Line);
-				}
+				if (Enabled) WriteInternal(Line);
 			}
+			public void WriteError(Exception ex)
+            {
+				WriteInternal(ex.ToString());
+            }
 			public void Dispose()
 			{
 				stream.Close();
 				stream.Dispose();
+			}
+
+			private void WriteInternal(string Line)
+            {
+				if (stream == null) SelectFile(_Path);
+				if (FilterInput.Length > 0)
+				{
+					foreach (string rule in rules)
+					{
+						string[] s = rule.Split('|');
+						if (s.Length > 2)
+						{
+							if (s.First().Length > 0)
+							{
+								s[1] = "|";
+							}
+							else
+							{
+								s[0] = "|";
+								s[1] = s[2];
+							}
+						}
+						Line = Line.Replace(s[0], s[1]);
+					}
+				}
+				if (TimeStamp)
+				{
+					Line = DateTime.Now.ToString() + " " + Line;
+				}
+				stream.WriteLine(Line);
 			}
 		}
 	}

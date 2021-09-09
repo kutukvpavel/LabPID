@@ -367,7 +367,7 @@ namespace LabPID
             catch (Exception ex)
             {
                 SetStatus("Ошибка...");
-                Program.clsLog.Write(ex.ToString());
+                Program.clsLog.WriteError(ex);
             }
             load = true;
             timer1.Start();
