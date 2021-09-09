@@ -32,22 +32,33 @@ namespace LabPID
 		[STAThread]
 		static void Main()
 		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			clsControl = new Controller();
-			clsProfile = new TemperatureProfile();
-			clsLog = new Log(Log.GenerateFilename("log", true));
-			frmInfo = new Info();
-			frmTerm = new Terminal();
-			frmSet = new Settings();
-			frmAbout = new AboutBox();
-			frmProfile = new Profile();
-			frmGpioTools = new GpioTools(clsControl.GpioState);
-			clsControl.GpioState.InputLabels = Deserialize(InputLabelsJsonName, clsControl.GpioState.InputLabels);
-			clsControl.GpioState.OutputLabels = Deserialize(OutputLabelsJsonName, clsControl.GpioState.OutputLabels);
-			Application.Run(frmInfo);
-			Serialize(InputLabelsJsonName, clsControl.GpioState.InputLabels);
-			Serialize(OutputLabelsJsonName, clsControl.GpioState.OutputLabels);
+			try
+            {
+				Application.EnableVisualStyles();
+				Application.SetCompatibleTextRenderingDefault(false);
+				clsControl = new Controller();
+				clsProfile = new TemperatureProfile();
+				clsLog = new Log(Log.GenerateFilename("log", true));
+				frmInfo = new Info();
+				frmTerm = new Terminal();
+				frmSet = new Settings();
+				frmAbout = new AboutBox();
+				frmProfile = new Profile();
+				frmGpioTools = new GpioTools(clsControl.GpioState);
+				clsControl.GpioState.InputLabels = Deserialize(InputLabelsJsonName, clsControl.GpioState.InputLabels);
+				clsControl.GpioState.OutputLabels = Deserialize(OutputLabelsJsonName, clsControl.GpioState.OutputLabels);
+				Application.Run(frmInfo);
+				Serialize(InputLabelsJsonName, clsControl.GpioState.InputLabels);
+				Serialize(OutputLabelsJsonName, clsControl.GpioState.OutputLabels);
+			}
+			catch (Exception ex)
+            {
+				clsLog.WriteError(ex);
+            }
+			finally
+            {
+				NamedPipeService.Instance.Dispose();
+            }
 		}
 
 		private static string GetJsonFilePath(string name)
