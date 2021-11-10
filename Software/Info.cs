@@ -240,6 +240,7 @@ namespace LabPID
                 MarkLoggingState();
             }
             NamedPipeService.Instance.BroadcastTemperature(Program.clsControl.Temp[0]);
+            NamedPipeService.Instance.BroadcastSetpoint(Program.clsControl.Setpoint);
         }
 
         private void MarkLoggingState()

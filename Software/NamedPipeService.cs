@@ -28,10 +28,16 @@ namespace LabPID
 
         public string TemperatureFormat { get; set; } = "T{0:F2}";
         public string CustomFormat { get; set; } = "C{0}";
+        public string SetpointFormat { get; set; } = "S{0:F2}";
 
         public void BroadcastTemperature(float t)
         {
             _Server.PushMessage(string.Format(TemperatureFormat, t));
+        }
+
+        public void BroadcastSetpoint(float s)
+        {
+            _Server.PushMessage(string.Format(SetpointFormat, s));
         }
 
         public void BroadcastCustomCommand(string s)
