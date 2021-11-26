@@ -199,6 +199,7 @@ namespace LabPID
             }
 			public void Dispose()
 			{
+				if (stream == null) return;
 				stream.Close();
 				stream.Dispose();
 			}
