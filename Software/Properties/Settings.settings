@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="PortName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">COM1</Value>
+      <Value Profile="(Default)">COM4</Value>
     </Setting>
     <Setting Name="LogPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">..\Log</Value>

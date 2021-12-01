@@ -1,14 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NamedPipeWrapper;
-using NamedPipeWrapper.IO;
+﻿using NamedPipeWrapper;
+using Newtonsoft.Json;
+using System;
 
 namespace LabPID
 {
     public class NamedPipeService : IDisposable
     {
+        private class DataPacket
+        {
+            public DataPacket(float t, float s, GpioDescriptor g)
+            {
+                Temperature = t;
+                Setpoint = s;
+                Gpio = g;
+            }
+
+            public float Temperature { get; set; }
+            public float Setpoint { get; set; }
+            public GpioDescriptor Gpio { get; set; }
+
+            public string GetJson()
+            {
+                return JsonConvert.SerializeObject(this);
+            }
+        }
+
         public const string PipeName = "LabPID_Profile_Broadcast";
         public static NamedPipeService Instance { get; } = new NamedPipeService();
 
@@ -26,23 +42,9 @@ namespace LabPID
             Dispose();
         }
 
-        public string TemperatureFormat { get; set; } = "T{0:F2}";
-        public string CustomFormat { get; set; } = "C{0}";
-        public string SetpointFormat { get; set; } = "S{0:F2}";
-
-        public void BroadcastTemperature(float t)
+        public void Broadcast(float currentTemp, float setpoint, GpioDescriptor gpio)
         {
-            _Server.PushMessage(string.Format(TemperatureFormat, t));
-        }
-
-        public void BroadcastSetpoint(float s)
-        {
-            _Server.PushMessage(string.Format(SetpointFormat, s));
-        }
-
-        public void BroadcastCustomCommand(string s)
-        {
-            _Server.PushMessage(string.Format(CustomFormat, s));
+            _Server.PushMessage(new DataPacket(currentTemp, setpoint, gpio).GetJson());
         }
 
         public void Dispose()

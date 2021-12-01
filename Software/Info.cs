@@ -17,7 +17,7 @@ namespace LabPID
         public Info()
         {
             InitializeComponent();
-            Program.clsControl.GpioState.Changed += GpioState_Changed;
+            //Program.clsControl.GpioState.Changed += GpioState_Changed;
         }
 
         #region Form event handlers
@@ -179,6 +179,14 @@ namespace LabPID
 
         private void UpdateDisplay(bool partially = false)
         {
+            try
+            {
+                NamedPipeService.Instance.Broadcast(Program.clsControl.Temp[0], Program.clsControl.Setpoint, Program.clsControl.GpioState);
+            }
+            catch (Exception ex)
+            {
+                Program.clsLog.WriteError(ex);
+            }
             lblTemp1.Text = Program.clsControl.Temp[0].ToString(Properties.Settings.Default.InfoFormTemperatureFormat) + "°C";
             lblTemp2.Text = Program.clsControl.Temp[1].ToString(Properties.Settings.Default.InfoFormTemperatureFormat) + "°C";
             if (Program.clsControl.Mode != Controller.ModeType.Manual)
@@ -188,6 +196,7 @@ namespace LabPID
             mtbSetpoint.Text = Program.clsControl.Setpoint.ToString(Program.ShortFloatFormat);
             updMode.SelectedIndex = updMode.Items.IndexOf(Controller.ModeDesignator[Program.clsControl.Mode].ToString());
             updChannel.SelectedIndex = Program.clsControl.Channel;
+            lblGpio.Text = Program.clsControl.GpioState.ToString();
             if (!partially)
             {
                 mtbC0.Text = Program.clsControl.Calibrations[0].ToString(Program.ShortFloatFormat);
@@ -239,8 +248,6 @@ namespace LabPID
             {
                 MarkLoggingState();
             }
-            NamedPipeService.Instance.BroadcastTemperature(Program.clsControl.Temp[0]);
-            NamedPipeService.Instance.BroadcastSetpoint(Program.clsControl.Setpoint);
         }
 
         private void MarkLoggingState()
@@ -865,13 +872,13 @@ namespace LabPID
             }
         }
 
-        private void GpioState_Changed(object sender, System.ComponentModel.HandledEventArgs e)
+        /*private void GpioState_Changed(object sender, System.ComponentModel.HandledEventArgs e)
         {
             string s = Program.clsControl.GpioState.ToString();
             if (!e.Handled)
                 Invoke((Action)(() => { lblGpio.Text = s; }));
             NamedPipeService.Instance.BroadcastCustomCommand(s);
-        }
+        }*/
 
         private void ClsProfile_TimeToIssueCustomCommand(object sender, CustomCommandEventArgs e)
         {

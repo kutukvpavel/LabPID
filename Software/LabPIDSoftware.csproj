@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="CommPort.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="GpioDescriptor.cs" />
     <Compile Include="GpioTools.cs">
       <SubType>Form</SubType>
     </Compile>
