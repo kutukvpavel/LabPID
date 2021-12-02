@@ -30,6 +30,7 @@
 #define RIGHT_COLUMN_MARGIN (RIGHT_COLUMN_OFFSET + LBL_LEN)
 #define LEFT_COLUMN_OFFSET 0_ui8
 #define LEFT_COLUMN_MARGIN (LEFT_COLUMN_OFFSET + LBL_LEN)
+#define MODE_LETTERS 'N', 'A', 'D', 'M'
 
 #pragma endregion
 
@@ -39,6 +40,7 @@ uint8_t relativeCursorX = 0;                                                    
 uint8_t absoluteCursorY = 0;                                                              //
 uint8_t prevRegulationMode = 0xff;
 uint8_t menuState = MENU_STATE_SETPOINT;      // Menu state flag: 0 - setpoint, 1 - mode, 2 - calibration (input field), 3 - power (for manual mode)
+char modeLetters[] = { MODE_LETTERS };
 LiquidCrystal lcd(PIN_RS, PIN_E, PIN_D4, PIN_D5, PIN_D6, PIN_D7);
 
 void print_double(double dbl, int x, int y);
@@ -273,7 +275,7 @@ void lcd_process_slow()
 		{
 			lcd.setCursor(RIGHT_COLUMN_MARGIN, 0);
 			lcd_send_space();
-			lcd.print(convert_regulation_mode(regulationMode));
+			lcd.print(modeLetters[regulationMode]);
 			lcd.print(channelIndex);
 			lcd_send_space();
 			prevChannelIndex = channelIndex;

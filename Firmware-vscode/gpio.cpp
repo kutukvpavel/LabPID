@@ -8,7 +8,9 @@
 PCA9555 gpio_port(GPIO_IC_ADDRESS);
 
 uint8_t gpio_map[] = { GPIO_MODE_MAP };
-bool gpioOK = false;
+uint8_t output_count;
+uint8_t input_count;
+bool gpioOK;
 
 void gpio_init()
 {
@@ -20,7 +22,17 @@ void gpio_init()
     uint8_t current_pin = 0;
     for (uint8_t i = 0; i < arraySize(gpio_map); i++) //Only then set pin modes so that they can actually become outputs
     {
-        uint8_t state = i % 2 == 0 ? OUTPUT : INPUT;
+        uint8_t state;
+        if (i % 2 == 0)
+        {
+            state = OUTPUT;
+            output_count++;
+        }
+        else
+        {
+            state = INPUT;
+            input_count++;
+        }
         for (uint8_t j = 0; j < gpio_map[i]; j++)
         {
             gpio_port.pinMode(current_pin++, state);
@@ -30,7 +42,6 @@ void gpio_init()
 
 void gpio_write_all(uint16_t val)
 {
-    if (!gpioOK) return;
     gpio_port.writeAll(val);
 }
 
@@ -46,16 +57,25 @@ bool gpio_read(uint8_t address)
 
 void gpio_write(uint8_t address, bool value)
 {
-    if (!gpioOK) return;
     gpio_port.digitalWrite(address, value);
 }
 
-void gpio_write(uint8_t code)
-{
-    gpio_write(code & 0x7F_ui8, (code & 0x80_ui8) != 0_ui8);
-}
-
-uint16_t gpio_get_output_register()
+uint16_t gpio_get_all_outputs()
 {
     return gpio_port.getOutputRegister();
+}
+
+bool gpio_get_output(uint8_t address)
+{
+    return gpio_get_all_outputs() & _BV(address);
+}
+
+bool gpio_check_output_address(uint8_t addr)
+{
+    return gpioOK && (addr < output_count);
+}
+
+bool gpio_check_input_address(uint8_t addr)
+{
+    return gpioOK && (addr < input_count);
 }

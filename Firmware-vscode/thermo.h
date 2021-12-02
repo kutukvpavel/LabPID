@@ -6,6 +6,8 @@
 #include "src\PID\PID_v1.h" //Heavily modified
 #include "src\Shared Libraries\MyFunctions.h"
 
+#pragma region Definitions
+
 //Definitions of constants
 //#define DEBUG  //Debug info enable. Warning: consumes flash memory space and may impair communication with software!!
 //#define DEBUG_STARTUP //LCD detailed startup info
@@ -26,6 +28,8 @@
 #define CURSOR_BLINK 2_ui8
 #define TIMING 1000                     //Timing for PID in milliseconds
 
+#pragma endregion
+
 #pragma region Globals
 //Global variables
 //The quantity of global vars probably is more than it could be (some could have been transfered to local scope), 
@@ -41,7 +45,7 @@ extern float prevSetpoint;
 extern float prevInputValue;
 extern float Setpoint, Input, Output;
 extern float integralTermLimit;
-extern float K[CHANNEL_COUNT][2];
+extern float K[3][2];
 extern float amplifierCoeff;            
 extern float calibration[CHANNEL_COUNT];
 extern float distillExtraPower;         
@@ -55,12 +59,10 @@ extern int8_t power;
 extern int8_t prevPower;               
 extern uint8_t cursorType;   
 extern uint8_t errorStatusDelay;    
-extern bool averaging[CHANNEL_COUNT]; 
-extern bool logging;        
+extern bool averaging[CHANNEL_COUNT];
 extern bool condition[4];      
 extern bool cjc;
 extern bool enableCooler[CHANNEL_COUNT];
-extern bool gpioOK;
 
 extern ClickEncoder* encoder;
 extern PID myPID;
@@ -134,7 +136,9 @@ uint16_t gpio_read_all();
 void gpio_write_all(uint16_t val);
 bool gpio_read(uint8_t address);
 void gpio_write(uint8_t address, bool value);
-void gpio_write(uint8_t code);
-uint16_t gpio_get_output_register();
+uint16_t gpio_get_all_outputs();
+bool gpio_get_output(uint8_t address);
+bool gpio_check_output_address(uint8_t addr);
+bool gpio_check_input_address(uint8_t addr);
 
 #pragma endregion

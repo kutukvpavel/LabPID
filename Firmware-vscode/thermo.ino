@@ -102,34 +102,6 @@ ISR(TIMER0_COMPA_vect)
 }
 #pragma endregion
 
-#pragma region Common functions
-
-char convert_regulation_mode(char src)  //Routine for converting user-friendly into system-recognized values of current mode (var. "regulationMode") and vice-versa
-{
-	switch (src)
-	{
-	case 'N':
-		return MODE_NORMAL;
-	case 'A':
-		return MODE_AGGRESSIVE;
-	case 'D':
-		return MODE_DISTILL;
-	case 'M':
-		return MODE_MANUAL;
-	case MODE_NORMAL:
-		return 'N';
-	case MODE_AGGRESSIVE:
-		return 'A';
-	case MODE_DISTILL:
-		return 'D';
-	case MODE_MANUAL:
-		return 'M';
-	default:
-		return 0xff;
-	}
-}
-#pragma endregion
-
 #pragma region Checks
 
 void check_power()

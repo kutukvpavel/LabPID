@@ -71,7 +71,7 @@ void mem_save()
 	eeprom_update_float(&ee_distillation_bias, distillExtraPower);
 	eeprom_update_float(&ee_distillation_window, distillTempWindow);
 	eeprom_update_float(&ee_ramp_step, rampStepLimit);
-	eeprom_update_word(&ee_gpio, gpio_get_output_register());
+	eeprom_update_word(&ee_gpio, gpio_get_all_outputs());
 	eeprom_update_byte(&ee_cjc, cjc);
 	mem_save_array_b(ee_cooler_enable, enableCooler, arraySize(ee_cooler_enable));
 }
