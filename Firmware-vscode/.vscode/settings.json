@@ -1,0 +1,5 @@
+{
+    "cortex-debug.armToolchainPath": "C:\\XPACK-ARM-NONE-EABI-GCC\\BIN",
+    "cortex-debug.openocdPath": "C:\\XPACK-OPENOCD-0.11.0-1\\BIN\\OPENOCD.EXE",
+    "cmake.configureOnOpen": false
+}
