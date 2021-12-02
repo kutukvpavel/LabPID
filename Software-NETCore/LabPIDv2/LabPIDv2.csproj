@@ -2,7 +2,10 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
@@ -16,7 +19,10 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.10" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.10" />
     <PackageReference Include="L" Version="5.0.0" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="NModbus" Version="3.0.62" />
+    <PackageReference Include="NModbus.SerialPortStream" Version="3.0.62" />
+    <PackageReference Include="SerialPortStream" Version="2.3.1" />
     <PackageReference Include="System.Text.Json" Version="6.0.0" />
   </ItemGroup>
 </Project>
