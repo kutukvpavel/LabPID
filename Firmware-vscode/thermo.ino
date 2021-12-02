@@ -8,14 +8,32 @@
 *  This software was developed to fulfill the author's personal needs only and is provided strictly as-is.
 */
 
+#include "thermo.h"
+
 //Non-modified libraries (have to be present in the arduino libraries folder)
 #include <SPI.h>
 
 //Modified, but not imported into the cppproj (one-time changes)
 #include "src\MAX6675-master\src\max6675.h" //SPI thermocouple amplifier
 #include "src\Average-master\Average.h"
+#include "src\Shared Libraries\OptPin.h"
 
-#include "thermo.h"
+#pragma region Definitions
+
+#define AVERAGING_WINDOW 3_ui8
+#define PIN_COOLER 3
+#define PIN_INPUT A7                    //ADC input
+#define PIN_PWM 9                       //Pin for PWM PID output
+#define PIN_ENCODER1 A0                  //Encoder pins
+#define PIN_ENCODER2 A1
+#define PIN_BUTTON A2
+#define PIN_FUSE_SENSE A6
+#define PIN_SS 10
+#define PWM_MAX 62499u
+#define PWM_MIN -255
+#define ENCODER_STEPS 4_ui8
+
+#pragma endregion
 
 #pragma region Variables
 
@@ -53,7 +71,7 @@ ISR(TIMER2_OVF_vect) //16mS
 {
 #ifdef DEBUG_TIMERS
 	Serial.write('2');
-#endif                         // For encoder poll
+#endif
 	uint32_t now = millis();
 	if (static_cast<uint16_t>(now - counterForDisplay) > 199u)
 	{
@@ -72,9 +90,7 @@ ISR(TIMER1_OVF_vect)                               // 1 sec timer routine
 	check_safety();
 	timers_set_heater_duty((Output > 0) ? static_cast<uint16_t>(Output) : 0);
 	timers_set_cooler_duty(static_cast<uint8_t>(
-		(Output < 0 && enableCooler[channelIndex]) ? -Output : 0
-		));
-	counterForLog++;                            //Also enables logging flag for the log to be periodically created (with 1 sec period, of course)
+		(Output < 0 && enableCooler[channelIndex]) ? -Output : 0));
 }
 
 ISR(TIMER0_COMPA_vect)
@@ -131,8 +147,7 @@ void check_power()
 
 void check_safety() // Check if something goes wrong (real temp rises more than 20C above the setpoint, ambient temperature rises above 60C, ds18b20 failed, no ds18b20 when using mode #2, broken thermocouple)
 {
-	OPTsetADMUX(EXTERNAL, PIN_FUSE_SENSE);
-	bool fuse = OPTanalogRead() < 512u;
+	bool fuse = OPTanalogRead(PIN_FUSE_SENSE) < 512u;
 	condition[0] = (
 		((Input - Setpoint > 20) && (Output > 0)) ||
 		(ambientTemp > 60) ||
@@ -177,8 +192,7 @@ void read_input()                           //Update input according to the mode
 	switch (channelIndex)
 	{
 	case CHANNEL_ADC:                              // 0 - external amplifier (ADC input)
-		OPTsetADMUX(EXTERNAL, PIN_INPUT);
-		in = OPTanalogRead() * amplifierCoeff + (cjc ? ambientTemp : 0);
+		in = OPTanalogRead(PIN_INPUT) * amplifierCoeff + (cjc ? ambientTemp : 0);
 		break;
 	case CHANNEL_MAX6675:                              // 1 - max6675 (SPI)
 		in = static_cast<float>(thermocouple.readCelsius());
@@ -217,7 +231,7 @@ void pid_process()
 	}
 	myPID.SetMaxITerm(integralTermLimit);
 	myPID.SetRampLimit(rampStepLimit);
-	if ((cursorType != CURSOR_NONE) && (channelIndex == CHANNEL_DS18B20))            //Disable PID regulating if input is not updated
+	if (lcd_is_editing() && (channelIndex == CHANNEL_DS18B20))            //Disable PID regulating if input is not updated
 	{
 		myPID.SetMode(MANUAL);
 	}
@@ -253,7 +267,7 @@ void setup() {
 	lcd_draw_message(lcd_booting_message);
 #endif
 
-	Serial.begin(9600);                                     // Initialize serial communications with the PC
+	serial_init();
 #ifdef DEBUG_STARTUP
 	Serial.println("LabPID");
 	lcd_draw_message(lcd_spi_message);
@@ -294,7 +308,7 @@ void setup() {
 #ifdef DEBUG_STARTUP
 	lcd_draw_message(lcd_adc_message);
 #endif
-	analogReference(EXTERNAL);                              // Initialize ADC stuff
+	OPTanalogReference(EXTERNAL);                              // Initialize ADC stuff
 
 #ifdef DEBUG_STARTUP
 	lcd_draw_message(lcd_gpio_message);
@@ -362,9 +376,4 @@ void loop() {
 	lcd_process_cursor_position();		// Move cursor back to it's position immediately to prevent jumping to the last filled field	
 	lcd_process_cursor_type();    
 	mem_save_persistent();
-	if (logging && (counterForLog > 0))        // Check whether logging is enabled and it's time to send the info
-	{
-		serial_send_log();
-		counterForLog = 0;
-	}
 }

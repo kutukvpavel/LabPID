@@ -1,11 +1,10 @@
 #pragma once
 
 #include <avr/eeprom.h>
-//Libraries imported into the project (continuous changes)
-#include "MyFunctions.h"
 //Modified, but not imported into the cppproj (one-time changes)
 #include "src\encoder-arduino\ClickEncoder.h"
 #include "src\PID\PID_v1.h" //Heavily modified
+#include "src\Shared Libraries\MyFunctions.h"
 
 //Definitions of constants
 //#define DEBUG  //Debug info enable. Warning: consumes flash memory space and may impair communication with software!!
@@ -13,69 +12,19 @@
 //#define DEBUG_DISPLAY
 //#define DEBUG_TIMERS //Warning: may overflow serial buffer (outputs characters '1' and '2' when corresponding ISRs fire).
 
-#pragma region Definitions
-//#define NO_DS  -- Deprecated! [No Cold Junction Compensation (i.e. no ds18b20)]
-
-#define FIRMWARE_VERSION "2.1"
-#define INFO "Lab PID temperature controller with GPIO."
-
-#define AVERAGING_WINDOW 3_ui8
-#define PIN_COOLER 3
-#define PIN_INPUT A7                    //ADC input
-#define TIMING 1000                     //Timing for PID in milliseconds
-#define PIN_PWM 9                       //Pin for PWM PID output
-#define PIN_ENCODER1 A0                  //Encoder pins
-#define PIN_ENCODER2 A1
-#define PIN_BUTTON A2
-#define PIN_RS 7                //LCD pins
-#define PIN_E 6
-#define PIN_D4 2
-#define PIN_D5 A3
-#define PIN_D6 4
-#define PIN_D7 5
-#define PIN_FUSE_SENSE A6
-#define LBL_SPACING 1_ui8 //" "
-#define LBL_LEN 2_ui8 //"S:"
-#define LBLVALUE_LEN 6_ui8 //"123.45"            //Display configuration
-#define LBLVALUE_ACCESSIBLE 6_ui8
-#define LBLMODE_LEN 4_ui8 //" N0 ", "ERR!"
-#define LBLMODE_ACCESSIBLE 2_ui8
-#define LBLPOWER_LEN 5_ui8 //" 100 " "+100%"
-#define LBLPOWER_ACCESSIBLE 3_ui8
-#define DECIMAL_PLACES 3_ui8 //"123"         //Index of the last character in decimal part or length of decimal part of setpoint and input (interchangeable due to comma presence)
-#define LCD_X 16_ui8
-#define LCD_Y 2_ui8
-#define INIT_AMP_COEFF 0.3                     //Factory-default temperature coeff. for external amplifier
-#define PIN_ONEWIRE 8                 //OneWire bus pin
-#define PIN_SS 10
-#define EEPROM_START 1                  //EEPROM virtual start address
-#define ERROR_TIMEOUT 7_ui8                 //Number of seconds to wait (re-checking the conditions) before showing error status
-#define PWM_MAX 62499u
-#define PWM_MIN -255
-#define ENCODER_STEPS 4_ui8
-
-#define GPIO_MODE_MAP 12, 4  //Number of consequtive inputs (element index % 2 != 0) / outputs (element index % 2 == 0)
-#define GPIO_IC_ADDRESS 0x20_ui8
+#define CHANNEL_COUNT 3_ui8
+#define CHANNEL_ADC 0_ui8
+#define CHANNEL_MAX6675 1_ui8
+#define CHANNEL_DS18B20 2_ui8
 #define MODE_NORMAL 0_ui8
 #define MODE_AGGRESSIVE 1_ui8
 #define MODE_DISTILL 2_ui8
 #define MODE_MANUAL 3_ui8
-#define CHANNEL_ADC 0_ui8
-#define CHANNEL_MAX6675 1_ui8
-#define CHANNEL_DS18B20 2_ui8
-#define CHANNEL_COUNT 3_ui8
-#define MENU_STATE_SETPOINT 0_ui8
-#define MENU_STATE_MODE 1_ui8
-#define MENU_STATE_CALIBRATION 2_ui8
-#define MENU_STATE_POWER 3_ui8
+#define ERROR_TIMEOUT 7_ui8                 //Number of seconds to wait (re-checking the conditions) before showing error status
 #define CURSOR_NONE 0_ui8
 #define CURSOR_UNDERLINE 1_ui8
 #define CURSOR_BLINK 2_ui8
-#define RIGHT_COLUMN_OFFSET (LBL_LEN + LBLVALUE_LEN + LBL_SPACING)
-#define RIGHT_COLUMN_MARGIN (RIGHT_COLUMN_OFFSET + LBL_LEN)
-#define LEFT_COLUMN_OFFSET 0_ui8
-#define LEFT_COLUMN_MARGIN (LEFT_COLUMN_OFFSET + LBL_LEN)
-#pragma endregion
+#define TIMING 1000                     //Timing for PID in milliseconds
 
 #pragma region Globals
 //Global variables
@@ -156,13 +105,14 @@ void lcd_process_cursor_type();
 void lcd_process_cursor_position();
 void lcd_process_fast();
 void lcd_process_slow();
+bool lcd_is_editing();
 
 #pragma endregion
 
 #pragma region Commands
 
+void serial_init();
 void serial_process();
-void serial_send_log();
 
 #pragma endregion
 

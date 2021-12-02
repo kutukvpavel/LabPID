@@ -3,6 +3,36 @@
 //Non-modified libraries (have to be present in the arduino libraries folder)
 #include <LiquidCrystal.h>
 
+#pragma region Definitions
+
+#define PIN_RS 7                //LCD pins
+#define PIN_E 6
+#define PIN_D4 2
+#define PIN_D5 A3
+#define PIN_D6 4
+#define PIN_D7 5
+#define LBL_SPACING 1_ui8 //" "
+#define LBL_LEN 2_ui8 //"S:"
+#define LBLVALUE_LEN 6_ui8 //"123.45"            //Display configuration
+#define LBLVALUE_ACCESSIBLE 6_ui8
+#define LBLMODE_LEN 4_ui8 //" N0 ", "ERR!"
+#define LBLMODE_ACCESSIBLE 2_ui8
+#define LBLPOWER_LEN 5_ui8 //" 100 " "+100%"
+#define LBLPOWER_ACCESSIBLE 3_ui8
+#define DECIMAL_PLACES 3_ui8 //"123"         //Index of the last character in decimal part or length of decimal part of setpoint and input (interchangeable due to comma presence)
+#define LCD_X 16_ui8
+#define LCD_Y 2_ui8
+#define MENU_STATE_SETPOINT 0_ui8
+#define MENU_STATE_MODE 1_ui8
+#define MENU_STATE_CALIBRATION 2_ui8
+#define MENU_STATE_POWER 3_ui8
+#define RIGHT_COLUMN_OFFSET (LBL_LEN + LBLVALUE_LEN + LBL_SPACING)
+#define RIGHT_COLUMN_MARGIN (RIGHT_COLUMN_OFFSET + LBL_LEN)
+#define LEFT_COLUMN_OFFSET 0_ui8
+#define LEFT_COLUMN_MARGIN (LEFT_COLUMN_OFFSET + LBL_LEN)
+
+#pragma endregion
+
 //bool menuBlankState = 0;                                                      // Backup used to determine if some fields are already blanked out and no update is needed (menu in mode #2)
 int16_t encoderValue = 0;
 uint8_t relativeCursorX = 0;                                                              //
@@ -256,4 +286,9 @@ void lcd_process_slow()
 			lcd.print('!');
 		}
 	}
+}
+
+bool lcd_is_editing()
+{
+	return (cursorType != CURSOR_NONE);
 }

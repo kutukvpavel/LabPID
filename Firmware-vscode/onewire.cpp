@@ -4,6 +4,8 @@
 #include "src\OneWire\OneWire.h"
 #include "src\DallasTemperature\DallasTemperature.h"
 
+#define PIN_ONEWIRE 8                 //OneWire bus pin
+
 OneWire oneWire(PIN_ONEWIRE);                                        // OneWire bus object
 DallasTemperature dsSensors(&oneWire);                                  // DS18B20 Object
 

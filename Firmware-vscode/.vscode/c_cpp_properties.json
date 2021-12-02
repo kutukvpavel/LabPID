@@ -26,7 +26,8 @@
                 "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\**",
                 "C:\\arduino-1.8.5\\hardware\\arduino\\avr\\libraries\\**",
                 "E:\\Doc\\Паша\\Программирование\\arduino\\libraries\\**",
-                "C:\\arduino-1.8.5\\libraries\\**"
+                "C:\\arduino-1.8.5\\libraries\\**",
+                "E:\\Doc\\Shared libraries"
             ],
             "defines": [
                 "__AVR__",

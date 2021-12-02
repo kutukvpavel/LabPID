@@ -1,5 +1,7 @@
 #include "thermo.h"
 
+#define INIT_AMP_COEFF 0.3                     //Factory-default temperature coeff. for external amplifier
+
 const float mult[5] = { 100, 10 , 1, 0.1, 0.01 };                 // Multipliers for building up numbers
 uint8_t channelIndex = CHANNEL_ADC;           // Current input used: 0 - ADC, 1 - SPI, 2 - DS18B20
 uint8_t prevChannelIndex = 0xff;              // Backup used to check for changes, thus determining if display update is needed
