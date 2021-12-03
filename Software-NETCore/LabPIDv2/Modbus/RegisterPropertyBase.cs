@@ -1,29 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace LabPIDv2.Modbus
 {
-    public enum PropertyTypes
+    public abstract class RegisterPropertyBase<T> : PropertyBase, IRegisterProperty<T>
     {
-        Input,
-        Holding,
-        Coil
-    }
-
-    public abstract class RegisterPropertyBase<T> : IRegisterProperty where T : struct
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public RegisterPropertyBase(ushort address, string name)
+        public RegisterPropertyBase(ushort address, string name) : base(address, name)
         {
-            Address = address;
-            Name = name;
             try
             {
-                Length = LengthDictionary[typeof(T)];
+                Length = Extensions.GetLength<T>();
             }
             catch (KeyNotFoundException)
             {
@@ -32,12 +18,10 @@ namespace LabPIDv2.Modbus
             Raw = new ushort[Length];
         }
 
-        public string Name { get; }
-        public ushort Address { get; }
-        public abstract PropertyTypes Type { get; }
+        public abstract RegisterTypes Type { get; }
         public ushort Length { get; }
-        public T Value { get; private set; }
-        public ushort[] Raw { get; private set; }
+        public T Value { get; protected set; }
+        public ushort[] Raw { get; protected set; }
 
         public void SetValue(ushort[] raw)
         {
@@ -46,27 +30,5 @@ namespace LabPIDv2.Modbus
             RaisePropertyChanged(nameof(Raw));
             RaisePropertyChanged(nameof(Value));
         }
-
-        protected void RaisePropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        #region Static
-
-        /// <summary>
-        /// Length in modbus registers (16-bit words). Supports: float, short, byte (bool), including signed types.
-        /// </summary>
-        private static readonly Dictionary<Type, ushort> LengthDictionary = new Dictionary<Type, ushort>()
-        {
-            { typeof(float), 2 },
-            { typeof(short), 1 },
-            { typeof(ushort), 1 },
-            { typeof(byte), 1 },
-            { typeof(sbyte), 1 },
-            { typeof(bool), 1 }
-        };
-
-        #endregion
     }
 }

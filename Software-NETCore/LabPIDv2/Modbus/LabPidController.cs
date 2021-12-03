@@ -31,24 +31,28 @@ namespace LabPIDv2.Modbus
 
         public async void ReadProperty<T>(IRegisterProperty<T> p)
         {
-            if (p.Type == PropertyTypes.Coil)
-            {
-
-            }
-            else
+            try
             {
                 ushort[] res = p.Type switch
                 {
-                    PropertyTypes.Input => await _modbusMaster.ReadInputRegistersAsync(SlaveAddress, p.Address, p.Length),
-                    PropertyTypes.Holding => await _modbusMaster.ReadHoldingRegistersAsync(SlaveAddress, p.Address, p.Length),
+                    RegisterTypes.Input => await _modbusMaster.ReadInputRegistersAsync(SlaveAddress, p.Address, p.Length),
+                    RegisterTypes.Holding => await _modbusMaster.ReadHoldingRegistersAsync(SlaveAddress, p.Address, p.Length),
                     _ => throw new ArgumentException("Invalid register type.")
                 };
                 p.SetValue(res);
             }
+            catch (SlaveException ex)
+            {
+
+            }
         }
-        public void SetProperty<T>(IRegisterProperty<T> p)
+        public void ReadDiscreteInput(IDiscreteProperty p)
         {
 
+        }
+        public void SetProperty<T>(IRegisterProperty<T> p, T newValue)
+        {
+            
         }
 
         public void Dispose()

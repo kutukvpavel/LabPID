@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LabPIDv2.Modbus
+namespace LabPIDv2.Models
 {
-    class CoilProperty
+    public class ControllerStatus
     {
+
     }
 }
