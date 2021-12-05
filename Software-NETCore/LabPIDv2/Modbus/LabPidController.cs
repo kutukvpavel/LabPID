@@ -5,11 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NModbus;
-using NModbus.Data;
-using NModbus.Device;
-using NModbus.Message;
-using NModbus.Utility;
-using NModbus.IO;
 using NModbus.SerialPortStream;
 using RJCP.IO.Ports;
 
@@ -29,7 +24,7 @@ namespace LabPIDv2.Modbus
         public byte SlaveAddress { get; }
         public bool IsDisposed { get; private set; } = false;
 
-        public async void ReadProperty<T>(IRegisterProperty<T> p)
+        public async Task ReadRegisterProperty<T>(IRegisterProperty<T> p)
         {
             try
             {
@@ -43,16 +38,62 @@ namespace LabPIDv2.Modbus
             }
             catch (SlaveException ex)
             {
-
+                ModbusExceptionHelper(ex);
             }
         }
-        public void ReadDiscreteInput(IDiscreteProperty p)
+        public async Task ReadDiscreteProperty(IDiscreteProperty p)
         {
-
+            try
+            {
+                p.Value = p.Type switch
+                {
+                    DiscreteTypes.Coil => (await _modbusMaster.ReadCoilsAsync(SlaveAddress, p.Address, 1))[0],
+                    DiscreteTypes.Input => (await _modbusMaster.ReadInputsAsync(SlaveAddress, p.Address, 1))[0],
+                    _ => throw new ArgumentException("Invalid discrete property type.")
+                };
+            }
+            catch (SlaveException ex)
+            {
+                ModbusExceptionHelper(ex);
+            }
         }
-        public void SetProperty<T>(IRegisterProperty<T> p, T newValue)
+        public async Task SetRegisterProperty<T>(IRegisterProperty<T> p, T newValue)
         {
-            
+            try
+            {
+                switch (p.Type)
+                {
+                    case RegisterTypes.Holding:
+                        await _modbusMaster.WriteMultipleRegistersAsync(SlaveAddress, p.Address, newValue.ConvertToRegs());
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid register type for writing to.");
+                }
+            }
+            catch (SlaveException ex)
+            {
+                ModbusExceptionHelper(ex);
+            }
+            await ReadRegisterProperty(p);
+        }
+        public async Task SetDiscreteProperty(IDiscreteProperty p, bool newValue)
+        {
+            try
+            {
+                switch (p.Type)
+                {
+                    case DiscreteTypes.Coil:
+                        await _modbusMaster.WriteSingleCoilAsync(SlaveAddress, p.Address, newValue);
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid discrete property type for writing to.");
+                }
+            }
+            catch (SlaveException ex)
+            {
+                ModbusExceptionHelper(ex);
+            }
+            await ReadDiscreteProperty(p);
         }
 
         public void Dispose()
@@ -74,5 +115,11 @@ namespace LabPIDv2.Modbus
 
         private IModbusSerialMaster _modbusMaster;
         private SerialPortStream _port;
+
+        private void ModbusExceptionHelper(SlaveException ex)
+        {
+            //TODO
+            throw ex;
+        }
     }
 }

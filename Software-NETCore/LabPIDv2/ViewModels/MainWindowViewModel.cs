@@ -9,6 +9,6 @@ namespace LabPIDv2.ViewModels
     {
         public CoilProperty[] Coils { get; set; }
         public DiscreteInputProperty[] BinaryInputs { get; set; }
-        public 
+        public PropertyBag RegisteredProperties { get; set; }
     }
 }
