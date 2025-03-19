@@ -1,10 +1,3 @@
-﻿/*
- * MyFunctions.h
- *
- * Created: 17.08.2018 22:51:40
- *  Author: Павел
- */
-
 #pragma once
 
 #ifdef ARDUINO

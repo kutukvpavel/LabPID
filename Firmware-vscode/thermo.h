@@ -4,8 +4,8 @@
 //Libraries imported into the project (continuous changes)
 #include "MyFunctions.h"
 //Modified, but not imported into the cppproj (one-time changes)
-#include "src\encoder-arduino\ClickEncoder.h"
-#include "src\PID\PID_v1.h" //Heavily modified
+#include "src/encoder-arduino/ClickEncoder.h"
+#include "src/PID/PID_v1.h" //Heavily modified
 
 //Definitions of constants
 //#define DEBUG  //Debug info enable. Warning: consumes flash memory space and may impair communication with software!!
@@ -16,7 +16,7 @@
 #pragma region Definitions
 //#define NO_DS  -- Deprecated! [No Cold Junction Compensation (i.e. no ds18b20)]
 
-#define FIRMWARE_VERSION "2.1"
+#define FIRMWARE_VERSION "2.2"
 #define INFO "Lab PID temperature controller with GPIO."
 
 #define AVERAGING_WINDOW 3_ui8

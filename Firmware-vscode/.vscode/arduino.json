@@ -1,5 +1,5 @@
 {
-    "sketch": "thermo.ino",
+    "sketch": "Firmware-vscode.ino",
     "board": "arduino:avr:nano",
     "configuration": "cpu=atmega328old",
     "port": "COM50"

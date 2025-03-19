@@ -1,6 +1,6 @@
 #include "thermo.h"
 
-#include "src\PCA9555-master\clsPCA9555.h"
+#include "src/PCA9555-master/clsPCA9555.h"
 
 PCA9555 gpio_port(GPIO_IC_ADDRESS);
 

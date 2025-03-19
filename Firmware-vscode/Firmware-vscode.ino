@@ -12,8 +12,8 @@
 #include <SPI.h>
 
 //Modified, but not imported into the cppproj (one-time changes)
-#include "src\MAX6675-master\src\max6675.h" //SPI thermocouple amplifier
-#include "src\Average-master\Average.h"
+#include "src/MAX6675-master/src/max6675.h" //SPI thermocouple amplifier
+#include "src/Average-master/Average.h"
 
 #include "thermo.h"
 
