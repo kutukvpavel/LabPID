@@ -87,11 +87,11 @@ void ClickEncoder::service(void)
 #if ENC_DECODER == ENC_FLAKY
   last = (last << 2) & 0x0F;
 
-  if (digitalRead(pinA) == pinsActive) {
+  if (DIRECT_READ(baseRegA, bitmaskA) == pinsActive) {
     last |= 2;
   }
 
-  if (digitalRead(pinB) == pinsActive) {
+  if (DIRECT_READ(baseRegB, bitmaskB) == pinsActive) {
     last |= 1;
   }
 

@@ -55,10 +55,10 @@ bool PID::Compute()
    if(timeChange >= SampleTime)
    {
       /*Compute all the working error variables*/
-	  float input = *myInput;
+	   float input = *myInput;
       float error = *mySetpoint - input;
 	  
-	  if(abs(*mySetpoint - SetpointBcp) <= RampMaxDifference)				//MODIFIED!
+	  if((ITerm > 0 ? (SetpointBcp - *mySetpoint) : (*mySetpoint - SetpointBcp)) <= RampMaxDifference)				//MODIFIED!
 	  {
 		ITerm += (ki * error);
 		if(ITerm > ITermMax) ITerm = ITermMax;
@@ -66,9 +66,9 @@ bool PID::Compute()
 	  }
 	  else
 	  {
-		ITerm = outMin;
-		SetpointBcp = *mySetpoint;
+		ITerm = 0;
 	  }
+     SetpointBcp = *mySetpoint;
       
       float dInput = (input - lastInput);
  

@@ -28,7 +28,7 @@
 // ----------------------------------------------------------------------------
 
 #ifndef ENC_DECODER
-#  define ENC_DECODER     ENC_NORMAL
+#  define ENC_DECODER     ENC_FLAKY
 #endif
 
 #if ENC_DECODER == ENC_FLAKY
