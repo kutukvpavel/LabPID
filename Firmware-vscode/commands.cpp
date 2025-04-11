@@ -41,7 +41,7 @@ void serial_process()
 float convert(float def)                      // Putting all converted characters together into a double, again using our multipliers array
 {
 	if (serialBufferIndex < 2_ui8) return def;
-	float res = decodeFloat(serialBuffer, 2, serialBufferIndex - 2_ui8);
+	float res = decodeFloat(serialBuffer, 1, serialBufferIndex - 1_ui8);
 	if (!(res == res)) return def; //NAN test
 	return res;
 }
