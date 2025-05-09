@@ -890,6 +890,7 @@ namespace LabPID
             Program.clsProfile.ExecutionFinished -= ClsProfile_ExecutionFinished;
             Program.clsProfile.TimeToChangeSetpoint -= ClsProfile_TimeToChangeSetpoint;
             Program.clsProfile.TemperatureValidationCallback -= GetTempAndSetpoint;
+            Program.clsProfile.TimeToIssueCustomCommand -= ClsProfile_TimeToIssueCustomCommand;
             Invoke((Action)(() =>
             {
                 btnSession.Enabled = true;
