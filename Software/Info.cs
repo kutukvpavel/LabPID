@@ -597,7 +597,10 @@ namespace LabPID
         {
             foreach (Series item in chart1.Series)
             {
-                item.Points.Clear();
+                item.Points.SuspendUpdates();
+                while (item.Points.Count > 0)
+                    item.Points.RemoveAt(item.Points.Count - 1);
+                item.Points.ResumeUpdates();
             }
         }
 
